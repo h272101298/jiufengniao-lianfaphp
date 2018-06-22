@@ -17,7 +17,7 @@ class CreateUserSettleAppliesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('apply_id');
-            $table->tinyInteger('state')->default(0);
+            $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
     }

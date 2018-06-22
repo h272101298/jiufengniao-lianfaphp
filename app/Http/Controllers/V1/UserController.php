@@ -17,6 +17,7 @@ class UserController extends Controller
      */
     public function login(LoginPost $post)
     {
+//        dd($post);
         $username = $post->username;
         $password = $post->password;
         if (Auth::attempt(['username'=>$username,'password'=>$password],false)){

@@ -1,5 +1,6 @@
 <?php
 namespace App\Modules\WeChatUser;
+use App\Modules\Address\AddressHandle;
 use App\Modules\SettleApply\SettleApplyHandle;
 use App\Modules\WeChatUser\Model\WeChatUser;
 use App\User;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\DB;
  * 微信用户数据操作类
  */
 class WeChatUserHandle {
-    use \AddressHandle;
+    use AddressHandle;
     use SettleApplyHandle;
     //创建用户
     public function createUser($data)
@@ -24,8 +25,10 @@ class WeChatUserHandle {
         foreach ($data as $key=>$value){
             $user->$key = $value;
         }
-        $user->save();
-        return $user;
+        if ($user->save()){
+            return $user->id;
+        }
+        return false;
 //        dd($user);
     }
     //编辑用户
@@ -40,6 +43,7 @@ class WeChatUserHandle {
         }
         return false;
     }
+
     //用户列表
     public function listUsers($page,$limit)
     {
@@ -62,16 +66,15 @@ class WeChatUserHandle {
         $user = WeChatUser::find($user_id);
         return $user;
     }
-    //使用token获取单个用户的收获地址
-    public function getUserAddressByToken($token,$page,$limit)
+    public function findUserByOpenId($openId)
     {
-        $user_id = getRedisData($token);
-//        $address = $this->listMyAddress($user_id,$limit,$page);
-        return $this->listMyAddress($user_id,$limit,$page);
+        $user = WeChatUser::where('open_id','=',$openId)->first();
+        return $user;
     }
     //
 //    public function createSettleApply($token, $data)
 //    {
+//        $uid = getRedisData($token);
 //
 //    }
 

@@ -59,6 +59,7 @@ trait AdvertHandle
     {
         $advert = Advert::findOrFail($id);
         if ($advert->delete()){
+            CategoryAdvert::where('advert_id','=',$advert->id)->delete();
             return true;
         }
         return false;

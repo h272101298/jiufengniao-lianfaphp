@@ -15,8 +15,9 @@ class CreateAdvertsTable extends Migration
     {
         Schema::create('adverts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->string('pic')->commit('图片');
+            $table->string('detail')->nullable();
 //            $table->string('category_id')->commit('位置');
             $table->tinyInteger('type')->default(1)->commit('类型');
             $table->timestamps();

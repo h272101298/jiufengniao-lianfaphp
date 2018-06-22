@@ -9,6 +9,7 @@
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
+        "predis/predis": "^1.1",
         "mpociot/laravel-apidoc-generator": "^2.0"
     },
     "require-dev": {
@@ -27,7 +28,8 @@
             "App\\": "app/"
         },
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/Libraries/Wxxcx.php"
         ]
     },
     "autoload-dev": {
