@@ -78,7 +78,7 @@ trait RoleHandle
     }
     public function delRole($id)
     {
-        $role = Role::find($id);
+        $role = Role::findOrFail($id);
         if ($role->delete()){
             return true;
         }

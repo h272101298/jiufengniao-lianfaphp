@@ -10,10 +10,18 @@ namespace App\Modules;
 
 
 use App\Modules\Advert\AdvertHandle;
+use App\Modules\Product\ProductHandle;
+use App\Modules\Role\RoleHandle;
+use App\Modules\SettleApply\SettleApplyHandle;
 use App\Modules\Store\StoreHandle;
+use App\Modules\System\SystemHandle;
 
 class User
 {
     use AdvertHandle;
     use StoreHandle;
+    use RoleHandle;
+    use SettleApplyHandle;
+    use ProductHandle;
+    use SystemHandle;
 }

@@ -12,6 +12,11 @@ return [
     'ivRequired'=>'iv不能为空！',
     'encryptedDataRequired'=>'encryptedData不能为空！',
     'codeRequired'=>'code不能为空！',
-    'nameRequired'=>'收货人不能为空！',
+    'nameRequired'=>'姓名不能为空！',
     'phoneRequired'=>'联系电话不能为空！',
+    'cityRequired'=>'城市不能为空！',
+    'storeNameRequired'=>'店铺名不能为空！',
+    'typeRequired'=>'类型不能为空！',
+    'categoryRequired'=>'类目不能为空',
+    'notifyIdRequired'=>'通知ID不能为空！'
 ];

@@ -29,4 +29,5 @@ class UserController extends Controller
             'msg'=>'用户名或密码错误！'
         ],401);
     }
+
 }

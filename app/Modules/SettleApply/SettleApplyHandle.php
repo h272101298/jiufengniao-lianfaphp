@@ -2,6 +2,8 @@
 namespace App\Modules\SettleApply;
 use App\Modules\SettleApply\Model\SettleApply;
 use App\Modules\SettleApply\Model\UserSettleApply;
+use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 /**
@@ -33,13 +35,71 @@ trait SettleApplyHandle
     {
         $uid = getRedisData($token);
         $apply_id = UserSettleApply::where('user_id','=',$uid)->orderBy('id','DESC')->first();
-        $apply = SettleApply::find($apply_id);
-        return $apply;
+//        $apply = SettleApply::find($apply_id);
+        return $apply_id;
+    }
+    public function countSettleApplyPhone($phone)
+    {
+        $idArr = SettleApply::where('phone','=',$phone)->pluck('id')->toArray();
+        if (empty($idArr)){
+            return 0;
+        }
+        return UserSettleApply::whereIn('apply_id',$idArr)->where('state','!=',3)->count();
     }
     public function getUserSettleApplyCount($token)
     {
         $uid = getRedisData($token);
-        return UserSettleApply::where('user_id','=',$uid)->where('state','<=',3)->count();
+        return UserSettleApply::where('user_id','=',$uid)->where('state','<',3)->count();
+    }
+    public function getSettleApplies($page,$limit,$state=0,$phone='',$name='')
+    {
+        $dbObj = DB::table('settle_applies');
+        if ($state){
+            $idArr = UserSettleApply::where('state','=',$state)->pluck('apply_id');
+            $dbObj->whereIn('id',$idArr);
+        }
+        if ($phone){
+            $dbObj->where('phone','like','%'.$phone.'%');
+        }
+        if ($name){
+            $dbObj->where('name','like','%'.$phone.'%');
+        }
+        $count = $dbObj->count();
+        $data = $dbObj->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$this->formatSettleApplies($data),
+            'count'=>$count
+        ];
+    }
+    public function formatSettleApplies(&$applies)
+    {
+        if (count($applies)==0){
+            return [];
+        }
+        $applyState = config('applyState');
+        for ($i=0;$i<count($applies);$i++){
+            $swap = UserSettleApply::where('apply_id','=',$applies[$i]->id)->first();
+            $applies[$i]->check_id = $swap->id;
+            $applies[$i]->state = $applyState[$swap->state];
+        }
+        return $applies;
+    }
+    public function checkSettleApply($id,$state)
+    {
+        $check = UserSettleApply::find($id);
+        if ($state==1) {
+            $check->state = 2;
+        }else{
+            $check->state = 3;
+        }
+        if ($check->save()){
+            return $check->apply_id;
+        }
+        return false;
+    }
+    public function getSettleApplyById($id)
+    {
+        return SettleApply::findOrFail($id);
     }
 //    public function
 }

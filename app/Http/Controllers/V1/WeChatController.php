@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Requests\AddressPost;
+use App\Http\Requests\ApplyPost;
 use App\Http\Requests\WXLogin;
 use App\Libraries\Wxxcx;
 use App\Modules\WeChatUser\Model\WeChatUser;
@@ -11,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use function Psy\debug;
 
 class WeChatController extends Controller
 {
@@ -37,7 +39,9 @@ class WeChatController extends Controller
                 return \jsonResponse([
                     'msg'=>'ok',
                     'data'=>[
-                        'token'=>$token
+                        'token'=>$token,
+                        'apply'=>$this->handle->getUserSettleApplyCount($token),
+                        'address'=>$this->handle->getDefaultAddress($user->id)
                     ]
                 ]);
             }else{
@@ -56,7 +60,9 @@ class WeChatController extends Controller
                     return \jsonResponse([
                         'msg'=>'ok',
                         'data'=>[
-                            'token'=>$token
+                            'token'=>$token,
+                            'apply'=>0,
+                            'address'=>''
                         ]
                     ]);
                 }
@@ -68,15 +74,35 @@ class WeChatController extends Controller
             ],400);
         }
     }
-    public function createApply(Request $post)
+    public function createApply(ApplyPost $post)
     {
         $token = $post->token;
-        $uid = getRedisData($token);
-        $handle = new WeChatUserHandle();
-        $handle->createSettleApply($token);
-        $user = WeChatUser::find($uid);
-//        $user-
-//        $apply = $this->createApply()
+        if ($this->handle->getUserSettleApplyCount($token)>0){
+            return \jsonResponse([
+                'msg'=>'有待审核的申请!'
+            ],400);
+        }
+        if ($this->handle->countSettleApplyPhone($post->phone)!=0){
+            return \jsonResponse([
+                'msg'=>'该手机号码已被使用!'
+            ],400);
+        }
+        $data = [
+            'name'=>$post->name,
+            'phone'=>$post->phone,
+            'city'=>implode(',',$post->city),
+            'storeName'=>$post->storeName,
+            'type'=>$post->type,
+            'category'=>$post->category,
+            'notifyId'=>$post->notifyId,
+            'picture'=>$post->picture?$post->picture:''
+        ];
+        if ($this->handle->createSettleApply($token,$data)){
+            return \jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return \jsonResponse(['msg'=>'error'],400);
     }
 
     /**
@@ -163,5 +189,4 @@ class WeChatController extends Controller
             'msg'=>'设置失败！'
         ],400);
     }
-
 }

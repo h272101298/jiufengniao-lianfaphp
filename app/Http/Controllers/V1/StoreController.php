@@ -50,4 +50,41 @@ class StoreController extends Controller
             'msg'=>'删除失败！'
         ],400);
     }
+    public function test(Request $request)
+    {
+        $path = $request->file('image')->store('images','public');
+//        $path = Storage::putFile('avatars', $request->file('avatar'));
+        return $path;
+    }
+    public function getSettleApplies()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $data = $this->handle->getSettleApplies($page,$limit);
+        return $data;
+    }
+    public function checkSettleApply()
+    {
+        $id = Input::get('id');
+        $state = Input::get('state',2);
+        $result = $this->handle->checkSettleApply($id,$state);
+        if (!$result){
+            return jsonResponse([
+                'msg'=>'操作失败！'
+            ],400);
+        }else{
+            if ($state==1){
+                $apply = $this->handle->getSettleApplyById($result);
+                $user = new \App\User();
+                $user->username = $apply->phone;
+                $user->phone = $apply->phone;
+                $user->password = bcrypt('123456');
+                $user->save();
+            }
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+
+    }
 }

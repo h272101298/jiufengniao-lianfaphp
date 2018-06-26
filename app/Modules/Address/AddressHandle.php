@@ -2,6 +2,7 @@
 namespace App\Modules\Address;
 use App\Modules\Address\Model\Address;
 use App\Modules\Address\Model\UserAddress;
+use function GuzzleHttp\Psr7\uri_for;
 
 /**
  * Created by PhpStorm.
@@ -72,6 +73,14 @@ trait AddressHandle
     public function isDefaultAddress($id)
     {
         return UserAddress::where('address_id','=',$id)->pluck('is_default')->first();
+    }
+    public function getDefaultAddress($user_id)
+    {
+        $id = UserAddress::where('user_id','=',$user_id)->where('is_default','=',1)->pluck('address_id')->first();
+        if ($id){
+            return Address::find($id);
+        }
+        return '';
     }
     public function setDefaultAddress($token,$id)
     {
