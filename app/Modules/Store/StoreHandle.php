@@ -9,7 +9,11 @@
 namespace App\Modules\Store;
 
 
+use App\Modules\Store\Model\Express;
+use App\Modules\Store\Model\Store;
 use App\Modules\Store\Model\StoreCategory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 trait StoreHandle
 {
@@ -41,4 +45,74 @@ trait StoreHandle
         }
         return false;
     }
+    public function addExpress($id=0,$store_id,$title,$code)
+    {
+        if ($id){
+            $express = Express::find($id);
+        }else{
+            $express = new Express();
+        }
+        $express->store_id = $store_id;
+        $express->title = $title;
+        $express->code = $code;
+        if ($express->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getExpresses($store_id=0,$page,$limit,$title='',$code)
+    {
+        $db = DB::table('expresses');
+        if ($store_id){
+            $db->where('store_id','=',$store_id);
+        }
+        if ($title){
+            $db->where('title','like','%'.$title.'%');
+        }
+        if ($code){
+            $db->where('code','like','%'.$code.'%');
+        }
+        $count = $db->count();
+        $data = $db->get();
+        return [
+            'count'=>$count,
+            'data'=>$data
+        ];
+    }
+    public function delExpress($id)
+    {
+        $express = Express::findOrFail($id);
+        if ($express->store_id!=getStoreId()){
+            return false;
+        }
+        if ($express->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function addStore($id=0,$user_id,$data)
+    {
+        if ($id){
+            $store = Store::find($id);
+        }else{
+            $store = new Store();
+            $store->user_id = $user_id;
+        }
+        foreach ($data as $key=>$value){
+            $store->$key = $value;
+        }
+        if ($store->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getUserStoreCount($user_id,$id)
+    {
+        return Store::where('user_id','=',$user_id)->where('id','!=',$id)->count();
+    }
+    public function getStores()
+    {
+
+    }
+
 }

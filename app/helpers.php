@@ -65,3 +65,18 @@ if (!function_exists('getRequestMessage')){
         return $message;
     }
 }
+if (!function_exists('setStoreId')){
+    function setStoreId($user_id)
+    {
+        $store_id = \App\Modules\Store\Model\Store::where('user_id','=',$user_id)->pluck('id')->first();
+        if ($store_id){
+            session(['storeId'=>$store_id]);
+        }
+    }
+}
+if (!function_exists('getStoreId')){
+    function getStoreId()
+    {
+        return session('storeId');
+    }
+}

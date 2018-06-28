@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Http\Requests\ExpressPost;
+use App\Http\Requests\StorePost;
 use App\Modules\User;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 class StoreController extends Controller
@@ -87,4 +91,63 @@ class StoreController extends Controller
         }
 
     }
+    public function addStore(StorePost $post)
+    {
+        $id = $post->id?$post->id:0;
+        if ($this->handle->getUserStoreCount(Auth::id(),$id)!=0){
+            return jsonResponse([
+                'msg'=>'不能重复开店！'
+            ],400);
+        }
+
+        $data = [
+            'name'=>$post->name,
+            'manager'=>$post->manager
+        ];
+        if ($this->handle->addStore($id,Auth::id(),$data)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'操作失败！'
+        ],400);
+    }
+    public function getStoreExpresses()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $title = Input::get('title','');
+        $code = Input::get('code','');
+        $data = $this->handle->getExpresses(getStoreId(),$page,$limit,$title,$code);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function delExpress()
+    {
+        $id = Input::get('id');
+        if ($this->handle->delExpress($id)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'操作失败！'
+        ],400);
+    }
+    public function addExpress(ExpressPost $post)
+    {
+        $id = $post->id?$post->id:0;
+        if ($this->handle->addExpress($id,getStoreId(),$post->title,$post->code)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'操作失败！'
+        ]);
+    }
+
 }

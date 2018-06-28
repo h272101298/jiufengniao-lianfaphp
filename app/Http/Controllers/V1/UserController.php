@@ -21,6 +21,7 @@ class UserController extends Controller
         $username = $post->username;
         $password = $post->password;
         if (Auth::attempt(['username'=>$username,'password'=>$password],false)){
+            setStoreId(Auth::id());
             return jsonResponse([
                 'msg'=>'ok'
             ]);
