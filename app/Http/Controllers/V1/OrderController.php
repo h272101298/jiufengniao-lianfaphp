@@ -320,10 +320,14 @@ class OrderController extends Controller
     public function refuseOrder()
     {
         $id = Input::get('id');
-        $this->handle->refuse($id);
+        if ($this->handle->refuse($id)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        };
         return jsonResponse([
-            'msg'=>'ok'
-        ]);
+            'msg'=>'退款失败,请稍后再试！'
+        ],400);
     }
     public function payNotify(Request $post)
     {
