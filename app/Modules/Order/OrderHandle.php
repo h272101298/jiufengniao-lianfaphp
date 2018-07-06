@@ -119,6 +119,19 @@ trait OrderHandle
             $snapshots = StockSnapshot::where('order_id','=',$orders[$i]['id'])->get()->toArray();
             $store = array_column($snapshots,'store_id');
             $store = array_unique($store);
+            if ($orders[$i]['state']=='canceled'){
+                $refuse = Refuse::where('order_id','=',$orders[$i]['id'])->pluck('state')->first();
+                if (empty($refuse)){
+                    $data[$i]['refuse'] = '';
+                }else{
+                    if ($refuse==2){
+                        $data[$i]['refuse'] = '已退款';
+                    }else{
+                        $data[$i]['refuse'] = '待处理';
+                    }
+                }
+
+            }
             $data[$i]['orderid'] = $orders[$i]['number'];
             $data[$i]['orderprice'] = $orders[$i]['price'];
             $data[$i]['state'] = $orders[$i]['state'];

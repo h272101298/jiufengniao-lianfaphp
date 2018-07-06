@@ -367,5 +367,18 @@ class WeChatController extends Controller
             'data'=>$data
         ]);
     }
+    public function addNotifyList()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $notify_id = Input::get('notify_id');
+        if ($this->handle->addNotifyList($user_id,$notify_id)){
+            return \jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return \jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
 
 }

@@ -5,6 +5,7 @@ use App\Modules\Product\Model\Product;
 use App\Modules\Proxy\Model\ProxyList;
 use App\Modules\Proxy\ProxyHandle;
 use App\Modules\SettleApply\SettleApplyHandle;
+use App\Modules\WeChatUser\Model\NotifyList;
 use App\Modules\WeChatUser\Model\ProductCollect;
 use App\Modules\WeChatUser\Model\UserAmount;
 use App\Modules\WeChatUser\Model\UserInfo;
@@ -170,6 +171,25 @@ class WeChatUserHandle {
             'data'=>$lists,
             'count'=>$count
         ];
+    }
+    public function addNotifyList($user_id,$notify_id)
+    {
+        $user = WeChatUser::find($user_id);
+        $list = new NotifyList();
+        $list->open_id = $user->open_id;
+        $list->notify_id = $notify_id;
+        if ($list->save()){
+            return true;
+        }
+        return false;
+    }
+    public function delNotifyList($id)
+    {
+        $list = NotifyList::findOrFail($id);
+        if ($list->delete()){
+            return true;
+        }
+        return false;
     }
 
 }

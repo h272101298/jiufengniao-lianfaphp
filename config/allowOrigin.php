@@ -7,6 +7,7 @@
  * 允许跨域的域名
  */
 return [
-    'http://192.168.1.141:8081'
+    'http://192.168.1.141:8081',
+    'https://background.geckowing.com'
 //    'http://a.com',
 ];
