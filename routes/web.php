@@ -33,7 +33,7 @@ Route::get('test',function (){
     var_dump($data);
 });
 Route::get('test2',function (){
-    dd(getStoreId()) ;
+//    dd()
 });
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
 

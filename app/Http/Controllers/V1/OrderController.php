@@ -110,11 +110,11 @@ class OrderController extends Controller
     }
     public function payOrder(Request $post)
     {
+        $url = 'https://template.geckowing.com/api/pay/notify';
         $user_id = getRedisData($post->token);
         $order_id = $post->order_id;
         $user = WeChatUser::findOrFail($user_id);
         $count = Order::where('group_number','=',$order_id)->where('state','!=','created')->count();
-//        foreach ()
         if ($count!=0){
             return jsonResponse([
                 'msg'=>'订单已支付！'
@@ -127,8 +127,8 @@ class OrderController extends Controller
             ],403);
         }
         $price = Order::where('group_number','=',$order_id)->sum('price');
-        $wxPay = getWxPay($user_id->open_id);
-        $data = $wxPay->pay($order_id,'购买商品',($price)*100,$post->getClientIp());
+        $wxPay = getWxPay($user->open_id);
+        $data = $wxPay->pay($order_id,'购买商品',($price)*100,$url);
         $notify_id = $wxPay->getPrepayId();
         Order::where('group_number','=',$order_id)->update(['notify_id'=>$notify_id]);
         return response()->json([
