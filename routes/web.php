@@ -100,7 +100,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('wechat/users','V1\WeChatController@getWechatUsers');
         Route::post('tx/config','V1\SystemController@addTxConfig');
         Route::get('tx/config','V1\SystemController@getTxConfig');
-
+        Route::get('brokerages','V1\UserController@getBrokerageList');
 //        Route::post('user','V1\UserController@addUser');
     });
 

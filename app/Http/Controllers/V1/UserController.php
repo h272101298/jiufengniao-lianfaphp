@@ -173,4 +173,15 @@ class UserController extends Controller
             'msg'=>'操作失败！'
         ]);
     }
+    public function getBrokerageList()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $data = $this->handle->getBrokerageList($page,$limit);
+        $this->handle->formatUserBrokerageList($data['data']);
+        return \jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 }

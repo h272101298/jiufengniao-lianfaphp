@@ -320,6 +320,7 @@ class OrderController extends Controller
     public function refuseOrder()
     {
         $id = Input::get('id');
+        $this->handle->refuse($id);
         return jsonResponse([
             'msg'=>'ok'
         ]);

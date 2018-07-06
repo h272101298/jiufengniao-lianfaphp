@@ -202,6 +202,15 @@ trait ProxyHandle
             'count'=>$count
         ];
     }
+    public function getBrokerageList($page=1,$limit=10)
+    {
+        $count = Brokerage::count();
+        $data = Brokerage::limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
     public function formatUserBrokerageList(&$brokerages)
     {
         if (empty($brokerages)){

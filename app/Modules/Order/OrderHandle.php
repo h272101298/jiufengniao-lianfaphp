@@ -21,6 +21,7 @@ use App\Modules\Product\Model\Stock;
 use App\Modules\Store\Model\Express;
 use App\Modules\Store\Model\ExpressConfig;
 use App\Modules\Store\Model\Store;
+use App\Modules\System\Model\TxConfig;
 use App\Modules\WeChatUser\Model\WeChatUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -277,6 +278,23 @@ trait OrderHandle
     }
     public function refuse($id)
     {
-//        $wxxcx = new Wxxcx()
+        $config = TxConfig::first();
+        $refuse = Refuse::find($id);
+        $wxpay = getWxPay();
+        $order = Order::find($refuse->order_id);
+        $total_fee = Order::where('group_number','=',$order->group_number)->sum('price');
+        $data = $wxpay->refund($order->transaction_id,$order->number,$total_fee,$order->price,$config->mch_id,$config->ssl_cert,
+            $config->ssl_key);
+        if ($data['return_code']=='FAIL'){
+            $refuse->state = 3;
+        }else{
+            if ($data['result_code']=='FAIL'){
+                $refuse->state = 3;
+            }else{
+                $refuse->state = 3;
+            }
+        }
+        $refuse->save();
+        dd($data);
     }
 }
