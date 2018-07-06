@@ -172,7 +172,7 @@ class WxPay
         }
         return $reqPar;
     }
-    public function refund($transaction_id,$out_refund_no,$total_fee,$refund_fee,$op_user_id,$sslCert,$sslKey,$caInfo)
+    public function refund($transaction_id,$out_refund_no,$total_fee,$refund_fee,$op_user_id,$sslCert,$sslKey)
     {
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
         $parameters = [
@@ -187,7 +187,7 @@ class WxPay
         ];
         $parameters['sign'] = $this->getSign($parameters);
         $xmldata = $this->arrayToXml($parameters);
-        $refundData = $this->xmlToArray($this->postXmlCurl($xmldata, $url, 60,TRUE,$sslCert,$sslKey,$caInfo));
+        $refundData = $this->xmlToArray($this->postXmlCurl($xmldata, $url, 60,TRUE,$sslCert,$sslKey));
         return $refundData;
     }
     public function getPrepayId()
