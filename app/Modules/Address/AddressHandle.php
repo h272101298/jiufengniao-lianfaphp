@@ -80,7 +80,7 @@ trait AddressHandle
         if ($id){
             return Address::find($id);
         }
-        return '';
+        return [];
     }
     public function setDefaultAddress($token,$id)
     {

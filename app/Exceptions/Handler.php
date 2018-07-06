@@ -52,10 +52,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-//        dd($exception);
+        dd($exception);
 //        $debug = env('APP_DEBUG','false');
 //        if ($debug){
-//            return parent::render($request, $exception);
+            return jsonResponse($exception,500);
 //        }
         $code = 422;
         if ($exception instanceof \Illuminate\Validation\ValidationException){
@@ -86,6 +86,5 @@ class Handler extends ExceptionHandler
         return response()->json([
             'msg'=>$message
         ],$code);
-//        return parent::render($request, $exception);
     }
 }

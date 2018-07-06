@@ -9,7 +9,10 @@
 namespace App\Modules\Store;
 
 
+use App\Modules\Product\Model\Product;
+use App\Modules\Product\Model\Stock;
 use App\Modules\Store\Model\Express;
+use App\Modules\Store\Model\ExpressConfig;
 use App\Modules\Store\Model\Store;
 use App\Modules\Store\Model\StoreCategory;
 use Illuminate\Support\Facades\Auth;
@@ -114,5 +117,40 @@ trait StoreHandle
     {
 
     }
-
+    public function getStoresId($name)
+    {
+        $db = DB::table('stores');
+        if ($name){
+            $db->where('name','like','%'.$name.'%');
+        }
+        return $db->pluck('id')->toArray();
+    }
+    public function getStoresIdByStockId($idArray)
+    {
+        $productId = Stock::whereIn('id',$idArray)->pluck('product_id')->toArray();
+        $storesId = Product::whereIn('id',$productId)->pluck('store_id')->toArray();
+        return array_unique($storesId);
+    }
+    public function addStoreExpressConfig($store_id,$businessId,$apiKey)
+    {
+        $config = ExpressConfig::where('store_id','=',$store_id)->first();
+        if (empty($config)){
+            $config = new ExpressConfig();
+            $config->store_id = $store_id;
+        }
+        $config->business_id = $businessId;
+        $config->api_key = $apiKey;
+        if ($config->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getStoreExpressConfig($store_id)
+    {
+        $config = ExpressConfig::where('store_id','=',$store_id)->first();
+        if (empty($config)){
+            $config = new ExpressConfig();
+        }
+        return $config;
+    }
 }

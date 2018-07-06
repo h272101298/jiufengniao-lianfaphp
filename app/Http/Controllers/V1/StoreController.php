@@ -105,6 +105,7 @@ class StoreController extends Controller
             'manager'=>$post->manager
         ];
         if ($this->handle->addStore($id,Auth::id(),$data)){
+            setStoreId(Auth::id());
             return jsonResponse([
                 'msg'=>'ok'
             ]);
@@ -147,6 +148,26 @@ class StoreController extends Controller
         }
         return jsonResponse([
             'msg'=>'操作失败！'
+        ]);
+    }
+    public function addExpressConfig(Request $post)
+    {
+//        dd($post->businessId);
+        if ($this->handle->addStoreExpressConfig(getStoreId(),$post->businessId,$post->apiKey)) {
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
+    public function getExpressConfig()
+    {
+        $data = $this->handle->getStoreExpressConfig(getStoreId());
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
         ]);
     }
 

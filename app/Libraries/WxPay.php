@@ -27,13 +27,13 @@ class WxPay
         $this->key = $key;
     }
 
-    public function pay($out_trade_no,$body,$total_fee,$ip)
+    public function pay($out_trade_no,$body,$total_fee)
     {
-        $return = $this->weixinapp($out_trade_no,$body,$total_fee,$ip);
+        $return = $this->weixinapp($out_trade_no,$body,$total_fee);
         return $return;
     }
 
-    private function unifiedOrder($out_trade_no,$body,$total_fee,$ip)
+    private function unifiedOrder($out_trade_no,$body,$total_fee)
     {
         $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
         $parameters = [
@@ -43,14 +43,15 @@ class WxPay
             'body' => $body,
             'out_trade_no' => $out_trade_no,
             'total_fee' => $total_fee,
-            'notify_url' => config('wxxcx.notify_url'),
-            'trade_type' => 'APP',
-            'spbill_create_ip' =>$ip
+            'notify_url' => config('weChat.notifyUrl'),
+            'openid' => $this->openid,
+            'trade_type' => 'JSAPI'
+//            'spbill_create_ip' =>
         ];
         $parameters['sign'] = $this->getSign($parameters);
         $xmlData = $this->arrayToXml($parameters);
-//        dd($xmlData);
         $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData, $url, 60));
+//        dd($unifiedOrder);
         return $unifiedOrder;
     }
 
@@ -72,7 +73,7 @@ class WxPay
             curl_setopt($ch,CURLOPT_SSLCERT, $sslCert);
             curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
             curl_setopt($ch,CURLOPT_SSLKEY, $sslKey);
-            curl_setopt($ch,CURLOPT_CAINFO,$caInfo);
+//            curl_setopt($ch,CURLOPT_CAINFO,$caInfo);
         }
         //post提交方式
         curl_setopt($ch, CURLOPT_POST, TRUE);
@@ -115,19 +116,19 @@ class WxPay
         return $val;
     }
 
-    private function weixinapp($out_trade_no,$body,$total_fee,$ip)
+    private function weixinapp($out_trade_no,$body,$total_fee)
     {
-        $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee,$ip);
+        $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee);
+//        dd($unifiedOrder);
         $this->prepay_id = $unifiedOrder['prepay_id'];
         $parameters = [
-            'appid' => $this->appid,
-            'partnerid'=>config('wxxcx.mch_id'),
-            'prepayid'=>$unifiedOrder['prepay_id'],
-            'package'=>'Sign=WXPay',
-            'noncestr'=>$this->createNoncestr(),
-            'timestamp' => ''. time() . ''
+            'appId' => $this->appid,
+            'timeStamp' => ''. time() . '',
+            'nonceStr' => $this->createNoncestr(),
+            'package' => 'prepay_id=' . $unifiedOrder['prepay_id'],
+            'signType' => 'MD5'
         ];
-        $parameters['sign'] = $this->getSign($parameters);
+        $parameters['paySign'] = $this->getSign($parameters);
         return $parameters;
     }
 
@@ -193,4 +194,5 @@ class WxPay
     {
         return $this->prepay_id;
     }
+
 }

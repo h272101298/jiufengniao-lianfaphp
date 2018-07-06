@@ -14,17 +14,15 @@ use Illuminate\Support\Facades\DB;
  */
 trait RoleHandle
 {
-    public function getUserRole($token)
+    public function getUserRole($uid)
     {
-        $uid = getRedisData($token);
         $roleId = RoleUser::where('user_id','=',$uid)->first();
         $role = $roleId?Role::find($roleId):null;
         return $role;
 //        $role =
     }
-    public function getUserPermissions($token)
+    public function getUserPermissions($uid)
     {
-        $uid = getRedisData($token);
         $roleId = RoleUser::where('user_id','=',$uid)->first();
         $permissionId = RolePermission::where('role_id','=',$roleId)->pluck('permission_id')->toArray();
         return Permission::whereIn('id',$permissionId)->get();
@@ -35,8 +33,18 @@ trait RoleHandle
         if ($name){
             $db->where('display_name','like','%'.$name.'%');
         }
+        $count = $db->count();
         $roles = $db->limit($limit)->offset(($page-1)*$limit)->get();
-        return $roles;
+        if (!empty($roles)){
+            foreach ($roles as $role){
+                $idArray = RolePermission::where('role_id','=',$role->id)->pluck('permission_id')->toArray();
+                $role->permissions = Permission::whereIn('id',$idArray)->get();
+            }
+        }
+        return [
+            'count'=>$count,
+            'data'=>$roles
+        ];
     }
     public function getRolePermissions($role_id)
     {
@@ -46,7 +54,8 @@ trait RoleHandle
     }
     public function getPermissions()
     {
-
+        $permissions = Permission::all();
+        return $permissions;
     }
     public function getPermission($id)
     {
@@ -61,7 +70,7 @@ trait RoleHandle
         }
         return false;
     }
-    public function createRole($data,$id=0)
+    public function createRole($id=0,$data,$permission)
     {
         if ($id){
             $role = Role::find($id);
@@ -72,6 +81,15 @@ trait RoleHandle
             $role->$key = $value;
         }
         if ($role->save()){
+            if (!empty($permission)){
+                RolePermission::where('role_id','=',$role->id)->delete();
+                foreach ($permission as $item){
+                    $rolePermission = new RolePermission();
+                    $rolePermission->role_id = $role->id;
+                    $rolePermission->permission_id = $item;
+                    $rolePermission->save();
+                }
+            }
             return true;
         }
         return false;
@@ -80,9 +98,24 @@ trait RoleHandle
     {
         $role = Role::findOrFail($id);
         if ($role->delete()){
+            RolePermission::where('role_id','=',$id)->delete();
             return true;
         }
         return false;
     }
-
+    public function createPermission($id=0,$data)
+    {
+        if ($id){
+            $permission = Permission::find($id);
+        }else{
+            $permission = new Permission();
+        }
+        foreach ($data as $key=>$value){
+            $permission->$key = $value;
+        }
+        if ($permission->save()){
+            return true;
+        }
+        return false;
+    }
 }

@@ -20,13 +20,6 @@ class CheckToken
                 'msg'=>'登录过期，请重新登录！'
             ],401);
         }
-//        $user = WechatUser::find(getUserToken($request->get('token')));
-//        if ($user->state ==0){
-//            return response()->json([
-//                'code'=>'403',
-//                'msg'=>'账号被禁用！'
-//            ]);
-//        }
         return $next($request);
     }
 }

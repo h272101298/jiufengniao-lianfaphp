@@ -80,3 +80,29 @@ if (!function_exists('getStoreId')){
         return session('storeId');
     }
 }
+if (!function_exists('checkPermission')){
+    function checkPermission($uid,$permission)
+    {
+        $role = \App\Modules\Role\Model\RoleUser::where('user_id','=',$uid)->pluck('role_id')->first();
+        $permissionId = \App\Modules\Role\Model\Permission::where('name','=',$permission)->pluck('id')->first();
+        $rolePermission = \App\Modules\Role\Model\RolePermission::where('role_id','=',$role)->where('permission_id','=',$permissionId)->first();
+        if (empty($rolePermission)){
+            return false;
+        }
+        return true;
+    }
+}
+if (!function_exists('getWxXcx')){
+    function getWxXcx(){
+        $config = \App\Modules\System\Model\TxConfig::first();
+        $wxxcx = new \App\Libraries\Wxxcx($config->app_id,$config->app_secret);
+        return $wxxcx;
+    }
+}
+if (!function_exists('getWxPay')) {
+    function getWxPay($open_id){
+        $config = \App\Modules\System\Model\TxConfig::first();
+        $wxpay = new \App\Libraries\WxPay($config->app_id,$config->mch_id,$config->api_key,$open_id);
+        return $wxpay;
+    }
+}

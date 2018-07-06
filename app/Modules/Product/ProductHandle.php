@@ -9,7 +9,14 @@
 namespace App\Modules\Product;
 
 
+use App\Modules\Order\Model\Order;
+use App\Modules\Order\Model\StockSnapshot;
+use App\Modules\Product\Model\Cart;
 use App\Modules\Product\Model\CategoryDetail;
+use App\Modules\Product\Model\HotList;
+use App\Modules\Product\Model\HotTypeList;
+use App\Modules\Product\Model\NewList;
+use App\Modules\Product\Model\OfferList;
 use App\Modules\Product\Model\Product;
 use App\Modules\Product\Model\ProductCategory;
 use App\Modules\Product\Model\ProductCategorySnapshot;
@@ -18,6 +25,9 @@ use App\Modules\Product\Model\ProductType;
 use App\Modules\Product\Model\ProductTypeBind;
 use App\Modules\Product\Model\Stock;
 use App\Modules\Product\Model\StockImage;
+use App\Modules\Store\Model\Store;
+use App\Modules\WeChatUser\Model\ProductCollect;
+use App\Modules\WeChatUser\Model\WeChatUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -55,9 +65,20 @@ trait ProductHandle
         }
         return false;
     }
-    public function getProductTypes($page=1,$limit=10,$title='',$level=0,$parent=0)
+    public function getProductTypesId($name)
     {
         $dbObj = DB::table('product_types');
+        if ($name){
+            $dbObj->where('title','like','%'.$name.'%');
+        }
+        return $dbObj->pluck('id')->toArray();
+    }
+    public function getProductTypes($page=1,$limit=10,$title='',$level=0,$parent=0,$store_id=0)
+    {
+        $dbObj = DB::table('product_types');
+        if ($store_id){
+
+        }
         if ($title){
 //            dd($title);
             $dbObj->where('title','like','%'.$title.'%');
@@ -127,6 +148,51 @@ trait ProductHandle
             });
         }
         return $level1;
+    }
+    public function formatProductTypes(&$types)
+    {
+        if (empty($types)){
+            return [];
+        }
+        foreach ($types as $type){
+            $type->is_hot = HotTypeList::where('type_id','=',$type->id)->count();
+            $bind = ProductTypeBind::where('type_id','=',$type->id)->first();
+            if ($bind->parent_id==0){
+                $type->level = 1;
+            }else{
+                $type->level = 2;
+                $swap = ProductTypeBind::where('type_id','=',$bind->parent_id)->first();
+                if ($swap->parent_id!=0){
+                    $type->level = 3;
+                }
+            }
+        }
+        return $types;
+
+    }
+    public function addHotType($type_id)
+    {
+        $count = HotTypeList::where('type_id','!=',$type_id)->count();
+        if ($count>=5){
+            return false;
+        }
+        $hot = HotTypeList::where('type_id','=',$type_id)->first();
+        if (empty($hot)){
+            $hot = new HotTypeList();
+            $hot->type_id = $type_id;
+            $hot->save();
+            return true;
+        }
+        if ($hot->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function getHotTypes()
+    {
+        $type_id = HotTypeList::pluck('type_id')->toArray();
+        $type = ProductType::whereIn('id',$type_id)->get();
+        return $type;
     }
     public function addProductCategory($id=0,$type_id,$title,$store_id=0,$detail=[])
     {
@@ -203,7 +269,7 @@ trait ProductHandle
             $detailSnap->title = $detail->title;
             $detailSnap->save();
         }
-        return true;
+        return $detailSnap->id;
     }
     public function addProduct($id=0,$data)
     {
@@ -219,6 +285,175 @@ trait ProductHandle
             return $product->id;
         }
         return false;
+    }
+    public function delProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        if ($product->delete()){
+            $categoryId = ProductCategorySnapshot::where('product_id','=',$id)->pluck('id')->toArray();
+            ProductDetailSnapshot::whereIn('category_id',$categoryId)->delete();
+            ProductCategorySnapshot::where('product_id','=',$id)->delete();
+            $stockId = Stock::where('product_id','=',$id)->pluck('id')->toArray();
+            StockImage::whereIn('stock_id',$stockId)->delete();
+            Stock::where('product_id','=',$id)->delete();
+            return true;
+        }
+        return false;
+    }
+    public function softDelProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->deleted = 1;
+        if ($product->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getProducts($store_id=null,$type_id = null,$page=1,$limit=100,$name='',$review=0,$state=0,$deleted=0,$idArr=null)
+    {
+        $db = DB::table('products');
+        if ($store_id) {
+            $db->whereIn('store_id',$store_id);
+        }
+        if ($type_id){
+            $db->whereIn('type_id',$type_id);
+        }
+        if ($idArr){
+            $db->whereIn('id',$idArr);
+        }
+        if($name){
+            $db->where('name','like','%'.$name.'%');
+        }
+        if ($review){
+            $db->where('review','=',$review-1);
+        }
+        if ($state){
+            $db->where('state','=',$state-1);
+        }
+        if ($deleted){
+            $db->where('deleted','=',$deleted-1);
+        }
+        $count = $db->count();
+        $data = $db->limit($limit)->offset(($page-1)*$limit)->get();
+        $this->formatProducts($data);
+//        if (!empty($data)){}
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function formatProducts(&$data)
+    {
+        if (empty($data)){
+            return [];
+        }
+        foreach ($data as $item){
+            $item->cover = Stock::where('product_id','=',$item->id)->pluck('cover')->first();
+            $item->hot = HotList::where('product_id','=',$item->id)->count();
+            $item->new = NewList::where('product_id','=',$item->id)->count();
+            $item->offer = OfferList::where('product_id','=',$item->id)->count();
+        }
+        return $data;
+    }
+    public function getStoreProducts($store_id,$page=1,$limit=100,$name,$review=0,$state=0,$idArr)
+    {
+        $db = DB::table('products')->where('store_id','=',$store_id)->where('deleted','!=',1);
+        if ($idArr){
+            $db->whereIn('id',$idArr);
+        }
+        if($name){
+            $db->where('name','like','%'.$name.'%');
+        }
+        if ($review){
+            $db->where('review','=',$review-1);
+        }
+        if ($state){
+            $db->where('state','=',$state-1);
+        }
+        $count = $db->count();
+        $data = $db->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function getProductsApi($name,$type)
+    {
+        $db = DB::table('products')->where('deleted','!=',1)->where('state','=',1)->where('review','=',1);
+        if ($name){
+            $db->where('name','like','%'.$name.'%');
+        }
+        if ($type){
+            $db->where('type_id','=',$type);
+        }
+        $count = $db->count();
+        $data = $db->select(['name','id','norm'])->get();
+        $data = $this->formatProductApi($data);
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function formatProductApi(&$products)
+    {
+        if (empty($products)){
+            return [];
+        }
+        foreach ($products as $product){
+            if ($product->norm=='fixed'){
+                $stock = Stock::where('product_id','=',$product->id)->first();
+                $product->cover = $stock->cover;
+                $product->price = $stock->price;
+                $product->origin_price = $stock->origin_price;
+            }else{
+                $stock = Stock::where('product_id','=',$product->id)->orderBy('price','DESC')->first();
+                $product->cover = $stock->cover;
+                $product->price = $stock->price;
+                $product->origin_price = $stock->origin_price;
+            }
+        }
+        return $products;
+    }
+    public function getProduct($id)
+    {
+        $product = Product::find($id);
+        $product->store = Store::find($product->store_id);
+        $stocks = Stock::where('product_id','=',$product->id)->orderBy('price','DESC')->get();
+        if (!empty($stocks)){
+            foreach ($stocks as $stock){
+                $stock->images = StockImage::where('stock_id','=',$stock->id)->pluck('url')->toArray();
+            }
+        }
+        $product->default = $stocks[0];
+        $categories = ProductCategorySnapshot::where('product_id','=',$product->id)->get();
+        if (!empty($categories)){
+            foreach ($categories as $category){
+                $category->detail = ProductDetailSnapshot::where('category_id','=',$category->id)->get();
+            }
+        }
+        $product->categories = $categories;
+        return $product;
+    }
+    public function getProductAssesses($product,$page,$limit)
+    {
+        $db = DB::table('stock_snapshots')->where('product_id','=',$product)->where('is_assess','=',1);
+        $count = $db->count();
+        $data = $db->limit($limit)->offset(($page-1)*$limit)->get();
+        if (!empty($data)){
+            foreach ($data as $item){
+                $user_id = Order::find($item->order_id)->user_id;
+                $item->user = WeChatUser::find($user_id);
+            }
+        }
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function getProductById($id)
+    {
+        $product = Product::findOrFail($id);
+        return $product;
     }
     public function addStock($id,$data)
     {
@@ -244,5 +479,227 @@ trait ProductHandle
             return true;
         }
         return false;
+    }
+    public function getStock($product,$detail)
+    {
+        $stock = Stock::where('product_id','=',$product)->where('product_detail','=',$detail)->first();
+        if (!empty($stock)){
+            $stock->images = StockImage::where('stock_id','=',$stock->id)->pluck('url')->toArray();
+        }
+        return $stock;
+    }
+    public function getStockById($id)
+    {
+        $stock = Stock::findOrFail($id);
+        return $stock;
+    }
+    public function addCart($uid,$stock_id,$store_id,$number)
+    {
+        $cart = Cart::where('user_id','=',$uid)->where('stock_id','=',$stock_id)->where('store_id','=',$store_id)->first();
+        if (empty($cart)){
+            $cart = new Cart();
+        }
+        $cart->user_id = $uid;
+        $cart->stock_id = $stock_id;
+        $cart->store_id = $store_id;
+        $cart->number = $number;
+        if ($cart->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getCarts($user_id)
+    {
+        $carts = Cart::where('user_id','=',$user_id)->get()->toArray();
+        return $carts;
+    }
+    public function formatCarts($carts)
+    {
+        $data = [];
+        if (empty($carts)){
+            return $data;
+        }
+        $store = array_column($carts,'store_id');
+        $store = array_merge(array_unique($store));
+        for ($i=0;$i<count($store);$i++){
+            $data[$i]['shopname'] = Store::find($store[$i])->name;
+            $data[$i]['shopid'] = $store[$i];
+            $store_id = $store[$i];
+            $swapCarts = array_filter($carts,function ($item) use($store_id){
+                return $item['store_id'] == $store_id;
+            });
+            $swap = [];
+            if (!empty($swapCarts)){
+                foreach ($swapCarts as $swapCart){
+                    $stock = Stock::find($swapCart['stock_id']);
+                    $product = Product::find($stock->product_id);
+                    $swapCart['goodid'] = $swapCart['stock_id'];
+                    $swapCart['shopid'] = $store[$i];
+                    $swapCart['goodname'] = $product->name;
+                    $swapCart['goodpic'] = $stock->cover;
+                    $swapCart['goodprice'] = sprintf('%.2f',$stock->price);
+                    $swapCart['goodnum'] = $swapCart['number'];
+                    if ($product->norm=='fixed'){
+                        $swapCart['goodformat'] = 'fixed';
+                    }else{
+                        $detail = explode(',',$stock->product_detail);
+                        $detail = ProductDetailSnapshot::whereIn('id',$detail)->pluck('title')->toArray();
+                        $detail = implode(' ',$detail);
+                        $swapCart['goodformat'] = $detail;
+                    }
+                    array_push($swap,$swapCart);
+                }
+            }
+            $data[$i]['goods'] = $swap;
+        }
+        return $data;
+    }
+    public function delUserCart($user_id)
+    {
+        Cart::where('user_id','=',$user_id)->delete();
+        return true;
+    }
+    public function delCarts($idArray)
+    {
+        Cart::whereIn('id',$idArray)->delete();
+        return true;
+    }
+    public function addCollect($user_id,$product_id)
+    {
+        $product = Product::findOrFail($product_id);
+        if (empty($product)){
+            return false;
+        }
+        $stock = Stock::where('product_id','=',$product_id)->orderBy('price','ASC')->first();
+        $collect = new ProductCollect();
+        $collect->user_id = $user_id;
+        $collect->product_id = $product_id;
+        $collect->price = $stock->price;
+        $collect->origin_price = $stock->origin_price;
+        $collect->cover = $stock->cover;
+        $collect->name = $product->name;
+        if ($collect->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getUserCollect($user,$page=1,$limit=10)
+    {
+        $count = ProductCollect::where('user_id','=',$user)->count();
+        $collects = ProductCollect::where('user_id','=',$user)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        return [
+            'data'=>$collects,
+            'count'=>$count
+        ];
+    }
+    public function checkCollect($user_id,$product_id)
+    {
+        $count = ProductCollect::where('user_id','=',$user_id)->where('product_id','=',$product_id)->count();
+        return $count;
+    }
+    public function delCollect($id)
+    {
+        $collect = ProductCollect::findOrFail($id);
+        if ($collect->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function formatCollect(&$collect)
+    {
+        if (empty($collect)){
+            return [];
+        }
+        for ($i=0;$i<count($collect);$i++){
+            $product = Product::find($collect[$i]->product_id);
+            $collect[$i]->product = $product?$product:[];
+            $collect[$i]->cover = Stock::where('product_id','=',$product->id)->pluck('cover')->first();
+        }
+        return $collect;
+    }
+    public function addHot($product_id)
+    {
+        $hot = HotList::where('product_id','=',$product_id)->first();
+        if (empty($hot)){
+            $hot = new HotList();
+            $hot->product_id = $product_id;
+            $hot->save();
+            return true;
+        }
+        if ($hot->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function addNew($product_id)
+    {
+        $new = NewList::where('product_id','=',$product_id)->first();
+        if (empty($new)){
+            $new = new NewList();
+            $new->product_id = $product_id;
+            $new->save();
+            return true;
+        }
+        if ($new->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function addOffer($product_id)
+    {
+        $offer = OfferList::where('product_id','=',$product_id)->first();
+        if (empty($offer)){
+            $offer = new OfferList();
+            $offer->product_id = $product_id;
+            $offer->save();
+            return true;
+        }
+        if ($offer->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function getHotList($page=1,$limit=10)
+    {
+        $count = HotList::count();
+        $list = HotList::limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$list,
+            'count'=>$count
+        ];
+    }
+    public function getNewList($page=1,$limit=10)
+    {
+        $count = NewList::count();
+        $list = NewList::limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$list,
+            'count'=>$count
+        ];
+    }
+    public function getOfferList($page=1,$limit=10)
+    {
+        $count = OfferList::count();
+        $list = OfferList::limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$list,
+            'count'=>$count
+        ];
+    }
+    public function formatRecommendList(&$list)
+    {
+        if (empty($list)){
+            return [];
+        }
+        foreach ($list as $item){
+            $stock = Stock::where('product_id','=',$item->product_id)->orderBy('price','ASC')->first();
+            $product = Product::find($item->product_id);
+            $item->product_name =$product->name;
+            $item->sales_volume = $product->sales_volume;
+            $item->cover = $stock->cover;
+            $item->price = $stock->price;
+            $item->origin_price = $stock->origin_price;
+        }
+        return $list;
     }
 }

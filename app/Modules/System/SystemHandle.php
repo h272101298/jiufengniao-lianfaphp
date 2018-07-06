@@ -10,6 +10,7 @@ namespace App\Modules\System;
 
 
 use App\Modules\System\Model\Document;
+use App\Modules\System\Model\TxConfig;
 use Illuminate\Support\Facades\DB;
 
 trait SystemHandle
@@ -48,5 +49,23 @@ trait SystemHandle
             return true;
         }
         return false;
+    }
+    public function addTxConfig($data)
+    {
+        $config = TxConfig::first();
+        if (empty($config)){
+            $config = new TxConfig();
+        }
+        foreach ($data as $key=>$value){
+            $config->$key = $value;
+        }
+        if ($config->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getTxConfig()
+    {
+        return TxConfig::first();
     }
 }
