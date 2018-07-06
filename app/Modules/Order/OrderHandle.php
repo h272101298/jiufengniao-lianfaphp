@@ -281,10 +281,11 @@ trait OrderHandle
         $config = TxConfig::first();
         $refuse = Refuse::find($id);
         $wxpay = getWxPay();
+        $path = base_path().'/public/';
         $order = Order::find($refuse->order_id);
         $total_fee = Order::where('group_number','=',$order->group_number)->sum('price');
-        $data = $wxpay->refund($order->transaction_id,$order->number,$total_fee,$order->price,$config->mch_id,$config->ssl_cert,
-            $config->ssl_key);
+        $data = $wxpay->refund($order->transaction_id,$order->number,$total_fee,$order->price,$config->mch_id,$path.$config->ssl_cert,
+            $path.$config->ssl_key);
         if ($data['return_code']=='FAIL'){
             $refuse->state = 3;
         }else{

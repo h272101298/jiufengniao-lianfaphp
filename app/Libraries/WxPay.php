@@ -55,7 +55,7 @@ class WxPay
         return $unifiedOrder;
     }
 
-    private static function postXmlCurl($xml, $url, $second = 30,$useCert = false,$sslCert = '',$sslKey = '',$caInfo='')
+    private static function postXmlCurl($xml, $url, $second = 30,$useCert = false,$sslCert = '',$sslKey = '')
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_TIMEOUT ,$second);

@@ -37,7 +37,7 @@ Route::get('test2',function (){
 });
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
 
-
+    Route::post('upload','V1\SystemController@upload');
     Route::get('delete/advert','V1\AdvertController@delAdvert');
 //    Route::options('{all}',function (){return 'ok';})->middleware('cross');
     Route::post('login','V1\UserController@login');
