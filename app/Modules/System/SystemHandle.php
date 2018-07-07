@@ -11,6 +11,7 @@ namespace App\Modules\System;
 
 use App\Modules\System\Model\Document;
 use App\Modules\System\Model\TxConfig;
+use App\Modules\WeChatUser\Model\WeChatUser;
 use Illuminate\Support\Facades\DB;
 
 trait SystemHandle
@@ -67,5 +68,9 @@ trait SystemHandle
     public function getTxConfig()
     {
         return TxConfig::first();
+    }
+    public function countWeChatUsers($created)
+    {
+        return WeChatUser::whereDate('created_at',$created)->count();
     }
 }

@@ -113,9 +113,22 @@ trait StoreHandle
     {
         return Store::where('user_id','=',$user_id)->where('id','!=',$id)->count();
     }
-    public function getStores()
+    public function getUserStore($user_id)
     {
-
+        return Store::where('user_id','=',$user_id)->first();
+    }
+    public function getStores($name='',$page,$limit)
+    {
+        $db = DB::table('stores');
+        if ($name){
+            $db->where('name','like',$name);
+        }
+        $count = $db->count();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
     }
     public function getStoresId($name)
     {

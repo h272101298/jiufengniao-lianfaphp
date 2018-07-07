@@ -191,5 +191,9 @@ class WeChatUserHandle {
         }
         return false;
     }
+    public function countWeChatUsers($created)
+    {
+        return WeChatUser::whereDate('created_at',$created)->count();
+    }
 
 }

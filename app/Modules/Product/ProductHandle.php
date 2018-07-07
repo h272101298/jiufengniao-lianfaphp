@@ -702,4 +702,21 @@ trait ProductHandle
         }
         return $list;
     }
+    public function countProduct($store=0,$state=0,$review=0,$deleted=0)
+    {
+        $db = DB::table('products');
+        if ($store){
+            $db->where('store_id','=',$store);
+        }
+        if ($state){
+            $db->where('state','=',$state-1);
+        }
+        if ($review){
+            $db->where('review','=',$review-1);
+        }
+        if ($deleted){
+            $db->where('deleted','=',$deleted-1);
+        }
+        return $db->count();
+    }
 }

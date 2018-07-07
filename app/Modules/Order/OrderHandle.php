@@ -193,6 +193,20 @@ trait OrderHandle
             'data'=>$data
         ];
     }
+    public function getNewestOrders($store_id)
+    {
+        $db = DB::table('orders');
+        if ($store_id){
+            $db->where('store_id','=',$store_id);
+        }
+        $db->whereDate('created_at',date());
+        $count = $db->count();
+        $data = $db->get();
+        return [
+            'count'=>$count,
+            'data'=>$data
+        ];
+    }
     public function formatOrders(&$orders)
     {
         if (empty($orders)){
@@ -315,5 +329,31 @@ trait OrderHandle
             }
         }
         return false;
+    }
+    public function countOrders($store_id=0,$state='',$created='')
+    {
+        $db = DB::table('orders');
+        if ($store_id){
+            $db->where('store_id','=',$store_id);
+        }
+        if ($state){
+            $db->where('state','=',$store_id);
+        }
+        if ($created){
+            $db->whereDate('created_at',$created);
+        }
+        return $db->count();
+    }
+    public function countSales($store_id=0,$created='')
+    {
+        $OrderDB = Order::where('state','!=','created')->where('state','!=','canceled');
+        if ($store_id){
+            $OrderDB->where('store_id','=',$store_id);
+        }
+        if ($created){
+            $OrderDB->whereDate('created_at',$created);
+        }
+        $idArray = $OrderDB->pluck('id')->toArray();
+        return StockSnapshot::whereIn('order_id',$idArray)->sum('number');
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Requests\DocumentPost;
+use App\Modules\Role\Model\Permission;
 use App\Modules\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Excel;
 
 class SystemController extends Controller
 {
@@ -16,7 +18,41 @@ class SystemController extends Controller
     {
         $this->handle = new User();
     }
-
+//    public function __construct(Excel $excel)
+//    {
+//        $this->excel = $excel;
+//    }
+//    public function test(Request $post)
+//    {
+//        $file = $post->file('file');
+//        if ($file){
+//            $list = [];
+//            $this->excel->selectSheetsByIndex(0)->load($file,function ($sheet) use (&$list){
+//                $sheet->ignoreEmpty()->each(function ($data) use (&$list){
+//                    $origin = $data->toArray();
+////                    dd($origin);
+////                    $origin = array_values($origin);
+////                    dd($origin);
+//                    $permission = new Permission();
+//                    $permission->name = $origin['name'];
+//                    $permission->display_name = $origin['display_name'];
+//                    $permission->save();
+////                    dd($origin);
+//                });
+//            });
+////            dd($list);
+//            return response()->json([
+//                'code'=>'200',
+//                'msg'=>'SUCCESS'
+//            ]);
+////            dd($file);
+//        }else{
+//            return response()->json([
+//                'code'=>'400',
+//                'msg'=>'空文件'
+//            ]);
+//        }
+//    }
     public function getDocuments()
     {
         $page = Input::get('page',1);
@@ -202,5 +238,20 @@ class SystemController extends Controller
                 ]
             ]);
         }
+    }
+    public function getCount()
+    {
+
+        $data = [
+            'productCount'=>$this->handle->countProduct(),
+            'todayOrderCount'=>$this->handle->countOrders(0,'',date('Y-m-d')),
+            'todaySalesCount'=>$this->handle->countSales(0,date('Y-m-d')),
+            'todayUserCount'=>$this->handle->countWeChatUsers(date('Y-m-d')),
+            'reviewProductCount'=>$this->handle->countProduct(0,0,1),
+        ];
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
     }
 }

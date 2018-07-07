@@ -16,8 +16,13 @@ trait RoleHandle
 {
     public function getUserRole($uid)
     {
-        $roleId = RoleUser::where('user_id','=',$uid)->first();
+        $roleId = RoleUser::where('user_id','=',$uid)->pluck('role_id')->first();
         $role = $roleId?Role::find($roleId):null;
+        if (!empty($role)){
+            $idArray = RolePermission::where('role_id','=',$role->id)->pluck('permission_id')->toArray();
+            $permissions = Permission::whereIn('id',$idArray)->pluck('name')->toArray();
+            $role->permissions = $permissions;
+        }
         return $role;
 //        $role =
     }
@@ -84,10 +89,14 @@ trait RoleHandle
             if (!empty($permission)){
                 RolePermission::where('role_id','=',$role->id)->delete();
                 foreach ($permission as $item){
-                    $rolePermission = new RolePermission();
-                    $rolePermission->role_id = $role->id;
-                    $rolePermission->permission_id = $item;
-                    $rolePermission->save();
+                    $swap = Permission::where('name','=',$item)->first();
+                    if (!empty($swap)){
+                        $rolePermission = new RolePermission();
+                        $rolePermission->role_id = $role->id;
+                        $rolePermission->permission_id = $swap->id;
+                        $rolePermission->save();
+                    }
+
                 }
             }
             return true;

@@ -175,6 +175,15 @@ class OrderController extends Controller
             'data'=>$order
         ]);
     }
+    public function getNewestOrder()
+    {
+        $data = $this->handle->getNewestOrders(getStoreId());
+        $this->handle->formatOrders($data['data']);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
     public function shipOrder(Request $post)
     {
         $id = $post->id;

@@ -170,5 +170,16 @@ class StoreController extends Controller
             'data'=>$data
         ]);
     }
+    public function getStores()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $name = Input::get('name');
+        $data = $this->handle->getStores($name,$page,$limit);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 
 }

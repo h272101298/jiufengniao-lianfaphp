@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckPermission;
+use App\Http\Middleware\CheckStore;
 use App\Http\Middleware\CheckToken;
 use App\Http\Middleware\CrossDomain;
 use App\Http\Middleware\OptionsCheck;
@@ -64,6 +66,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'checkToken'=>CheckToken::class,
-        'cross'=>CrossDomain::class
+        'cross'=>CrossDomain::class,
+        'checkStore'=>CheckStore::class,
+        'permission'=>CheckPermission::class
     ];
 }

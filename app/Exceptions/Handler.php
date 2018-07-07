@@ -53,9 +53,10 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         dd($exception);
+//        return response()->make($exception)->headers(['Access-Control-Allow-Origin:*']);
 //        $debug = env('APP_DEBUG','false');
 //        if ($debug){
-            return jsonResponse($exception,500);
+            return jsonResponse($exception->getTraceAsString(),500);
 //        }
         $code = 422;
         if ($exception instanceof \Illuminate\Validation\ValidationException){
