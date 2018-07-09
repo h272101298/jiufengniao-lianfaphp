@@ -50,18 +50,18 @@ Route::group(['prefix'=>'v1'],function (){
         Route::post('collect','V1\ProductController@addCollect');
         Route::get('collects','V1\ProductController@getCollects');
         Route::delete('collect','V1\ProductController@delCollect');
-        Route::post('proxy/apply','V1\WechatController@addProxyApply');
-        Route::post('withdraw/apply','V1\WechatController@addWithdrawApply');
+        Route::post('proxy/apply','V1\WeChatController@addProxyApply');
+        Route::post('withdraw/apply','V1\WeChatController@addWithdrawApply');
         Route::get('withdraw/applies','V1\WeChatController@getWithdrawApplies');
-        Route::get('user/amount','V1\WechatController@getUserAmount');
-        Route::get('user/qrcode','V1\WechatController@getUserQrCode');
+        Route::get('user/amount','V1\WeChatController@getUserAmount');
+        Route::get('user/qrcode','V1\WeChatController@getUserQrCode');
         Route::get('project/qrcode','V1\ProductController@getProductQrCode');
-        Route::post('user/info','V1\WechatController@addUserInfo');
-        Route::get('user/info','V1\WechatController@getUserInfo');
-        Route::get('proxy/list','V1\WechatController@getProxyList');
-        Route::post('proxy/list','V1\WechatController@addProxyList');
-        Route::get('brokerages','V1\WechatController@getBrokerageList');
-        Route::post('notify/list','V1\WechatController@addNotifyList');
+        Route::post('user/info','V1\WeChatController@addUserInfo');
+        Route::get('user/info','V1\WeChatController@getUserInfo');
+        Route::get('proxy/list','V1\WeChatController@getProxyList');
+        Route::post('proxy/list','V1\WeChatController@addProxyList');
+        Route::get('brokerages','V1\WeChatController@getBrokerageList');
+        Route::post('notify/list','V1\WeChatController@addNotifyList');
 //        Route::get('product/')
     });
 
