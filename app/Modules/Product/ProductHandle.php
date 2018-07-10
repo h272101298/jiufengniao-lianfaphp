@@ -493,6 +493,11 @@ trait ProductHandle
         $stock = Stock::findOrFail($id);
         return $stock;
     }
+    public function getStockByProductId($product_id)
+    {
+        $stock = Stock::where('product_id','=',$product_id)->orderBy('price','ASC')->first();
+        return $stock;
+    }
     public function addCart($uid,$stock_id,$store_id,$number)
     {
         $cart = Cart::where('user_id','=',$uid)->where('stock_id','=',$stock_id)->where('store_id','=',$store_id)->first();

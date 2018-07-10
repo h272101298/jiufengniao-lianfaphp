@@ -58,10 +58,10 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('stores','V1\StoreController@getStores')->middleware('permission:storeList');
         Route::post('express','V1\StoreController@addExpress')->middleware('expressAdd');
         Route::get('expresses','V1\StoreController@getStoreExpresses')->middleware('permission:expressList');
-        Route::delete('express','V1\StoreController@delExpress')->middleware('expressDel');
-        Route::post('product','V1\ProductController@addProduct')->middleware('productAdd');
-        Route::get('del/product','V1\ProductController@softDelProduct')->middleware('productSoftDel');
-        Route::delete('product','V1\ProductController@delProduct')->middleware('productDel');
+        Route::delete('express','V1\StoreController@delExpress')->middleware('permission:expressDel');
+        Route::post('product','V1\ProductController@addProduct')->middleware('permission:productAdd');
+        Route::get('del/product','V1\ProductController@softDelProduct')->middleware('permission:productSoftDel');
+        Route::delete('product','V1\ProductController@delProduct')->middleware('permission:productDel');
         Route::get('check/product','V1\ProductController@checkProduct')->middleware('permission:productReview');
         Route::get('shelf/product','V1\ProductController@shelfProduct')->middleware('permission:productShelf');
         Route::get('products','V1\ProductController@getProducts')->middleware(['checkStore','permission:productListAll|productListStore']);

@@ -10,7 +10,9 @@ namespace App\Modules\System;
 
 
 use App\Modules\System\Model\Document;
+use App\Modules\System\Model\NotifyQueue;
 use App\Modules\System\Model\TxConfig;
+use App\Modules\WeChatUser\Model\NotifyList;
 use App\Modules\WeChatUser\Model\WeChatUser;
 use Illuminate\Support\Facades\DB;
 
@@ -73,4 +75,27 @@ trait SystemHandle
     {
         return WeChatUser::whereDate('created_at',$created)->count();
     }
+    public function getNotifyList()
+    {
+        $data = NotifyList::groupBy('open_id')->get();
+        return $data;
+    }
+    public function delNotifyList($id)
+    {
+        $list = NotifyList::findOrFail($id);
+        if ($list->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function addNotifyQueue($data)
+    {
+        $queue = new NotifyQueue();
+        $queue->content = $data;
+        if ($queue->save()){
+            return true;
+        }
+        return false;
+    }
+
 }
