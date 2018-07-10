@@ -18,6 +18,9 @@ class CreateCardPromotionsTable extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('stock_id');
             $table->string('description')->nullable();
+            $table->integer('start');
+            $table->integer('end');
+            $table->integer('number')->default(0);
             $table->timestamps();
         });
     }
