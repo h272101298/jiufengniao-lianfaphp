@@ -341,7 +341,10 @@ trait ProductHandle
         if ($deleted){
             $db->where('deleted','=',$deleted-1);
         }
-        dd($db->toSql());
+        $bindings = $db->getBindings();
+        $sql = str_replace('?', '%s', $db->toSql());
+        $sql = sprintf($sql, ...$bindings);
+        dd($sql);
         $count = $db->count();
         $data = $db->limit($limit)->offset(($page-1)*$limit)->get();
         $this->formatProducts($data);
