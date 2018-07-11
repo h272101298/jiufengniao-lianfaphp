@@ -44,8 +44,8 @@ class WeChatController extends Controller
                     'msg'=>'ok',
                     'data'=>[
                         'token'=>$token,
-                        'apply'=>$this->handle->getUserSettleApplyCount($token),
                         'address'=>$this->handle->getDefaultAddress($user->id),
+                        'apply'=>$this->handle->getUserSettleApplyCount($token),
                         'is_proxy'=>$this->handle->checkProxyUser($user->id),
                         'proxy_apply'=>$this->handle->getUserProxyApplyCount($user->id)
                     ]
@@ -82,6 +82,19 @@ class WeChatController extends Controller
                 'data'=>$WX
             ],400);
         }
+    }
+    public function getProxyInfo()
+    {
+        $token = Input::get('token');
+        $user_id = getRedisData($token);
+        return \jsonResponse([
+            'msg'=>'ok',
+            'data'=>[
+                'apply'=>$this->handle->getUserSettleApplyCount($token),
+                'is_proxy'=>$this->handle->checkProxyUser($user_id),
+                'proxy_apply'=>$this->handle->getUserProxyApplyCount($user_id)
+            ]
+        ]);
     }
     public function createApply(ApplyPost $post)
     {

@@ -58,6 +58,7 @@ Route::group(['prefix'=>'v1'],function (){
         Route::get('project/qrcode','V1\ProductController@getProductQrCode');
         Route::post('user/info','V1\WeChatController@addUserInfo');
         Route::get('user/info','V1\WeChatController@getUserInfo');
+        Route::get('proxy/info','V1\WeChatController@getProxyInfo');
         Route::get('proxy/list','V1\WeChatController@getProxyList');
         Route::post('proxy/list','V1\WeChatController@addProxyList');
         Route::get('brokerages','V1\WeChatController@getBrokerageList');
