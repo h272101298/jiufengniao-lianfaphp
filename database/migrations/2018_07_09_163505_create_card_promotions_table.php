@@ -15,12 +15,15 @@ class CreateCardPromotionsTable extends Migration
     {
         Schema::create('card_promotions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('product_id');
+//            $table->unsignedInteger('product_id');
             $table->unsignedInteger('stock_id');
             $table->string('description')->nullable();
             $table->integer('start');
             $table->integer('end');
             $table->integer('number')->default(0);
+            $table->float('offer')->default(0);
+            $table->integer('clickNum')->default(0);
+            $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
     }

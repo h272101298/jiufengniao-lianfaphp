@@ -15,6 +15,9 @@ class CreateCardListsTable extends Migration
     {
         Schema::create('card_lists', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('promotion_id');
+            $table->string('name')->nullable();
+            $table->string('cover');
             $table->timestamps();
         });
     }

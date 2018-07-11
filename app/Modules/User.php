@@ -10,6 +10,7 @@ namespace App\Modules;
 
 
 use App\Modules\Advert\AdvertHandle;
+use App\Modules\Card\CardHandle;
 use App\Modules\Order\OrderHandle;
 use App\Modules\Product\ProductHandle;
 use App\Modules\Proxy\ProxyHandle;
@@ -31,6 +32,7 @@ class User
     use SystemHandle;
     use OrderHandle;
     use ProxyHandle;
+    use CardHandle;
     public function addUser($id,$data,$role)
     {
         if ($id){

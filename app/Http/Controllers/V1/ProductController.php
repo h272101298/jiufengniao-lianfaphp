@@ -170,10 +170,25 @@ class ProductController extends Controller
         $type_id = $this->handle->getProductTypesId($name);
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        if (checkPermission(Auth::id(),'productlistall')) {
+        if (checkPermission(Auth::id(),'productListAll')) {
             $data = $this->handle->getProducts($storeId,$type_id,$page,$limit,$name,0,$state,$deleted);
         }else{
             $data = $this->handle->getProducts([getStoreId()],$type_id,$page,$limit,$name,0,$state,$deleted);
+        }
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function getProductsByType()
+    {
+        $type = Input::get('type');
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        if (checkPermission(Auth::id(),'productListAll')) {
+            $data = $this->handle->getProducts(0,[$type],$page,$limit,'',2,2,1);
+        }else{
+            $data = $this->handle->getProducts([getStoreId()],[$type],$page,$limit,'',2,2,1);
         }
         return jsonResponse([
             'msg'=>'ok',

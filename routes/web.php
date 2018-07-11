@@ -24,13 +24,8 @@
 Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('/{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('v1/{all}',function (){jsonResponse(['msg'=>'ok']);})->middleware('cross');
-Route::get('test',function (){
-    $search = new \App\Libraries\ExpressSearch('1358357','4ca2f3ce-5025-4d03-af5a-60bb64e1ffd1');
-    $data = $search->getOrderTracesByJson('LHT','753014072569');
-    $data = json_decode($data);
-    $data = $data->Traces;
-    $data = array_reverse($data);
-    var_dump($data);
+Route::get('test',function (\Illuminate\Http\Request $post){
+    return $post->getScheme().'://'.$post->getHttpHost().$post->getScheme().'://'.$post->getHttpHost().'/api/pay/notify';
 });
 Route::post('test2','V1\SystemController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
@@ -65,6 +60,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('check/product','V1\ProductController@checkProduct')->middleware('permission:productReview');
         Route::get('shelf/product','V1\ProductController@shelfProduct')->middleware('permission:productShelf');
         Route::get('products','V1\ProductController@getProducts')->middleware(['checkStore','permission:productListAll|productListStore']);
+        Route::get('type/products','V1\ProductController@getProductsByType')->middleware(['checkStore','permission:productListAll|productListStore']);
         Route::post('role','V1\SystemController@addRole')->middleware('permission:roleAdd');
         Route::get('roles','V1\SystemController@getRoles')->middleware('permission:roleList');
         Route::delete('role','V1\SystemController@delRole')->middleware('permission:roleDel');
@@ -101,4 +97,9 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('count','V1\SystemController@getCount');
         Route::get('newest/order','V1\OrderController@getNewestOrder');
     });
+});
+Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
+    Route::post('card/promotion','V2\CardController@addCardPromotion');
+    Route::post('default/card','V2\CardController@addDefaultCard');
+    Route::get('default/cards','V2\CardController@getDefaultCards');
 });

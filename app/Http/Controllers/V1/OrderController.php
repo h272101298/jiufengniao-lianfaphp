@@ -110,7 +110,7 @@ class OrderController extends Controller
     }
     public function payOrder(Request $post)
     {
-        $url = 'https://template.geckowing.com/api/pay/notify';
+        $url = $post->getScheme().'://'.$post->getHttpHost().'/api/pay/notify';
         $user_id = getRedisData($post->token);
         $order_id = $post->order_id;
         $user = WeChatUser::findOrFail($user_id);
