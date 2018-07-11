@@ -390,7 +390,7 @@ trait ProductHandle
         if ($type){
             $db->where('type_id','=',$type);
         }
-        $db->where('review','=',1)->where('state''=',1)->where('deleted','=',0);
+        $db->where('review','=',1)->where('state','=',1)->where('deleted','=',0);
         $count = $db->count();
         $data = $db->select(['name','id','norm'])->get();
         $data = $this->formatProductApi($data);
