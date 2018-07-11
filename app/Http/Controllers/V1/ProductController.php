@@ -167,8 +167,14 @@ class ProductController extends Controller
         $state = Input::get('state');
         $name = Input::get('name');
         $deleted = Input::get('deleted',1);
-        $storeId = $this->handle->getStoresId($name);
-        $type_id = $this->handle->getProductTypesId($name);
+        if ($name){
+            $storeId = $this->handle->getStoresId($name);
+            $type_id = $this->handle->getProductTypesId($name);
+        }else{
+            $storeId = null;
+            $type_id = null;
+        }
+
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         if (checkPermission(Auth::id(),'productListAll')) {
