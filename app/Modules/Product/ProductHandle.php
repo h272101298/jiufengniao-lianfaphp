@@ -300,6 +300,10 @@ trait ProductHandle
             $stockId = Stock::where('product_id','=',$id)->pluck('id')->toArray();
             StockImage::whereIn('stock_id',$stockId)->delete();
             Stock::where('product_id','=',$id)->delete();
+            HotList::where('product_id','=',$id)->delete();
+            OfferList::where('product_id','=',$id)->delete();
+            NewList::where('product_id','=',$id)->delete();
+
             return true;
         }
         return false;
