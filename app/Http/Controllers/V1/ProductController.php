@@ -397,7 +397,7 @@ class ProductController extends Controller
     public function getProductQrCode()
     {
         $project_id = Input::get('project_id');
-        $wx =  new Wxxcx(config('weChat.appId'),config('weChat.appSecret'));
+        $wx =  getWxXcx();
         $data = [
             'scene'=>"project_id=" . $project_id,
             'page'=>"pages/goods/detail/detail"

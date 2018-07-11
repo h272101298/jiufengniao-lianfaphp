@@ -307,7 +307,7 @@ class WeChatController extends Controller
     public function getUserQrCode()
     {
         $user_id = getRedisData(Input::get('token'));
-        $wx =  new Wxxcx(config('weChat.appId'),config('weChat.appSecret'));
+        $wx =  getWxXcx();
         $data = array(
             'scene'=>'proxy='.$user_id,
             'page' => 'pages/index/index'
