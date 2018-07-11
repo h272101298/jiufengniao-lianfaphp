@@ -36,7 +36,8 @@ class UserController extends Controller
                 'msg'=>'ok',
                 'data'=>[
                     'role'=>$this->handle->getUserRole(Auth::id()),
-                    'name'=>$username
+                    'name'=>$username,
+                    'store_id'=>getStoreId()
                 ]
             ]);
         }
