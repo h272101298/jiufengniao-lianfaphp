@@ -65,6 +65,10 @@ trait ProductHandle
         }
         return false;
     }
+    public function delHotType($type_id)
+    {
+        return HotTypeList::where('type_id','=',$type_id)->delete();
+    }
     public function getProductTypesId($name)
     {
         $dbObj = DB::table('product_types');

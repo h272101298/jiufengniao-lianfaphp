@@ -57,6 +57,7 @@ class ProductController extends Controller
     {
         $id = Input::get('id');
         if ($this->handle->delProductType($id)){
+            $this->handle->delHotType($id);
             return jsonResponse([
                 'msg'=>'ok'
             ]);
