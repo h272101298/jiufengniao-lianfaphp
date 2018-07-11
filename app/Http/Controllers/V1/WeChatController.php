@@ -234,7 +234,8 @@ class WeChatController extends Controller
             'name'=>$post->name,
             'phone'=>$post->phone,
             'bank'=>$post->bank,
-            'account'=>$post->account
+            'account'=>$post->account,
+            'notify_id'=>$post->notifyId
         ];
         if ($this->handle->addProxyApply(0,$data)){
             return \jsonResponse([

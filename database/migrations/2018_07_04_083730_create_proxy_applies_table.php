@@ -20,6 +20,7 @@ class CreateProxyAppliesTable extends Migration
             $table->string('phone');
             $table->string('bank');
             $table->string('account');
+            $table->string('notify_id');
             $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });
