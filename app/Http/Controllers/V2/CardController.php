@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V2;
 use App\Modules\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class CardController extends Controller
 {
@@ -17,8 +18,12 @@ class CardController extends Controller
 
     public function addCardPromotion(Request $post)
     {
+        $stock = $this->handle->getStockById($post->stock_id);
+        $product = $this->handle->getProductById($stock->product_id);
         $data = [
-            'stock_id'=>$post->stock_id,
+            'stock_id'=>$stock->id,
+            'product_id'=>$product->id,
+            'store_id'=>$product->store_id,
             'description'=>$post->description,
             'start'=>strtotime($post->start),
             'end'=>strtotime($post->end),
@@ -52,9 +57,44 @@ class CardController extends Controller
             'msg'=>'ok'
         ]);
     }
+    public function getCardPromotions()
+    {
+        $state = Input::get('state');
+        $page = Input::get('page',1);
+        $limit = Input::get('limit');
+        $data = $this->handle->getCardPromotions(null,$state,$page,$limit);
+        $this->handle->formatPromotions($data['data']);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function checkPromotion()
+    {
+        $id = Input::get('id');
+        $data = ['state'=>2];
+        if ($this->handle->addCardPromotion($id,$data)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ]);
+    }
+    public function modifyPromotion()
+    {
+        
+    }
     public function getCardPromotion()
     {
-
+        $id = Input::get('id');
+        $data = $this->handle->getCardPromotion($id);
+        $this->handle->formatPromotion($data);
+        return jsonResponse([
+            'data'=>$data,
+            'msg'=>'ok'
+        ]);
     }
 
     public function getCardList()

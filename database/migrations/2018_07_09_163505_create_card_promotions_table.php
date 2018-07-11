@@ -15,7 +15,8 @@ class CreateCardPromotionsTable extends Migration
     {
         Schema::create('card_promotions', function (Blueprint $table) {
             $table->increments('id');
-//            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('store_id');
+            $table->unsignedInteger('product_id');
             $table->unsignedInteger('stock_id');
             $table->string('description')->nullable();
             $table->integer('start');

@@ -13,6 +13,9 @@ use App\Modules\Card\Model\CardList;
 use App\Modules\Card\Model\CardPromotion;
 use App\Modules\Card\Model\DefaultCard;
 use App\Modules\Card\Model\UserCard;
+use App\Modules\Product\Model\Product;
+use App\Modules\Product\Model\ProductType;
+use App\Modules\Product\Model\Stock;
 use Illuminate\Support\Facades\DB;
 
 trait CardHandle
@@ -51,9 +54,58 @@ trait CardHandle
         }
         return false;
     }
-    public function getCardPromotion()
+    public function getCardPromotions($product_id=[],$state=0,$page=1,$limit=10)
     {
-
+        $db = DB::table('card_promotions');
+        if ($product_id){
+            $db->whereIn('product_id',$product_id);
+        }
+        if ($state){
+            $db->where('state','=',$state);
+        }
+        $count = $db->count();
+        $data = $db->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function getCardPromotion($id)
+    {
+        return CardPromotion::find($id);
+    }
+    public function formatPromotions(&$promotions)
+    {
+        if (empty($promotions)){
+            return [];
+        }
+        foreach ($promotions as $promotion){
+            $stock = Stock::find($promotion->stock_id);
+            $product = Product::find($stock->product_id);
+            $type = ProductType::find($product->type_id);
+            $promotion->product = $product;
+            $promotion->type = $type;
+            $promotion->start = date('Y-m-d H:i:s',$promotion->start);
+            $promotion->end = date('Y-m-d H:i:s',$promotion->end);
+            $promotion->clickCount = 0;
+            $promotion->exchangeCount = 0;
+            $promotion->list = CardList::where('promotion_id','=',$promotion->id)->get();
+        }
+        return $promotions;
+    }
+    public function formatPromotion(&$promotion)
+    {
+        $stock = Stock::find($promotion->stock_id);
+        $product = Product::find($stock->product_id);
+        $type = ProductType::find($product->type_id);
+        $promotion->product = $product;
+        $promotion->type = $type;
+        $promotion->start = date('Y-m-d H:i:s',$promotion->start);
+        $promotion->end = date('Y-m-d H:i:s',$promotion->end);
+        $promotion->clickCount = 0;
+        $promotion->exchangeCount = 0;
+        $promotion->list = CardList::where('promotion_id','=',$promotion->id)->get();
+        return $promotion;
     }
     public function getSeedCount($sum)
     {

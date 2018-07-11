@@ -100,6 +100,9 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
 });
 Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::post('card/promotion','V2\CardController@addCardPromotion');
+    Route::get('card/promotions','V2\CardController@getCardPromotions');
+    Route::get('card/promotion','V2\CardController@getCardPromotion');
     Route::post('default/card','V2\CardController@addDefaultCard');
     Route::get('default/cards','V2\CardController@getDefaultCards');
+    Route::get('product/stocks','V2\ProductController@getStockByProduct');
 });

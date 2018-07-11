@@ -162,7 +162,7 @@ trait ProductHandle
             }else{
                 $type->level = 2;
                 $swap = ProductTypeBind::where('type_id','=',$bind->parent_id)->first();
-                if ($swap->parent_id!=0){
+                if (!empty($swap)&&$swap->parent_id!=0){
                     $type->level = 3;
                 }
             }
@@ -497,6 +497,26 @@ trait ProductHandle
     {
         $stock = Stock::where('product_id','=',$product_id)->orderBy('price','ASC')->first();
         return $stock;
+    }
+    public function getStocksByProductId($product_id)
+    {
+        $stock = Stock::where('product_id','=',$product_id)->orderBy('price','ASC')->get();
+        return $stock;
+    }
+    public function formatStocks(&$stocks)
+    {
+        if (empty($stocks)){
+            return [];
+        }
+        foreach ($stocks as $stock){
+            if ($stock->product_detail!='fixed'){
+                $idArray = explode(',',$stock->product_detail);
+                $detailArray = ProductDetailSnapshot::whereIn('id',$idArray)->pluck('title')->toArray();
+                $stock->detail = implode(',',$detailArray);
+            }
+
+        }
+        return $stocks;
     }
     public function addCart($uid,$stock_id,$store_id,$number)
     {
