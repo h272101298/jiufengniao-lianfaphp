@@ -37,6 +37,10 @@ trait ProxyHandle
         }
         return false;
     }
+    public function getProxyApply($user_id)
+    {
+        return ProxyApply::where('user_id','=',$user_id)->where('state','!=',3)->first();
+    }
     public function getUserProxyApplyCount($user)
     {
         return ProxyApply::where('user_id','=',$user)->where('state','!=',3)->count();

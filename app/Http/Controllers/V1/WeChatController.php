@@ -394,5 +394,14 @@ class WeChatController extends Controller
             'msg'=>'系统错误！'
         ],400);
     }
+    public function getProxyApply()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $data = $this->handle->getProxyApply($user_id);
+        return \jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 
 }

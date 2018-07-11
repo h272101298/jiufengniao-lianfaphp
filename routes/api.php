@@ -51,6 +51,7 @@ Route::group(['prefix'=>'v1'],function (){
         Route::get('collects','V1\ProductController@getCollects');
         Route::delete('collect','V1\ProductController@delCollect');
         Route::post('proxy/apply','V1\WeChatController@addProxyApply');
+        Route::get('proxy/apply','V1\WeChatController@getProxyApply');
         Route::post('withdraw/apply','V1\WeChatController@addWithdrawApply');
         Route::get('withdraw/applies','V1\WeChatController@getWithdrawApplies');
         Route::get('user/amount','V1\WeChatController@getUserAmount');
