@@ -25,6 +25,7 @@ class CreateCardPromotionsTable extends Migration
             $table->float('offer')->default(0);
             $table->integer('clickNum')->default(0);
             $table->tinyInteger('state')->default(1);
+            $table->tinyInteger('enable')->default(0);
             $table->timestamps();
         });
     }

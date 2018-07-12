@@ -330,7 +330,7 @@ trait OrderHandle
         }
         return false;
     }
-    public function countOrders($store_id=0,$state='',$created='')
+    public function countOrders($store_id=0,$state='',$created='',$user_id=0)
     {
         $db = DB::table('orders');
         if ($store_id){
@@ -339,11 +339,15 @@ trait OrderHandle
         if ($state){
             $db->where('state','=',$store_id);
         }
+        if ($user_id){
+            $db->where('user_id','=',$user_id);
+        }
         if ($created){
             $db->whereDate('created_at',$created);
         }
         return $db->count();
     }
+//    public function count
     public function countSales($store_id=0,$created='')
     {
         $OrderDB = Order::where('state','!=','created')->where('state','!=','canceled');

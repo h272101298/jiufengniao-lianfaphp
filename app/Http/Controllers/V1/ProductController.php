@@ -491,5 +491,13 @@ class ProductController extends Controller
             'data'=>$data
         ]);
     }
+    public function addNotifyQueue()
+    {
+        $id = Input::get('id');
+        $type = Input::get('type');
+        return jsonResponse([
+            'msg'=>'ok'
+        ]);
+    }
 
 }

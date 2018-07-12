@@ -25,6 +25,7 @@ class Wxxcx
         $code2session_url = sprintf($this->code2session_url,$this->appid,$this->secret,$code);
         $userInfo = $this->request($code2session_url);
         if(!isset($userInfo['session_key'])){
+//            var_dump($userInfo);
             return false;
         }
         $this->sessionKey = $userInfo['session_key'];

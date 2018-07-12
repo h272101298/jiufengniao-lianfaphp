@@ -44,6 +44,7 @@ class WeChatController extends Controller
                     'msg'=>'ok',
                     'data'=>[
                         'token'=>$token,
+                        'user_id'=>$user->id,
                         'address'=>$this->handle->getDefaultAddress($user->id),
                         'apply'=>$this->handle->getUserSettleApplyCount($token),
                         'is_proxy'=>$this->handle->checkProxyUser($user->id),
@@ -68,6 +69,7 @@ class WeChatController extends Controller
                         'msg'=>'ok',
                         'data'=>[
                             'token'=>$token,
+                            'user_id'=>$userId,
                             'apply'=>0,
                             'address'=>'',
                             'is_proxy'=>0,

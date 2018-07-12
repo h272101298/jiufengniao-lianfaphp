@@ -46,6 +46,7 @@ Route::group(['prefix'=>'v1'],function (){
         Route::post('order/assess','V1\OrderController@assessOrder');
         Route::get('order/cancel','V1\OrderController@cancelOrder');
         Route::get('orders','V1\OrderController@getMyOrders');
+        Route::get('orders/count','V1\OrderController@countUserOrders');
         Route::post('pay','V1\OrderController@payOrder');
         Route::post('collect','V1\ProductController@addCollect');
         Route::get('collects','V1\ProductController@getCollects');
@@ -67,4 +68,11 @@ Route::group(['prefix'=>'v1'],function (){
 //        Route::get('product/')
     });
 
+});
+Route::group(['prefix'=>'v2'],function (){
+    Route::group(['middleware'=>'checkToken'],function (){
+        Route::get('card/promotions','V2\CardController@getEnablePromotions');
+        Route::get('card/promotion','V2\CardController@getEnablePromotion');
+        Route::get('card/draw','V2\CardController@drawCard');
+    });
 });

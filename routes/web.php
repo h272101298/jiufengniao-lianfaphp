@@ -60,6 +60,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('check/product','V1\ProductController@checkProduct')->middleware('permission:productReview');
         Route::get('shelf/product','V1\ProductController@shelfProduct')->middleware('permission:productShelf');
         Route::get('products','V1\ProductController@getProducts')->middleware(['checkStore','permission:productListAll|productListStore']);
+        Route::get('product/notify','V1\ProductController@addNotifyQueue')->middleware('permission:productListAll');
         Route::get('type/products','V1\ProductController@getProductsByType')->middleware(['checkStore','permission:productListAll|productListStore']);
         Route::post('role','V1\SystemController@addRole')->middleware('permission:roleAdd');
         Route::get('roles','V1\SystemController@getRoles')->middleware('permission:roleList');
@@ -102,6 +103,10 @@ Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::post('card/promotion','V2\CardController@addCardPromotion');
     Route::get('card/promotions','V2\CardController@getCardPromotions');
     Route::get('card/promotion','V2\CardController@getCardPromotion');
+    Route::put('card/promotion','V2\CardController@modifyCardPromotion');
+    Route::delete('card/promotion','V2\CardController@delCardPromotion');
+    Route::get('check/promotion','V2\CardController@checkPromotion');
+    Route::get('enable/promotion','V2\CardController@enablePromotion');
     Route::post('default/card','V2\CardController@addDefaultCard');
     Route::get('default/cards','V2\CardController@getDefaultCards');
     Route::get('product/stocks','V2\ProductController@getStockByProduct');

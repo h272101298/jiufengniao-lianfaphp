@@ -69,10 +69,50 @@ class CardController extends Controller
             'data'=>$data
         ]);
     }
+    public function enablePromotion()
+    {
+        $id = Input::get('id');
+        $promotion = $this->handle->getCardPromotion($id);
+        if ($promotion->state!=2) {
+            return jsonResponse([
+                'msg'=>'未审核的活动不能上线！'
+            ],400);
+        }
+        $data = [
+            'enable'=>$promotion->enable==0?1:0
+        ];
+        if ($this->handle->addCardPromotion($id,$data)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+    }
+    public function getEnablePromotions()
+    {
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $data = $this->handle->getCardPromotions(null,0,$page,$limit,2);
+        $this->handle->formatCardPromotions($data['data']);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function getEnablePromotion()
+    {
+        $id = Input::get('id');
+        $user_id = getRedisData(Input::get('token'));
+        $data = $this->handle->getCardPromotion($id);
+        $this->handle->formatCardPromotion($data,$user_id);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
     public function checkPromotion()
     {
         $id = Input::get('id');
-        $data = ['state'=>2];
+        $data = ['state'=>Input::get('state',3)];
         if ($this->handle->addCardPromotion($id,$data)){
             return jsonResponse([
                 'msg'=>'ok'
@@ -82,10 +122,42 @@ class CardController extends Controller
             'msg'=>'系统错误！'
         ]);
     }
-    public function modifyPromotion()
+    public function delCardPromotion()
     {
-        
+        $id = Input::get('id');
+        $this->handle->delPromotionCardList($id);
+        $this->handle->delCardPromotion($id);
+        return jsonResponse([
+            'msg'=>'ok'
+        ]);
     }
+    public function modifyCardPromotion(Request $post)
+    {
+        $id = $post->id;
+        $data = [
+            'description'=>$post->description,
+            'start'=>strtotime($post->start),
+            'end'=>strtotime($post->end),
+            'number'=>$post->number,
+            'offer'=>$post->offer,
+            'clickNum'=>$post->clickNum,
+        ];
+        $this->handle->addCardPromotion($id,$data);
+        $list = $post->list;
+        if (!empty($list)){
+            $this->handle->delPromotionCardList($id);
+            foreach ($list as $item){
+                $swap = [
+                    'cover'=>$item
+                ];
+                $this->handle->addCardList(0,$swap);
+            }
+        }
+        return jsonResponse([
+            'msg'=>'ok'
+        ]);
+    }
+
     public function getCardPromotion()
     {
         $id = Input::get('id');
@@ -96,7 +168,6 @@ class CardController extends Controller
             'msg'=>'ok'
         ]);
     }
-
     public function getCardList()
     {
 
@@ -122,5 +193,77 @@ class CardController extends Controller
             'data'=>$data,
             'msg'=>'ok'
         ]);
+    }
+    public function drawCard()
+    {
+        $id = Input::get('promotion_id');
+        $user_id = getRedisData(Input::get('token'));
+        $founder_id = Input::get('founder_id');
+        $founder_id = $founder_id==0?$user_id:$founder_id;
+        if ($this->handle->checkCardJoin($id,$user_id,$founder_id)){
+            return jsonResponse([
+                'msg'=>'已参加过的活动不能再添加！'
+            ],400);
+        }
+        $promotion = $this->handle->getCardPromotion($id);
+        $count = $this->handle->getUserCardCount($user_id,$id);
+        $cards = $this->handle->getCardListArray($id);
+        $card = 0;
+        switch ($count){
+            case 0:
+                $card = $this->handle->drawCard($cards);
+                $this->handle->addUserCard($user_id,$card,$id);
+                break;
+            case 1:
+                if ($this->handle->checkDraw(10,8)){
+                    $card = $this->handle->drawCard($cards);
+                    $this->handle->addUserCard($user_id,$card,$id);
+                };
+                break;
+            case 2:
+                if ($this->handle->checkDraw(10,6)){
+                    $card = $this->handle->drawCard($cards);
+                    $this->handle->addUserCard($user_id,$card,$id);
+                };
+                break;
+            case 3:
+                if ($this->handle->checkDraw(10,4)){
+                    $card = $this->handle->drawCard($cards);
+                    $this->handle->addUserCard($user_id,$card,$id);
+                };
+                break;
+            case 4:
+                $sum = $this->handle->getSeedCount($promotion->clickNum);
+                if ($sum<=1){
+                    $card = $this->handle->drawCard($cards);
+                    $this->handle->addUserCard($user_id,$card,$id);
+                    break;
+                }else{
+                    if ($this->handle->checkDraw($sum,1)){
+                        $card = $this->handle->drawCard($cards);
+                        $this->handle->addUserCard($user_id,$card,$id);
+                    };
+                }
+                break;
+            default:
+                $sum = $this->handle->getSeedCount($promotion->clickNum);
+                if ($sum<=1){
+                    $card = $this->handle->drawCard($cards);
+                    $this->handle->addUserCard($user_id,$card,$id);
+                }else{
+                    if ($this->handle->checkDraw($sum,1)){
+                        $card = $this->handle->drawCard($cards);
+                        $this->handle->addUserCard($user_id,$card,$id);
+                    };
+                }
+                break;
+        }
+        if ($card!=0){
+            if ($user_id!=$founder_id){
+                $this->handle->addCardJoinRecord($user_id,$card,$founder_id,$id);
+            }
+        }
+        $this->handle->addCardJoin($id,$user_id,$founder_id);
+        return jsonResponse(['msg'=>'ok', 'data'=>$card]);
     }
 }

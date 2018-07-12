@@ -97,5 +97,12 @@ trait SystemHandle
         }
         return false;
     }
-
+    public function delNotifyQueue($id)
+    {
+        $queue = NotifyQueue::find($id);
+        if ($queue->delete()){
+            return true;
+        }
+        return false;
+    }
 }
