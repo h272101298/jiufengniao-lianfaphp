@@ -376,11 +376,11 @@ class OrderController extends Controller
     {
         $user_id = getRedisData(Input::get('token'));
         $data = [
-            'created'=>$this->handle->countOrders(null,'created',null,$user_id),
-            'paid'=>$this->handle->countOrders(null,'paid',null,$user_id),
-            'finish'=>$this->handle->countOrders(null,'finish',null,$user_id),
-            'closed'=>$this->handle->countOrders(null,'closed',null,$user_id),
-            'canceled'=>$this->handle->countOrders(null,'canceled',null,$user_id),
+            'created'=>$this->handle->countOrders(0,'created',0,$user_id),
+            'paid'=>$this->handle->countOrders(0,'paid',0,$user_id),
+            'finish'=>$this->handle->countOrders(0,'finish',0,$user_id),
+            'closed'=>$this->handle->countOrders(0,'closed',0,$user_id),
+            'canceled'=>$this->handle->countOrders(0,'canceled',0,$user_id),
         ];
         return jsonResponse([
             'msg'=>'ok',

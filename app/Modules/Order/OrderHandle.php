@@ -346,6 +346,7 @@ trait OrderHandle
             $db->whereDate('created_at',$created);
         }
         return $db->count();
+
     }
 //    public function count
     public function countSales($store_id=0,$created='')
