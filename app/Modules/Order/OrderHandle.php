@@ -345,10 +345,14 @@ trait OrderHandle
         if ($created){
             $db->whereDate('created_at',$created);
         }
+
         return $db->count();
 
     }
-//    public function count
+    public function countUserOrders($user_id,$state)
+    {
+        return Order::where('user_id','=',$user_id)->where('state','=',$state)->count();
+    }
     public function countSales($store_id=0,$created='')
     {
         $OrderDB = Order::where('state','!=','created')->where('state','!=','canceled');
