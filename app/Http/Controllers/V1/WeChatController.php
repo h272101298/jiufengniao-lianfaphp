@@ -45,6 +45,7 @@ class WeChatController extends Controller
                     'data'=>[
                         'token'=>$token,
                         'user_id'=>$user->id,
+                        'proxy_id'=>$proxy_id,
                         'address'=>$this->handle->getDefaultAddress($user->id),
                         'apply'=>$this->handle->getUserSettleApplyCount($token),
                         'is_proxy'=>$this->handle->checkProxyUser($user->id),
@@ -72,6 +73,7 @@ class WeChatController extends Controller
                         'data'=>[
                             'token'=>$token,
                             'user_id'=>$userId,
+                            'proxy_id'=>$proxy_id,
                             'apply'=>0,
                             'address'=>'',
                             'is_proxy'=>0,
@@ -86,6 +88,15 @@ class WeChatController extends Controller
                 'data'=>$WX
             ],400);
         }
+    }
+    public function test()
+    {
+        $user_id = 2;
+        $proxy_id = 1;
+        $this->handle->addProxyList($user_id,$proxy_id);
+        return \jsonResponse([
+            'msg'=>'ok'
+        ]);
     }
     public function getProxyInfo()
     {
