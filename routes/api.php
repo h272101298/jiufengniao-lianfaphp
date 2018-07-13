@@ -75,5 +75,6 @@ Route::group(['prefix'=>'v2'],function (){
         Route::get('card/promotions','V2\CardController@getEnablePromotions');
         Route::get('card/promotion','V2\CardController@getEnablePromotion');
         Route::get('card/draw','V2\CardController@drawCard');
+        Route::get('promotions/count','V2\WeChatController@countPromotions');
     });
 });

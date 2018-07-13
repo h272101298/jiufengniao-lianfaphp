@@ -119,9 +119,7 @@ class ProductController extends Controller
             'name'=>$post->name,
             'detail'=>$post->detail,
             'brokerage'=>$post->brokerage,
-//            'express'=>$post->express,
             'express'=>0,
-//            'express_price'=>$post->express_price,
             'express_price'=>0,
             'share_title'=>$post->share_title,
             'share_detail'=>$post->share_detail,
@@ -130,6 +128,7 @@ class ProductController extends Controller
         ];
         $stock = $post->stock;
         $norm = $post->norm;
+//        dd($data);
         $product_id = $this->handle->addProduct($id,$data);
         if ($product_id){
             foreach ($stock as $item){
@@ -152,7 +151,9 @@ class ProductController extends Controller
                     'product_detail'=>$detail
                 ];
                 $images = $item['images'];
-                $stock_id = $this->handle->addStock($id,$stockData);
+//                $stockId = $item['id']?$item['id']:0;
+                $this->handle->delStocks($product_id);
+                $stock_id = $this->handle->addStock(0,$stockData);
                 foreach ($images as $image){
                     $this->handle->addStockImage($stock_id,$image);
                 }
@@ -242,6 +243,15 @@ class ProductController extends Controller
         $name = Input::get('name');
         $type = Input::get('type');
         $data = $this->handle->getProductsApi($name,$type);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function getProduct()
+    {
+        $id = Input::get('id');
+        $data = $this->handle->getProduct($id);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data

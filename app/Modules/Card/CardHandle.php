@@ -12,6 +12,7 @@ namespace App\Modules\Card;
 use App\Modules\Card\Model\CardJoinList;
 use App\Modules\Card\Model\CardJoinRecord;
 use App\Modules\Card\Model\CardList;
+use App\Modules\Card\Model\CardPrizeList;
 use App\Modules\Card\Model\CardPromotion;
 use App\Modules\Card\Model\DefaultCard;
 use App\Modules\Card\Model\UserCard;
@@ -23,6 +24,12 @@ use Illuminate\Support\Facades\DB;
 
 trait CardHandle
 {
+    /**
+     * @param $id
+     * @param $data
+     * @return bool|mixed
+     * 新增集卡牌活动
+     */
     public function addCardPromotion($id,$data)
     {
         if ($id){
@@ -38,10 +45,22 @@ trait CardHandle
         }
         return false;
     }
+
+    /**
+     * @param $state
+     * @return mixed
+     * 获取集卡牌活动列表
+     */
     public function getCardPromotionCount($state)
     {
         return CardPromotion::where('state','=',$state)->count();
     }
+
+    /**
+     * @param $id
+     * @return bool
+     * 删除集卡牌活动
+     */
     public function delCardPromotion($id)
     {
         $promotion = CardPromotion::find($id);
@@ -50,9 +69,15 @@ trait CardHandle
         }
         return false;
     }
+
+    /**
+     * @param $promotionId
+     * @return mixed
+     * 删除卡牌列表
+     */
     public function delPromotionCardList($promotionId)
     {
-        CardList::where('promotion_id','=',$promotionId)->delete();
+        return CardList::where('promotion_id','=',$promotionId)->delete();
     }
     public function addCardList($id,$data)
     {
@@ -99,16 +124,21 @@ trait CardHandle
         }
         return $promotions;
     }
-    public function formatCardPromotion(&$promotion,$user_id)
+    public function formatCardPromotion(&$promotion,$user_id=0,$founder_id=0)
     {
         $promotion->stock = Stock::find($promotion->stock_id);
         $list = CardList::where('promotion_id','=',$promotion->id)->get();
         foreach ($list as $item){
-            $item->count = UserCard::where('user_id','=',$user_id)
+            $item->count = UserCard::where('user_id','=',$founder_id)
                 ->where('promotion_id','=',$promotion->id)->where('card_id','=',$item->id)->count();
         }
         $promotion->list = $list;
         $promotion->product = Product::find($promotion->product_id);
+        $stock = Stock::find($promotion->stock_id);
+        $promotion->join = CardJoinList::where('promotion_id','=',$promotion->id)
+            ->where('user_id','=',$user_id)->where('founder_id','=',$founder_id)->count();
+        $promotion->prize = CardPrizeList::where('user_id','=',$founder_id)->where('promotion_id','=',$promotion->id)->count();
+        $promotion->price = sprintf('%.2f',$stock->price*($promotion->offer/10));
         return $promotion;
     }
     public function getCardPromotion($id)
@@ -145,7 +175,6 @@ trait CardHandle
         $promotion->end = date('Y-m-d H:i:s',$promotion->end);
         $promotion->clickCount = 0;
         $promotion->exchangeCount = 0;
-        $promotion->list = CardList::where('promotion_id','=',$promotion->id)->get();
         return $promotion;
     }
     public function getSeedCount($sum)
@@ -286,6 +315,42 @@ trait CardHandle
             $record->user = WeChatUser::find($record->user_id);
         }
         return $records;
+    }
+    public function addCardPrize($user_id,$promotion_id)
+    {
+        $prize = new CardPrizeList();
+        $prize->user_id = $user_id;
+        $prize->promotion_id = $promotion_id;
+        if ($prize->save()){
+            return true;
+        }
+        return false;
+    }
+    public function countCardPrize($user_id,$promotion_id)
+    {
+        return CardPrizeList::where('user_id','=',$user_id)->where('promotion_id','=',$promotion_id)->count();
+    }
+    public function getUserJoinPromotions($user_id,$page=1,$limit=10)
+    {
+        $db = DB::table('card_join_lists')->where('user_id','=',$user_id)->where('founder_id','=',$user_id);
+        $count = $db->count();
+        $promotionsId = $db->limit($limit)->offset(($page-1)*$limit)->pluck('promotion_id')->toArray();
+        $promotions = CardPromotion::whereIn('id',$promotionsId)->get();
+        return [
+            'data'=>$promotions,
+            'count'=>$count
+        ];
+    }
+    public function formatUserJoinPromotions(&$promotions,$user_id)
+    {
+        if (empty($promotions)){
+            return [];
+        }
+        foreach ($promotions as $promotion){
+            $promotion->stock = Stock::find($promotion->stock_id);
+            $promotion->product = Product::find($promotion->product_id);
+            $promotion->count = $this->getUserCardCount($user_id,$promotion->id);
+        }
     }
 
 }

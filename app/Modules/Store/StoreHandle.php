@@ -20,148 +20,161 @@ use Illuminate\Support\Facades\DB;
 
 trait StoreHandle
 {
-    public function addStoreCategory($id=0,$title)
+    public function addStoreCategory($id = 0, $title)
     {
-        if ($id){
+        if ($id) {
             $category = StoreCategory::find($id);
-        }else{
+        } else {
             $category = new StoreCategory();
         }
         $category->title = $title;
-        if ($category->save()){
+        if ($category->save()) {
             return true;
         }
         return false;
     }
-    public function getStoreCategories($page,$limit)
+
+    public function getStoreCategories($page, $limit)
     {
         return [
-          'count'=>StoreCategory::count(),
-          'data'=>StoreCategory::limit($limit)->offset(($page-1)*$limit)->get()
+            'count' => StoreCategory::count(),
+            'data' => StoreCategory::limit($limit)->offset(($page - 1) * $limit)->get()
         ];
     }
+
     public function delStoreCategory($id)
     {
         $category = StoreCategory::findOrFail($id);
-        if ($category->delete()){
+        if ($category->delete()) {
             return true;
         }
         return false;
     }
-    public function addExpress($id=0,$store_id,$title,$code)
+
+    public function addExpress($id = 0, $store_id, $title, $code)
     {
-        if ($id){
+        if ($id) {
             $express = Express::find($id);
-        }else{
+        } else {
             $express = new Express();
         }
         $express->store_id = $store_id;
         $express->title = $title;
         $express->code = $code;
-        if ($express->save()){
+        if ($express->save()) {
             return true;
         }
         return false;
     }
-    public function getExpresses($store_id=0,$page,$limit,$title='',$code)
+
+    public function getExpresses($store_id = 0, $page, $limit, $title = '', $code)
     {
         $db = DB::table('expresses');
-        if ($store_id){
-            $db->where('store_id','=',$store_id);
+        if ($store_id) {
+            $db->where('store_id', '=', $store_id);
         }
-        if ($title){
-            $db->where('title','like','%'.$title.'%');
+        if ($title) {
+            $db->where('title', 'like', '%' . $title . '%');
         }
-        if ($code){
-            $db->where('code','like','%'.$code.'%');
+        if ($code) {
+            $db->where('code', 'like', '%' . $code . '%');
         }
         $count = $db->count();
         $data = $db->get();
         return [
-            'count'=>$count,
-            'data'=>$data
+            'count' => $count,
+            'data' => $data
         ];
     }
+
     public function delExpress($id)
     {
         $express = Express::findOrFail($id);
-        if ($express->store_id!=getStoreId()){
+        if ($express->store_id != getStoreId()) {
             return false;
         }
-        if ($express->delete()){
+        if ($express->delete()) {
             return true;
         }
         return false;
     }
-    public function addStore($id=0,$user_id,$data)
+
+    public function addStore($id = 0, $user_id, $data)
     {
-        if ($id){
+        if ($id) {
             $store = Store::find($id);
-        }else{
+        } else {
             $store = new Store();
             $store->user_id = $user_id;
         }
-        foreach ($data as $key=>$value){
+        foreach ($data as $key => $value) {
             $store->$key = $value;
         }
-        if ($store->save()){
+        if ($store->save()) {
             return true;
         }
         return false;
     }
-    public function getUserStoreCount($user_id,$id)
+
+    public function getUserStoreCount($user_id, $id)
     {
-        return Store::where('user_id','=',$user_id)->where('id','!=',$id)->count();
+        return Store::where('user_id', '=', $user_id)->where('id', '!=', $id)->count();
     }
+
     public function getUserStore($user_id)
     {
-        return Store::where('user_id','=',$user_id)->first();
+        return Store::where('user_id', '=', $user_id)->first();
     }
-    public function getStores($name='',$page,$limit)
+
+    public function getStores($name = '', $page, $limit)
     {
         $db = DB::table('stores');
-        if ($name){
-            $db->where('name','like',$name);
+        if ($name) {
+            $db->where('name', 'like', $name);
         }
         $count = $db->count();
-        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        $data = $db->orderBy('id', 'DESC')->limit($limit)->offset(($page - 1) * $limit)->get();
         return [
-            'data'=>$data,
-            'count'=>$count
+            'data' => $data,
+            'count' => $count
         ];
     }
+
     public function getStoresId($name)
     {
         $db = DB::table('stores');
-        if ($name){
-            $db->where('name','like','%'.$name.'%');
+        if ($name) {
+            $db->where('name', 'like', '%' . $name . '%');
         }
         return $db->pluck('id')->toArray();
     }
+
     public function getStoresIdByStockId($idArray)
     {
-        $productId = Stock::whereIn('id',$idArray)->pluck('product_id')->toArray();
-        $storesId = Product::whereIn('id',$productId)->pluck('store_id')->toArray();
+        $productId = Stock::whereIn('id', $idArray)->pluck('product_id')->toArray();
+        $storesId = Product::whereIn('id', $productId)->pluck('store_id')->toArray();
         return array_unique($storesId);
     }
-    public function addStoreExpressConfig($store_id,$businessId,$apiKey)
+
+    public function addStoreExpressConfig($store_id, $businessId, $apiKey)
     {
-        $config = ExpressConfig::where('store_id','=',$store_id)->first();
-        if (empty($config)){
+        $config = ExpressConfig::where('store_id', '=', $store_id)->first();
+        if (empty($config)) {
             $config = new ExpressConfig();
             $config->store_id = $store_id;
         }
         $config->business_id = $businessId;
         $config->api_key = $apiKey;
-        if ($config->save()){
+        if ($config->save()) {
             return true;
         }
         return false;
     }
+
     public function getStoreExpressConfig($store_id)
     {
-        $config = ExpressConfig::where('store_id','=',$store_id)->first();
-        if (empty($config)){
+        $config = ExpressConfig::where('store_id', '=', $store_id)->first();
+        if (empty($config)) {
             $config = new ExpressConfig();
         }
         return $config;

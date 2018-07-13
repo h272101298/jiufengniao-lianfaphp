@@ -24,8 +24,8 @@
 Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('/{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('v1/{all}',function (){jsonResponse(['msg'=>'ok']);})->middleware('cross');
-Route::get('test',function (\Illuminate\Http\Request $post){
-    return $post->getScheme().'://'.$post->getHttpHost().$post->getScheme().'://'.$post->getHttpHost().'/api/pay/notify';
+Route::get('test',function (){
+    dd(0.00==0) ;
 });
 Route::post('test2','V1\SystemController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
@@ -55,6 +55,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('expresses','V1\StoreController@getStoreExpresses')->middleware('permission:expressList');
         Route::delete('express','V1\StoreController@delExpress')->middleware('permission:expressDel');
         Route::post('product','V1\ProductController@addProduct')->middleware('permission:productAdd');
+        Route::get('product','V1\ProductController@getProduct')->middleware('permission:productListAll|productListStore');
         Route::get('del/product','V1\ProductController@softDelProduct')->middleware('permission:productSoftDel');
         Route::delete('product','V1\ProductController@delProduct')->middleware('permission:productDel');
         Route::get('check/product','V1\ProductController@checkProduct')->middleware('permission:productReview');

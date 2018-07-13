@@ -7,6 +7,7 @@ use App\Modules\Role\Model\Permission;
 use App\Modules\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Excel;
 
@@ -241,13 +242,13 @@ class SystemController extends Controller
     }
     public function getCount()
     {
-
+        $storeId = checkPermission(Auth::id(),'productListAll')?0:getStoreId();
         $data = [
-            'productCount'=>$this->handle->countProduct(),
+            'productCount'=>$this->handle->countProduct($storeId),
             'todayOrderCount'=>$this->handle->countOrders(0,'',date('Y-m-d')),
             'todaySalesCount'=>$this->handle->countSales(0,date('Y-m-d')),
             'todayUserCount'=>$this->handle->countWeChatUsers(date('Y-m-d')),
-            'reviewProductCount'=>$this->handle->countProduct(0,0,1),
+            'reviewProductCount'=>$this->handle->countProduct($storeId,0,1),
         ];
         return jsonResponse([
             'msg'=>'ok',

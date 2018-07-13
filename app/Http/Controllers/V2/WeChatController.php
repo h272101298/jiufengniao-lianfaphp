@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Controllers\V2;
+
+use App\Modules\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+
+class WeChatController extends Controller
+{
+    //
+    private $handle;
+    public function __construct()
+    {
+        $this->handle = new User();
+    }
+    public function countPromotions()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $type = Input::get('type');
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        switch ($type){
+            case 'card':
+                $data = $this->handle->getUserJoinPromotions($user_id,$page,$limit);
+                $this->handle->formatUserJoinPromotions($data['data'],$user_id);
+                break;
+        }
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+}

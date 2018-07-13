@@ -102,8 +102,10 @@ class CardController extends Controller
     {
         $id = Input::get('id');
         $user_id = getRedisData(Input::get('token'));
+        $founder_id = Input::get('founder_id');
+        $founder_id = $founder_id==0?$user_id:$founder_id;
         $data = $this->handle->getCardPromotion($id);
-        $this->handle->formatCardPromotion($data,$user_id);
+        $this->handle->formatCardPromotion($data,$user_id,$founder_id);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data
@@ -161,8 +163,9 @@ class CardController extends Controller
     public function getCardPromotion()
     {
         $id = Input::get('id');
+        $user_id = getRedisData(Input::get('token'))?getRedisData(Input::get('token')):0;
         $data = $this->handle->getCardPromotion($id);
-        $this->handle->formatPromotion($data);
+        $this->handle->formatPromotion($data,$user_id,$user_id);
         return jsonResponse([
             'data'=>$data,
             'msg'=>'ok'
@@ -206,42 +209,42 @@ class CardController extends Controller
             ],400);
         }
         $promotion = $this->handle->getCardPromotion($id);
-        $count = $this->handle->getUserCardCount($user_id,$id);
+        $count = $this->handle->getUserCardCount($founder_id,$id);
         $cards = $this->handle->getCardListArray($id);
         $card = 0;
         switch ($count){
             case 0:
                 $card = $this->handle->drawCard($cards);
-                $this->handle->addUserCard($user_id,$card,$id);
+                $this->handle->addUserCard($founder_id,$card,$id);
                 break;
             case 1:
                 if ($this->handle->checkDraw(10,8)){
                     $card = $this->handle->drawCard($cards);
-                    $this->handle->addUserCard($user_id,$card,$id);
+                    $this->handle->addUserCard($founder_id,$card,$id);
                 };
                 break;
             case 2:
                 if ($this->handle->checkDraw(10,6)){
                     $card = $this->handle->drawCard($cards);
-                    $this->handle->addUserCard($user_id,$card,$id);
+                    $this->handle->addUserCard($founder_id,$card,$id);
                 };
                 break;
             case 3:
                 if ($this->handle->checkDraw(10,4)){
                     $card = $this->handle->drawCard($cards);
-                    $this->handle->addUserCard($user_id,$card,$id);
+                    $this->handle->addUserCard($founder_id,$card,$id);
                 };
                 break;
             case 4:
                 $sum = $this->handle->getSeedCount($promotion->clickNum);
                 if ($sum<=1){
                     $card = $this->handle->drawCard($cards);
-                    $this->handle->addUserCard($user_id,$card,$id);
+                    $this->handle->addUserCard($founder_id,$card,$id);
                     break;
                 }else{
                     if ($this->handle->checkDraw($sum,1)){
                         $card = $this->handle->drawCard($cards);
-                        $this->handle->addUserCard($user_id,$card,$id);
+                        $this->handle->addUserCard($founder_id,$card,$id);
                     };
                 }
                 break;
@@ -249,11 +252,11 @@ class CardController extends Controller
                 $sum = $this->handle->getSeedCount($promotion->clickNum);
                 if ($sum<=1){
                     $card = $this->handle->drawCard($cards);
-                    $this->handle->addUserCard($user_id,$card,$id);
+                    $this->handle->addUserCard($founder_id,$card,$id);
                 }else{
                     if ($this->handle->checkDraw($sum,1)){
                         $card = $this->handle->drawCard($cards);
-                        $this->handle->addUserCard($user_id,$card,$id);
+                        $this->handle->addUserCard($founder_id,$card,$id);
                     };
                 }
                 break;
