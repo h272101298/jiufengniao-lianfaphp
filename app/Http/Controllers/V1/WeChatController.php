@@ -62,7 +62,9 @@ class WeChatController extends Controller
                 ];
                 $userId = $this->handle->createUser($userData);
                 if ($userId){
-                    $this->handle->addProxyList($userId,$proxy_id);
+                    if ($proxy_id!=0){
+                        $this->handle->addProxyList($userId,$proxy_id);
+                    }
                     $token = CreateNonceStr(8);
                     setRedisData($token,$userId);
                     return \jsonResponse([

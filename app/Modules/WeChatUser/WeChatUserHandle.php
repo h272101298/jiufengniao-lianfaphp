@@ -3,6 +3,7 @@ namespace App\Modules\WeChatUser;
 use App\Modules\Address\AddressHandle;
 use App\Modules\Product\Model\Product;
 use App\Modules\Proxy\Model\ProxyList;
+use App\Modules\Proxy\Model\ProxyUser;
 use App\Modules\Proxy\ProxyHandle;
 use App\Modules\SettleApply\SettleApplyHandle;
 use App\Modules\WeChatUser\Model\NotifyList;
