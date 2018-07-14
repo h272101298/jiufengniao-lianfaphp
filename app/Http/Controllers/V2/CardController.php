@@ -276,7 +276,7 @@ class CardController extends Controller
                             "touser"=>$list->open_id,
                             "template_id"=>$this->handle->getNotifyConfigByTitle('card_notify'),
                             "form_id"=>$list->notify_id,
-                            "page"=>"pages/activity/card/detail/detail",
+                            "page"=>"pages/activity/card/detail/detail?id=0&cardid=".$promotion->id,
                             "data"=>[
                                 "keyword1"=>[
                                     "value"=>$promotion->description
