@@ -303,8 +303,13 @@ trait CardHandle
     }
     public function getCardJoinRecords($founder_id,$promotion_id,$page=1,$limit=10)
     {
-        return CardJoinRecord::where('founder_id','=',$founder_id)->where('promotion_id','=',$promotion_id)
-            ->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        $db = DB::table('card_join_records')->where('founder_id','=',$founder_id)->where('promotion_id','=',$promotion_id);
+        $count = $db->count();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
     }
     public function formatCardJoinRecords(&$records)
     {
