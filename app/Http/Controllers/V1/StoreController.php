@@ -84,6 +84,7 @@ class StoreController extends Controller
                 $user->phone = $apply->phone;
                 $user->password = bcrypt('123456');
                 $user->save();
+
             }
             return jsonResponse([
                 'msg'=>'ok'

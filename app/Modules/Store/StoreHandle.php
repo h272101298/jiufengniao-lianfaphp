@@ -125,7 +125,10 @@ trait StoreHandle
     {
         return Store::where('user_id', '=', $user_id)->first();
     }
-
+    public function getStoreById($id)
+    {
+        return Store::find($id);
+    }
     public function getStores($name = '', $page, $limit)
     {
         $db = DB::table('stores');

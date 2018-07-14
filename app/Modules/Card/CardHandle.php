@@ -12,6 +12,7 @@ namespace App\Modules\Card;
 use App\Modules\Card\Model\CardJoinList;
 use App\Modules\Card\Model\CardJoinRecord;
 use App\Modules\Card\Model\CardList;
+use App\Modules\Card\Model\CardNotify;
 use App\Modules\Card\Model\CardPrizeList;
 use App\Modules\Card\Model\CardPromotion;
 use App\Modules\Card\Model\DefaultCard;
@@ -356,6 +357,23 @@ trait CardHandle
             $promotion->product = Product::find($promotion->product_id);
             $promotion->count = $this->getUserCardCount($user_id,$promotion->id);
         }
+    }
+    public function checkCardPromotionNotify($promotion)
+    {
+        $count = CardNotify::where('promotion_id','=',$promotion)->count();
+        if ($count!=0){
+            return true;
+        }
+        return false;
+    }
+    public function addCardPromotionNotify($promotion)
+    {
+        $notify = new CardNotify();
+        $notify->promotion_id = $promotion;
+        if ($notify->save()){
+            return true;
+        }
+        return false;
     }
 
 }

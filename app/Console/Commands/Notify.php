@@ -40,16 +40,16 @@ class Notify extends Command
      */
     public function handle()
     {
-        //
-//        $handle = new
         $notify = getWxNotify();
         $queues = $this->getNotifyQueues();
         foreach ($queues as $queue){
             $notify->setAccessToken();
             $data = $notify->send($queue->content);
-            dd($data);
+            $data = json_decode($data);
+            var_dump($data);
+            if ($data['errmsg']=='ok'){
+                $this->delNotifyQueue($queue->id);
+            }
         }
-//        $queue = get
-//        $notify = get
     }
 }

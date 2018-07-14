@@ -505,6 +505,49 @@ class ProductController extends Controller
     {
         $id = Input::get('id');
         $type = Input::get('type');
+        $product = $this->handle->getProductById($id);
+        $stock = $this->handle->getStockByProductId($id);
+        $lists = $this->handle->getNotifyList();
+        $store = $this->handle->getStoreById($product->store_id);
+        switch ($type){
+            case 'hot':
+                $typeString = '热门推荐';
+                break;
+            case 'new':
+                $typeString = '新品推荐';
+                break;
+            case 'offer':
+                $typeString = '优惠放送';
+                break;
+        }
+        if (!empty($lists)){
+            foreach ($lists as $list){
+                $data = [
+                    "touser"=>$list->open_id,
+                    "template_id"=>$this->handle->getNotifyConfigByTitle('product_notify'),
+                    "form_id"=>$list->notify_id,
+                    "page"=>"pages/goods/detail/detail?id=".$id,
+                    "data"=>[
+                        "keyword1"=>[
+                            "value"=>$stock->cover
+                        ],
+                        "keyword2"=>[
+                            "value"=>$product->name
+                        ],
+                        "keyword3"=>[
+                            "value"=>$store->name
+                        ],
+                        "keyword4"=>[
+                            "value"=>$typeString
+                        ],
+                        "keyword5"=>[
+                            "value"=>$stock->price
+                        ]
+                    ]
+                ];
+                $this->handle->addNotifyQueue(json_encode($data));
+            }
+        }
         return jsonResponse([
             'msg'=>'ok'
         ]);

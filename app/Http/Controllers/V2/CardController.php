@@ -261,34 +261,38 @@ class CardController extends Controller
                 }
                 break;
         }
+        if ($user_id!=$founder_id){
+            $this->handle->addCardJoinRecord($user_id,$card,$founder_id,$id);
+        }
         if ($card!=0){
-            if ($user_id!=$founder_id){
-                $this->handle->addCardJoinRecord($user_id,$card,$founder_id,$id);
-            }
             $cardCount = $this->handle->getUserCardCount($founder_id,$id);
             if ($cardCount==5){
-                $user = $this->handle->getWeChatUserById($user_id);
-                $list = $this->handle->getNotifyListByOpenId($user->open_id);
-                $product = $this->handle->getProductById($promotion->product_id);
-                if (!empty($list)){
-                    $data = [
-                        "touser"=>$list->open_id,
-                        "template_id"=>$this->handle->getNotifyConfigByTitle('card_notify'),
-                        "form_id"=>$list->notify_id,
-                        "page"=>"",
-                        "data"=>[
-                            "keyword1"=>[
-                                "value"=>$promotion->description
-                            ],
-                            "keyword2"=>[
-                                "value"=>date('Y-m-d H:i:s',time())
-                            ],
-                            "keyword3"=>[
-                                "value"=>$product->name
+                if (!$this->handle->checkCardPromotionNotify($id)){
+                    $user = $this->handle->getWeChatUserById($user_id);
+                    $list = $this->handle->getNotifyListByOpenId($user->open_id);
+                    $product = $this->handle->getProductById($promotion->product_id);
+                    if (!empty($list)){
+                        $data = [
+                            "touser"=>$list->open_id,
+                            "template_id"=>$this->handle->getNotifyConfigByTitle('card_notify'),
+                            "form_id"=>$list->notify_id,
+                            "page"=>"",
+                            "data"=>[
+                                "keyword1"=>[
+                                    "value"=>$promotion->description
+                                ],
+                                "keyword2"=>[
+                                    "value"=>date('Y-m-d H:i:s',time())
+                                ],
+                                "keyword3"=>[
+                                    "value"=>$product->name
+                                ]
                             ]
-                        ]
-                    ];
-                    $this->handle->addNotifyQueue(json_encode($data));
+                        ];
+                        $this->handle->addNotifyQueue(json_encode($data));
+                        $this->handle->addCardPromotionNotify($id);
+                    }
+
                 }
 
             }
