@@ -106,3 +106,10 @@ if (!function_exists('getWxPay')) {
         return $wxpay;
     }
 }
+if (!function_exists('getWxNotify')) {
+    function getWxNotify(){
+        $config = \App\Modules\System\Model\TxConfig::first();
+        $wxNotify = new \App\Libraries\WxNotify($config->app_id,$config->app_secret);
+        return $wxNotify;
+    }
+}

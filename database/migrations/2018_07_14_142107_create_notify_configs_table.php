@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserCardsTable extends Migration
+class CreateNotifyConfigsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateUserCardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_cards', function (Blueprint $table) {
+        Schema::create('notify_configs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('card_id');
-            $table->unsignedInteger('promotion_id');
+            $table->string('title');
+            $table->string('content');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateUserCardsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_cards');
+        Schema::dropIfExists('notify_configs');
     }
 }

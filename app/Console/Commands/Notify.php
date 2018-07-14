@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Modules\System\SystemHandle;
 use Illuminate\Console\Command;
 
 class Notify extends Command
 {
+    use SystemHandle;
     /**
      * The name and signature of the console command.
      *
@@ -19,6 +21,7 @@ class Notify extends Command
      * @var string
      */
     protected $description = 'Command description';
+
 
     /**
      * Create a new command instance.
@@ -38,6 +41,15 @@ class Notify extends Command
     public function handle()
     {
         //
+//        $handle = new
+        $notify = getWxNotify();
+        $queues = $this->getNotifyQueues();
+        foreach ($queues as $queue){
+            $notify->setAccessToken();
+            $data = $notify->send($queue->content);
+            dd($data);
+        }
+//        $queue = get
 //        $notify = get
     }
 }

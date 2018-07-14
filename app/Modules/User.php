@@ -21,6 +21,7 @@ use App\Modules\SettleApply\SettleApplyHandle;
 use App\Modules\Store\StoreHandle;
 use App\Modules\System\SystemHandle;
 use App\Modules\WeChatUser\Model\UserAmount;
+use App\Modules\WeChatUser\Model\WeChatUser;
 
 class User
 {
@@ -85,6 +86,10 @@ class User
             return true;
         }
         return false;
+    }
+    public function getWeChatUserById($id)
+    {
+        return WeChatUser::find($id);
     }
 
 

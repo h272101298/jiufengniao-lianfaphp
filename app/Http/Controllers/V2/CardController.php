@@ -265,8 +265,48 @@ class CardController extends Controller
             if ($user_id!=$founder_id){
                 $this->handle->addCardJoinRecord($user_id,$card,$founder_id,$id);
             }
+            $cardCount = $this->handle->getUserCardCount($founder_id,$id);
+            if ($cardCount==5){
+                $user = $this->handle->getWeChatUserById($user_id);
+                $list = $this->handle->getNotifyListByOpenId($user->open_id);
+                $product = $this->handle->getProductById($promotion->product_id);
+                if (!empty($list)){
+                    $data = [
+                        "touser"=>$list->open_id,
+                        "template_id"=>$this->handle->getNotifyConfigByTitle('card_notify'),
+                        "form_id"=>$list->notify_id,
+                        "page"=>"",
+                        "data"=>[
+                            "keyword1"=>[
+                                "value"=>$promotion->description
+                            ],
+                            "keyword2"=>[
+                                "value"=>date('Y-m-d H:i:s',time())
+                            ],
+                            "keyword3"=>[
+                                "value"=>$product->name
+                            ]
+                        ]
+                    ];
+                    $this->handle->addNotifyQueue(json_encode($data));
+                }
+
+            }
         }
         $this->handle->addCardJoin($id,$user_id,$founder_id);
         return jsonResponse(['msg'=>'ok', 'data'=>$card]);
+    }
+    public function getCardJoinRecords()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $promotion_id = Input::get('promotion_id');
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $data = $this->handle->getCardJoinRecords($user_id,$promotion_id,$page,$limit);
+        $this->handle->formatCardJoinRecords($data['data']);
+        return jsonResponse([
+            'data'=>$data,
+            'msg'=>'ok'
+        ]);
     }
 }

@@ -301,7 +301,7 @@ trait CardHandle
         }
         return false;
     }
-    public function getCardJoinRecord($founder_id,$promotion_id,$page=1,$limit=10)
+    public function getCardJoinRecords($founder_id,$promotion_id,$page=1,$limit=10)
     {
         return CardJoinRecord::where('founder_id','=',$founder_id)->where('promotion_id','=',$promotion_id)
             ->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();

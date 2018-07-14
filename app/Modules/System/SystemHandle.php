@@ -10,6 +10,7 @@ namespace App\Modules\System;
 
 
 use App\Modules\System\Model\Document;
+use App\Modules\System\Model\NotifyConfig;
 use App\Modules\System\Model\NotifyQueue;
 use App\Modules\System\Model\TxConfig;
 use App\Modules\WeChatUser\Model\NotifyList;
@@ -138,6 +139,12 @@ trait SystemHandle
         return false;
     }
 
+    public function getNotifyListByOpenId($openId)
+    {
+        $notify = NotifyList::where('open_id','=',$openId)->first();
+        return $notify;
+    }
+
     /**
      * @param $data
      * @return bool
@@ -153,6 +160,10 @@ trait SystemHandle
         return false;
     }
 
+    public function getNotifyQueues()
+    {
+        return NotifyQueue::all();
+    }
     /**
      * @param $id
      * @return bool
@@ -162,6 +173,38 @@ trait SystemHandle
     {
         $queue = NotifyQueue::find($id);
         if ($queue->delete()) {
+            return true;
+        }
+        return false;
+    }
+    public function addNotifyConfig($id,$data)
+    {
+        if ($id){
+            $config = NotifyConfig::find($id);
+        }else{
+            $config = new NotifyConfig();
+        }
+        foreach ($data as $key => $value){
+            $config->$key = $value;
+        }
+        if ($config->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getNotifyConfigs()
+    {
+        return NotifyConfig::select(['title','content'])->toArray();
+    }
+    public function getNotifyConfigByTitle($title)
+    {
+        $config = NotifyConfig::where('title','=',$title)->first();
+        return $config->content;
+    }
+    public function delNotifyConfig($id)
+    {
+        $config = NotifyConfig::findOrFail($id);
+        if ($config->delete()){
             return true;
         }
         return false;
