@@ -276,7 +276,7 @@ class CardController extends Controller
                             "touser"=>$list->open_id,
                             "template_id"=>$this->handle->getNotifyConfigByTitle('card_notify'),
                             "form_id"=>$list->notify_id,
-                            "page"=>"",
+                            "page"=>"pages/activity/card/detail/detail",
                             "data"=>[
                                 "keyword1"=>[
                                     "value"=>$promotion->description
@@ -291,6 +291,7 @@ class CardController extends Controller
                         ];
                         $this->handle->addNotifyQueue(json_encode($data));
                         $this->handle->addCardPromotionNotify($id);
+                        $this->handle->delNotifyList($list->id);
                     }
 
                 }

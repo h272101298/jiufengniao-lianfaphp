@@ -45,8 +45,6 @@ class Notify extends Command
         foreach ($queues as $queue){
             $notify->setAccessToken();
             $data = $notify->send($queue->content);
-//            $data = json_decode($data);
-            var_dump($data);
             if ($data['errmsg']=='ok'){
                 $this->delNotifyQueue($queue->id);
             }
