@@ -546,6 +546,7 @@ class ProductController extends Controller
                     ]
                 ];
                 $this->handle->addNotifyQueue(json_encode($data));
+                $this->handle->delNotifyList($list->id);
             }
         }
         return jsonResponse([
