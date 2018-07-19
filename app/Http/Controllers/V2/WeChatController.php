@@ -26,6 +26,10 @@ class WeChatController extends Controller
                 $data = $this->handle->getUserJoinPromotions($user_id,$page,$limit);
                 $this->handle->formatUserJoinPromotions($data['data'],$user_id);
                 break;
+            case 'bargain':
+                $data = $this->handle->getBargainRecords($user_id,0,$page,$limit);
+                $this->handle->formatBargainRecords($data['data'],1);
+                break;
         }
         return jsonResponse([
             'msg'=>'ok',

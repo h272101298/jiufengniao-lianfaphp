@@ -314,4 +314,26 @@ class CardController extends Controller
             'msg'=>'ok'
         ]);
     }
+    public function giftCard()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $card_id = Input::get('card_id');
+        $presenter = Input::get('presenter');
+        $cards = $this->handle->getUserCard($presenter,$card_id);
+        if (count($cards)<=1){
+            return jsonResponse([
+                'msg'=>'该卡片已被领取!'
+            ],400);
+        }
+        $card = array_random($cards,1);
+        $card->user_id = $user_id;
+        if ($card->save()){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'领取失败！'
+        ],400);
+    }
 }

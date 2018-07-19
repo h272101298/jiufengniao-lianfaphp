@@ -66,7 +66,7 @@ Route::group(['prefix'=>'v1'],function (){
         Route::post('proxy/list','V1\WeChatController@addProxyList');
         Route::get('brokerages','V1\WeChatController@getBrokerageList');
         Route::post('notify/list','V1\WeChatController@addNotifyList');
-//        Route::get('product/')
+        Route::get('poster/configs','V1\SystemController@getPosterConfigs');
     });
 
 });
@@ -75,7 +75,14 @@ Route::group(['prefix'=>'v2'],function (){
         Route::get('card/promotions','V2\CardController@getEnablePromotions');
         Route::get('card/promotion','V2\CardController@getEnablePromotion');
         Route::get('card/draw','V2\CardController@drawCard');
+        Route::post('card/gift','V2\CardController@giftCard');
         Route::get('promotions/count','V2\WeChatController@countPromotions');
         Route::get('card/records','V2\CardController@getCardJoinRecords');
+        Route::get('bargain/promotions','V2\BargainController@getEnablePromotions');
+        Route::get('bargain/promotion','V2\BargainController@getEnablePromotion');
+        Route::post('bargain','V2\BargainController@bargain');
+        Route::get('bargain/records','V2\BargainController@getBargainRecords');
+        Route::get('bargain/status','V2\BargainController@getBargainPrice');
+        Route::get('my/bargain/promotions','V2\BargainController@getMyPromotions');
     });
 });

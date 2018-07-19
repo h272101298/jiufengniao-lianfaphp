@@ -51,8 +51,11 @@ if (!function_exists('setRedisData')){
  * 获取redis缓存数据
  */
 if (!function_exists('getRedisData')){
-    function getRedisData($key,$refresh=0){
+    function getRedisData($key,$default=0){
         $data = \Illuminate\Support\Facades\Redis::get($key);
+        if (!$data){
+            return $default;
+        }
         return $data;
     }
 }

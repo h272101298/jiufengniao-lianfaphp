@@ -98,6 +98,10 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('brokerage/ratio','V1\SystemController@getBrokerageRatio')->middleware('permission:brokerageList');
         Route::get('count','V1\SystemController@getCount');
         Route::get('newest/order','V1\OrderController@getNewestOrder');
+        Route::post('notify/config','V1\SystemController@addNotifyConfig');
+        Route::get('notify/configs','V1\SystemController@getNotifyConfigs');
+        Route::post('poster/configs','V1\SystemController@addPosterConfigs');
+        Route::get('poster/configs','V1\SystemController@getPosterConfigs');
     });
 });
 Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
@@ -111,4 +115,11 @@ Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::post('default/card','V2\CardController@addDefaultCard');
     Route::get('default/cards','V2\CardController@getDefaultCards');
     Route::get('product/stocks','V2\ProductController@getStockByProduct');
+    Route::post('bargain/promotion','V2\BargainController@createBargain');
+    Route::put('bargain/promotion','V2\BargainController@modifyBargainPromotion');
+    Route::get('bargain/promotion','V2\BargainController@getBargainPromotion');
+    Route::get('bargain/promotions','V2\BargainController@getBargainPromotions');
+    Route::get('check/bargain/promotion','V2\BargainController@checkPromotion');
+    Route::get('enable/bargain/promotion','V2\BargainController@enablePromotion');
+    Route::get('hot/bargain/promotion','V2\BargainController@addHotPromotion');
 });

@@ -30,6 +30,7 @@ class OrderController extends Controller
         $user_id = getRedisData($post->token);
         $address = Address::find($post->address);
         $card_promotion = $post->card_promotion ? $post->card_promotion : 0;
+        $bargain_promotion = $post->bargain_promotion ? $post->bargain_promotion : 0;
         $groupNumber = self::makePaySn($user_id);
         DB::beginTransaction();
         try {
@@ -56,6 +57,68 @@ class OrderController extends Controller
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
                 if ($order_id) {
+                    $addressSnapshot = [
+                        'name' => $address->name,
+                        'phone' => $address->phone,
+                        'address' => $address->city . $address->address,
+                        'zip_code' => $address->zip_code
+                    ];
+                    if ($this->handle->addAddressSnapshot($order_id, $addressSnapshot)) {
+                        $swapStock = $this->handle->getStockById($stock->id);
+                        $product = $this->handle->getProductById($swapStock->product_id);
+                        if ($product->norm == 'fixed') {
+                            $detail = 'fixed';
+                        } else {
+                            $detail = explode(',', $swapStock->product_detail);
+                            $detail = ProductDetailSnapshot::whereIn('id', $detail)->pluck('title')->toArray();
+                            $detail = implode(' ', $detail);
+                        }
+                        $stockData = [
+                            'product_id' => $swapStock->product_id,
+                            'stock_id' => $swapStock->id,
+                            'store_id' => $product->store_id,
+                            'cover' => $swapStock->cover,
+                            'name' => $product->name,
+                            'detail' => $detail,
+                            'price' => $price,
+                            'number' => 1
+                        ];
+                        $this->handle->addStockSnapshot($order_id, $stockData);
+                        $this->handle->addCardPrize($user_id,$card_promotion);
+                    }
+                }
+                DB::commit();
+                return jsonResponse([
+                    'msg' => 'ok',
+                    'data' => [
+                        'order' => $groupNumber,
+                        'price'=>$price
+                    ]
+                ]);
+            }
+            if ($bargain_promotion){
+                $promotion = $this->handle->getBargainPromotion($bargain_promotion);
+                if ($promotion->number==0){
+                    throw new \Exception('已无库存');
+                }
+                $stock = $this->handle->getStockById($promotion->stock_id);
+                $product = $this->handle->getProductById($stock->product_id);
+                $price = $post->price;
+                $state = $price==0?'paid':'created';
+                if ($price<$promotion->min_price){
+                    throw new \Exception('非法价格！');
+                }
+                $data = [
+                    'user_id' => $user_id,
+                    'number' => self::makePaySn($user_id),
+                    'price' => $price,
+                    'state' => $state,
+                    'group_number' => $groupNumber,
+                    'store_id' => $product->store_id
+                ];
+                $order_id = $this->handle->addOrder(0, $data);
+                if ($order_id) {
+                    $this->handle->addBargainPromotion($bargain_promotion,['number'=>$promotion->number-1]);
                     $addressSnapshot = [
                         'name' => $address->name,
                         'phone' => $address->phone,

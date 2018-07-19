@@ -255,4 +255,44 @@ class SystemController extends Controller
             'data'=>$data
         ]);
     }
+    public function addNotifyConfig(Request $post)
+    {
+        $data = $post->all();
+        if (!empty($data)){
+            foreach ($data as $key=>$value){
+                $this->handle->addNotifyConfig($key,$value);
+            }
+        }
+        return jsonResponse([
+            'msg'=>'ok'
+        ]);
+    }
+    public function getNotifyConfigs()
+    {
+        $data = $this->handle->getNotifyConfigs();
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function addPosterConfigs(Request $post)
+    {
+        $data = $post->all();
+        if (!empty($data)){
+            foreach ($data as $key=>$value){
+                $this->handle->addPosterConfig($key,$value);
+            }
+        }
+        return jsonResponse([
+            'msg'=>'ok'
+        ]);
+    }
+    public function getPosterConfigs()
+    {
+        $data = $this->handle->getPosterConfigs();
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 }

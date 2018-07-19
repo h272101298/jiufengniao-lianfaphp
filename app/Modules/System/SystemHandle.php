@@ -12,6 +12,7 @@ namespace App\Modules\System;
 use App\Modules\System\Model\Document;
 use App\Modules\System\Model\NotifyConfig;
 use App\Modules\System\Model\NotifyQueue;
+use App\Modules\System\Model\PosterConfig;
 use App\Modules\System\Model\TxConfig;
 use App\Modules\WeChatUser\Model\NotifyList;
 use App\Modules\WeChatUser\Model\WeChatUser;
@@ -177,16 +178,14 @@ trait SystemHandle
         }
         return false;
     }
-    public function addNotifyConfig($id,$data)
+    public function addNotifyConfig($title,$content)
     {
-        if ($id){
-            $config = NotifyConfig::find($id);
-        }else{
+        $config = NotifyConfig::where('title','=',$title)->first();
+        if (empty($config)){
             $config = new NotifyConfig();
+            $config->title = $title;
         }
-        foreach ($data as $key => $value){
-            $config->$key = $value;
-        }
+        $config->content = $content;
         if ($config->save()){
             return true;
         }
@@ -194,7 +193,9 @@ trait SystemHandle
     }
     public function getNotifyConfigs()
     {
-        return NotifyConfig::select(['title','content'])->toArray();
+        $data =  NotifyConfig::select(['title','content'])->get()->toArray();
+        $data = array_column($data,'content','title');
+        return $data;
     }
     public function getNotifyConfigByTitle($title)
     {
@@ -205,6 +206,25 @@ trait SystemHandle
     {
         $config = NotifyConfig::findOrFail($id);
         if ($config->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function getPosterConfigs()
+    {
+        $data = PosterConfig::select(['title','url'])->get()->toArray();
+        $data = array_column($data,'url','title');
+        return $data;
+    }
+    public function addPosterConfig($title,$url)
+    {
+        $config = PosterConfig::where('title','=',$title)->first();
+        if (empty($config)){
+            $config = new PosterConfig();
+            $config->title = $title;
+        }
+        $config->url = $url;
+        if ($config->save()){
             return true;
         }
         return false;

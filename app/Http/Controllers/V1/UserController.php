@@ -62,7 +62,7 @@ class UserController extends Controller
             'password'=>bcrypt($post->password),
             'phone'=>$post->phone,
         ];
-        $role = $post->role;
+        $role = $post->role?$post->role:0;
         if ($this->handle->addUser($id,$data,$role)){
             return jsonResponse([
                 'msg'=>'ok'
