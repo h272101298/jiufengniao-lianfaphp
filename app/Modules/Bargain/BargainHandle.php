@@ -118,7 +118,6 @@ trait BargainHandle
         if ($count==1){
             return $price;
         }
-        echo $count.'price'.$price;
         return rand(0.01,($price/$count)*2);
     }
     public function addBargainCount($id,$count)
