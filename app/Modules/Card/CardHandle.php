@@ -154,7 +154,7 @@ trait CardHandle
         foreach ($promotions as $promotion){
             $stock = Stock::find($promotion->stock_id);
             $product = Product::find($stock->product_id);
-            $type = ProductType::find($product->type_id);
+            $type = empty($product)?'':ProductType::find($product->type_id);
             $promotion->product = $product;
             $promotion->type = $type;
             $promotion->start = date('Y-m-d H:i:s',$promotion->start);
