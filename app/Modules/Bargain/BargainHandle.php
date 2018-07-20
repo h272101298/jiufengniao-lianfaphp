@@ -118,7 +118,9 @@ trait BargainHandle
         if ($count==1){
             return $price;
         }
-        return rand(0.01,($price/$count)*2);
+        $swap = ($price/$count)*2;
+        $result =  0.01 + mt_rand() / mt_getrandmax() * ($swap - 0.01);
+        return sprintf('%.2f',$result);
     }
     public function addBargainCount($id,$count)
     {
