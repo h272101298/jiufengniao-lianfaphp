@@ -155,6 +155,9 @@ trait CardHandle
             $stock = Stock::find($promotion->stock_id);
             $product = empty($stock)?null:Product::find($stock->product_id);
             $type = empty($product)?null:ProductType::find($product->type_id);
+            if (!empty($product)){
+                unset($product->detail);
+            }
             $promotion->product = $product;
             $promotion->type = $type;
             $promotion->start = date('Y-m-d H:i:s',$promotion->start);
