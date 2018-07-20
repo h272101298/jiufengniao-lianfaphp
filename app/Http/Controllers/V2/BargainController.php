@@ -235,4 +235,17 @@ class BargainController extends Controller
             'data'=>$data
         ]);
     }
+    public function delBargainPromotion()
+    {
+        $id = Input::get('id');
+        $this->handle->delBargainRecords($id);
+        if ($this->handle->delBargainPromotion($id)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
 }

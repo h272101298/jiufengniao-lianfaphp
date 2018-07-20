@@ -174,4 +174,16 @@ trait BargainHandle
         }
         return $db->count();
     }
+    public function delBargainRecords($promotion_id)
+    {
+        return BargainRecord::where('promotion_id','=',$promotion_id)->delete();
+    }
+    public function delBargainPromotion($id)
+    {
+        $promotion = BargainPromotion::find($id);
+        if ($promotion->delete()){
+            return true;
+        }
+        return false;
+    }
 }

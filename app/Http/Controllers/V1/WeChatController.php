@@ -226,6 +226,11 @@ class WeChatController extends Controller
             'msg'=>'设置失败！'
         ],400);
     }
+
+    /**
+     * 获取默认地址
+     * @return JsonResponse
+     */
     public function getDefaultAddress()
     {
         $user_id = getRedisData(Input::get('token'));
@@ -235,6 +240,12 @@ class WeChatController extends Controller
             'data'=>$address
         ]);
     }
+
+    /**
+     * @param Request $post
+     * 录入代理申请
+     * @return JsonResponse
+     */
     public function addProxyApply(Request $post)
     {
         $user_id = getRedisData($post->token);
@@ -261,6 +272,12 @@ class WeChatController extends Controller
             'msg'=>'系统错误！'
         ],400);
     }
+
+    /**
+     * @param Request $post
+     * 添加提现申请
+     * @return JsonResponse
+     */
     public function addWithdrawApply(Request $post)
     {
         $user_id = getRedisData($post->token);
