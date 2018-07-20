@@ -64,10 +64,12 @@ trait BargainHandle
             return [];
         }
         foreach ($promotions as $promotion){
-            $promotion->product = Product::find($promotion->product_id);
+            $product = Product::find($promotion->product_id);
             if (!empty($product)){
                 unset($product->detail);
             }
+            $promotion->product = $product;
+
             $promotion->stock = Stock::find($promotion->stock_id);
             if ($time){
                 $promotion->start = date('Y-m-d H:i:s',$promotion->start);
