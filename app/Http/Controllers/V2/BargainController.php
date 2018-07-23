@@ -149,9 +149,9 @@ class BargainController extends Controller
         return jsonResponse([
             'msg'=>'ok',
             'data'=>[
-                'price'=>$promotion->origin_price-$price,
-                'count'=>$count,
-                'bargain_price'=>$price
+                'price'=>sprintf('%.2f',$promotion->origin_price-$price),
+                'count'=>$count+1,
+                'bargain_price'=>sprintf('%.2f',$price)
             ]
         ]);
 
