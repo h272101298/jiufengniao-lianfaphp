@@ -121,7 +121,11 @@ trait CardHandle
         }
         foreach ($promotions as $promotion) {
             $promotion->stock = Stock::find($promotion->stock_id);
-            $promotion->product = Product::find($promotion->product_id);
+            $product = Product::find($promotion->product_id);
+            if (!empty($product)){
+                unset($product->detail);
+            }
+            $promotion->product = $product;
         }
         return $promotions;
     }

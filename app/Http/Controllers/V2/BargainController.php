@@ -181,7 +181,7 @@ class BargainController extends Controller
                 'data'=>[
                     'price'=>sprintf('%.2f',$promotion->origin_price-$price),
                     'count'=>$count+1,
-                    'bargain_price'=>$price
+                    'bargain_price'=>sprintf('%.2f',$price)
                 ]
             ]);
         };
