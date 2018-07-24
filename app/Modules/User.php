@@ -12,6 +12,7 @@ namespace App\Modules;
 use App\Modules\Advert\AdvertHandle;
 use App\Modules\Bargain\BargainHandle;
 use App\Modules\Card\CardHandle;
+use App\Modules\Member\MemberHandle;
 use App\Modules\Order\OrderHandle;
 use App\Modules\Product\ProductHandle;
 use App\Modules\Proxy\ProxyHandle;
@@ -36,6 +37,7 @@ class User
     use ProxyHandle;
     use CardHandle;
     use BargainHandle;
+    use MemberHandle;
     public function addUser($id,$data,$role)
     {
         if ($id){
@@ -92,6 +94,10 @@ class User
     public function getWeChatUserById($id)
     {
         return WeChatUser::find($id);
+    }
+    public function getWeChatUsersIdByName($name)
+    {
+        return WeChatUser::where('nickname','like','%'.$name.'%')->pluck('id')->toArray();
     }
 
 

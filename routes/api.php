@@ -84,5 +84,6 @@ Route::group(['prefix'=>'v2'],function (){
         Route::get('bargain/records','V2\BargainController@getBargainRecords');
         Route::get('bargain/status','V2\BargainController@getBargainPrice');
         Route::get('my/bargain/promotions','V2\BargainController@getMyPromotions');
+        Route::get('member/levels','V2\MemberController@getMemberLevels');
     });
 });

@@ -36,4 +36,5 @@ class WeChatController extends Controller
             'data'=>$data
         ]);
     }
+
 }

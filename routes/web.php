@@ -123,4 +123,9 @@ Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::get('check/bargain/promotion','V2\BargainController@checkPromotion');
     Route::get('enable/bargain/promotion','V2\BargainController@enablePromotion');
     Route::get('hot/bargain/promotion','V2\BargainController@addHotPromotion');
+    Route::get('member/levels','V2\MemberController@getMemberLevels');
+    Route::post('member/level','V2\MemberController@addMemberLevel');
+    Route::delete('member/level','V2\MemberController@delMemberLevel');
+    Route::post('member/user','V2\MemberController@addMemberUser');
+    Route::get('member/users','V2\MemberController@getMemberUsers');
 });
