@@ -89,7 +89,7 @@ trait MemberHandle
             return null;
         }
         $user->level = MemberLevel::find($user->level_id);
-        $user->end = date('Y-m-d H:i:s',$user->end);
+//        $user->end = date('Y-m-d H:i:s',$user->end);
         return $user;
     }
     public function getMemberUsers($user_id=null,$level=0,$page=1,$limit=10)
