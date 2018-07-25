@@ -361,7 +361,6 @@ class CardController extends Controller
             $data = [];
         }else{
             $data = $this->handle->getCardPromotions(null,0,1,10,0,$hot);
-//            dd($data);$data
             $this->handle->formatCardPromotions($data['data']);
         }
         return jsonResponse([

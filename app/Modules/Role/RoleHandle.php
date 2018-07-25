@@ -90,12 +90,16 @@ trait RoleHandle
                 RolePermission::where('role_id','=',$role->id)->delete();
                 foreach ($permission as $item){
                     $swap = Permission::where('name','=',$item)->first();
-                    if (!empty($swap)){
-                        $rolePermission = new RolePermission();
-                        $rolePermission->role_id = $role->id;
-                        $rolePermission->permission_id = $swap->id;
-                        $rolePermission->save();
+                    if (empty($swap)){
+                        $swap = new Permission();
+                        $swap->name = $item;
+                        $swap->display_name = $item;
+                        $swap->save();
                     }
+                    $rolePermission = new RolePermission();
+                    $rolePermission->role_id = $role->id;
+                    $rolePermission->permission_id = $swap->id;
+                    $rolePermission->save();
 
                 }
             }
