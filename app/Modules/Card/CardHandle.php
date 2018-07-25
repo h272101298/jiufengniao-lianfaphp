@@ -16,6 +16,7 @@ use App\Modules\Card\Model\CardNotify;
 use App\Modules\Card\Model\CardPrizeList;
 use App\Modules\Card\Model\CardPromotion;
 use App\Modules\Card\Model\DefaultCard;
+use App\Modules\Card\Model\HotCardPromotion;
 use App\Modules\Card\Model\UserCard;
 use App\Modules\Product\Model\Product;
 use App\Modules\Product\Model\ProductType;
@@ -95,10 +96,10 @@ trait CardHandle
         }
         return false;
     }
-    public function getCardPromotions($product_id=[],$state=0,$page=1,$limit=10,$enable=0)
+    public function getCardPromotions($product_id=[],$state=0,$page=1,$limit=10,$enable=0,$idArray=[])
     {
         $db = DB::table('card_promotions');
-        if ($product_id){
+        if (!empty($product_id)){
             $db->whereIn('product_id',$product_id);
         }
         if ($state){
@@ -106,6 +107,9 @@ trait CardHandle
         }
         if ($enable){
             $db->where('enable','=',$enable-1);
+        }
+        if (!empty($idArray)){
+            $db->whereIn('id',$idArray);
         }
         $count = $db->count();
         $data = $db->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
@@ -120,6 +124,7 @@ trait CardHandle
             return [];
         }
         foreach ($promotions as $promotion) {
+//            dd($promotion);
             $promotion->stock = Stock::find($promotion->stock_id);
             $product = Product::find($promotion->product_id);
             if (!empty($product)){
@@ -162,6 +167,7 @@ trait CardHandle
             if (!empty($product)){
                 unset($product->detail);
             }
+            $promotion->hot = $this->checkHotCardPromotion($promotion->id);
             $promotion->product = $product;
             $promotion->type = $type;
             $promotion->start = date('Y-m-d H:i:s',$promotion->start);
@@ -381,6 +387,34 @@ trait CardHandle
             return true;
         }
         return false;
+    }
+    public function addHotCardPromotion($id)
+    {
+        $hot = HotCardPromotion::where('promotion_id','=',$id)->first();
+        if (empty($hot)){
+            $hot = new HotCardPromotion();
+            $hot->promotion_id = $id;
+            if ($hot->save()){
+                return true;
+            }
+            return false;
+        }
+        if ($hot->delete()){
+            return true;
+        }
+        return false;
+    }
+    public function checkHotCardPromotion($id)
+    {
+        return HotCardPromotion::where('promotion_id','=',$id)->count();
+    }
+    public function getHotCardPromotions()
+    {
+        return HotCardPromotion::pluck('promotion_id')->toArray();
+    }
+    public function countHotCardPromotions($id)
+    {
+        return HotCardPromotion::where('promotion_id','!=',$id)->count();
     }
 
 }

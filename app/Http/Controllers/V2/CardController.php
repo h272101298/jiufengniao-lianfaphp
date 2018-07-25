@@ -336,4 +336,37 @@ class CardController extends Controller
             'msg'=>'领取失败！'
         ],400);
     }
+    public function addHotCardPromotion()
+    {
+        $id = Input::get('id');
+        $count = $this->handle->countHotCardPromotions($id);
+        if ($count>=4){
+            return jsonResponse([
+                'msg'=>'最多4个推荐活动！'
+            ],400);
+        }
+        if ($this->handle->addHotCardPromotion($id)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
+    public function getHotCardPromotions()
+    {
+        $hot = $this->handle->getHotCardPromotions();
+        if (empty($hot)){
+            $data = [];
+        }else{
+            $data = $this->handle->getCardPromotions(null,0,1,10,0,$hot);
+//            dd($data);$data
+            $this->handle->formatCardPromotions($data['data']);
+        }
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 }

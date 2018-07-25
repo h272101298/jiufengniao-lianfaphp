@@ -108,6 +108,7 @@ Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::post('card/promotion','V2\CardController@addCardPromotion');
     Route::get('card/promotions','V2\CardController@getCardPromotions');
     Route::get('card/promotion','V2\CardController@getCardPromotion');
+    Route::get('hot/card/promotion','V2\CardController@addHotCardPromotion');
     Route::put('card/promotion','V2\CardController@modifyCardPromotion');
     Route::delete('card/promotion','V2\CardController@delCardPromotion');
     Route::get('check/promotion','V2\CardController@checkPromotion');
