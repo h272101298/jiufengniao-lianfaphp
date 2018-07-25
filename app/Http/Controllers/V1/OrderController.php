@@ -215,7 +215,7 @@ class OrderController extends Controller
                         $orderPrice = [
                             'price' => $price
                         ];
-                        if (floatval($price)!=$post->price){
+                        if (number_format($price,2)!=number_format($post->price,2)){
                             throw new \Exception('非法价格！'.$price);
                         }
                         $this->handle->addOrder($order_id, $orderPrice);
