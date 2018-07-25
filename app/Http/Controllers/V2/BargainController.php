@@ -150,7 +150,7 @@ class BargainController extends Controller
             'msg'=>'ok',
             'data'=>[
                 'price'=>sprintf('%.2f',$promotion->origin_price-$price),
-                'count'=>$count+1,
+                'count'=>$count,
                 'bargain_price'=>sprintf('%.2f',$price)
             ]
         ]);
