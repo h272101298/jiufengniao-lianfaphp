@@ -227,7 +227,7 @@ class OrderController extends Controller
                 'msg' => 'ok',
                 'data' => [
                     'order' => $groupNumber,
-                    'price'=>$price
+                    'price'=>number_format($price,2)
                 ]
             ]);
         } catch (\Exception $exception) {
