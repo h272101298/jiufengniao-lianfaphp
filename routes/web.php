@@ -128,4 +128,5 @@ Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::delete('member/level','V2\MemberController@delMemberLevel');
     Route::post('member/user','V2\MemberController@addMemberUser');
     Route::get('member/users','V2\MemberController@getMemberUsers');
+    Route::get('member/records','V2\MemberController@getMemberRecords');
 });

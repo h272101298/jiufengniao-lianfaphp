@@ -179,13 +179,18 @@ class OrderController extends Controller
                         'zip_code' => $address->zip_code
                     ];
                     if ($this->handle->addAddressSnapshot($order_id, $addressSnapshot)) {
-
+                        $member = $this->handle->getMemberUser($user_id);
+                        if (empty($member)||$member->end<time()){
+                            $discount = 1;
+                        }else{
+                            $discount = $member->discount/10;
+                        }
                         foreach ($stocks as $stock) {
                             $swapStock = $this->handle->getStockById($stock['id']);
 
                             $product = $this->handle->getProductById($swapStock->product_id);
                             if ($product->store_id == $item) {
-                                $price += $swapStock->price * $stock['number'];
+                                $price += $swapStock->price * $stock['number'] * $discount;
                                 if ($product->norm == 'fixed') {
                                     $detail = 'fixed';
                                 } else {
@@ -200,7 +205,7 @@ class OrderController extends Controller
                                     'cover' => $swapStock->cover,
                                     'name' => $product->name,
                                     'detail' => $detail,
-                                    'price' => $swapStock->price,
+                                    'price' => $swapStock->price*$discount,
                                     'number' => $stock['number']
                                 ];
                                 $this->handle->addStockSnapshot($order_id, $stockData);
@@ -210,6 +215,9 @@ class OrderController extends Controller
                         $orderPrice = [
                             'price' => $price
                         ];
+                        if ($price!=$post->price){
+                            throw new \Exception('非法价格！');
+                        }
                         $this->handle->addOrder($order_id, $orderPrice);
                     }
                 }

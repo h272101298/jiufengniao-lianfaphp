@@ -10,6 +10,7 @@ namespace App\Modules\Member;
 
 
 use App\Modules\Member\Model\MemberLevel;
+use App\Modules\Member\Model\MemberRecord;
 use App\Modules\Member\Model\MemberUser;
 use App\Modules\WeChatUser\Model\UserInfo;
 use App\Modules\WeChatUser\Model\WeChatUser;
@@ -82,6 +83,15 @@ trait MemberHandle
         $user = MemberUser::where('user_id','=',$user_id)->first();
         return $user;
     }
+    public function formatMemberUser(&$user)
+    {
+        if (empty($user)){
+            return null;
+        }
+        $user->level = MemberLevel::find($user->level_id);
+        $user->end = date('Y-m-d H:i:s',$user->end);
+        return $user;
+    }
     public function getMemberUsers($user_id=null,$level=0,$page=1,$limit=10)
     {
         $db = DB::table('member_users');
@@ -110,5 +120,44 @@ trait MemberHandle
             $user->end = date('Y-m-d H:i:s',$user->end);
         }
         return $users;
+    }
+    public function addMemberRecord($id,$data)
+    {
+        if ($id){
+            $record = MemberRecord::find($id);
+        }else{
+            $record = new MemberRecord();
+        }
+        foreach ($data as $key=>$value){
+            $record->$key = $value;
+        }
+        if ($record->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getMemberRecords($user_id,$page=1,$limit=10)
+    {
+        $db = DB::table('member_records');
+        if ($user_id){
+            $db->where('user_id','=',$user_id);
+        }
+        $count = $db->count();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function formatMemberRecords(&$records)
+    {
+        if (empty($records)){
+            return [];
+        }
+        foreach ($records as $record){
+            $record->user = WeChatUser::find($record->user_id);
+//            $record->member = MemberLevel::find($record->level_id);
+        }
+        return $records;
     }
 }

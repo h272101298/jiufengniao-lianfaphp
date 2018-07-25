@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 Route::post('pay/notify','V1\OrderController@payNotify');
+Route::post('member/notify','V2\MemberController@memberNotify');
 Route::group(['prefix'=>'v1'],function (){
     Route::post('login','V1\WeChatController@login');
     Route::get('test','V1\WeChatController@test');
@@ -78,6 +79,7 @@ Route::group(['prefix'=>'v2'],function (){
         Route::get('card/draw','V2\CardController@drawCard');
         Route::post('card/gift','V2\CardController@giftCard');
         Route::get('promotions/count','V2\WeChatController@countPromotions');
+        Route::get('member','V2\WeChatController@member');
         Route::get('card/records','V2\CardController@getCardJoinRecords');
         Route::get('bargain/promotion','V2\BargainController@getEnablePromotion');
         Route::post('bargain','V2\BargainController@bargain');
@@ -85,5 +87,6 @@ Route::group(['prefix'=>'v2'],function (){
         Route::get('bargain/status','V2\BargainController@getBargainPrice');
         Route::get('my/bargain/promotions','V2\BargainController@getMyPromotions');
         Route::get('member/levels','V2\MemberController@getMemberLevels');
+        Route::post('member/order','V2\MemberController@addMemberRecord');
     });
 });

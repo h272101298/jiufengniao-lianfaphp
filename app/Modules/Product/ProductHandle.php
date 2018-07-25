@@ -365,7 +365,6 @@ trait ProductHandle
         $count = $db->count();
         $data = $db->limit($limit)->offset(($page - 1) * $limit)->get();
         $this->formatProducts($data);
-//        if (!empty($data)){}
         return [
             'data' => $data,
             'count' => $count
@@ -378,6 +377,7 @@ trait ProductHandle
             return [];
         }
         foreach ($data as $item) {
+            unset($item->detail);
             $item->cover = Stock::where('product_id', '=', $item->id)->pluck('cover')->first();
             $item->hot = HotList::where('product_id', '=', $item->id)->count();
             $item->new = NewList::where('product_id', '=', $item->id)->count();

@@ -36,5 +36,16 @@ class WeChatController extends Controller
             'data'=>$data
         ]);
     }
+    public function member()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $member = $this->handle->getMemberUser($user_id);
+        $this->handle->formatMemberUser($member);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$member
+        ]);
+
+    }
 
 }
