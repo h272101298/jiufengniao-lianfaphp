@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 //        $request->headers(['Access-Control-Allow-Origin:*']);
-        dd($exception);
+//        dd($exception);
 //        return response()->make($exception)->headers(['Access-Control-Allow-Origin:*']);
 //        $debug = env('APP_DEBUG','false');
 //        if ($debug){
