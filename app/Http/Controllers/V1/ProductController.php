@@ -151,9 +151,9 @@ class ProductController extends Controller
                     'product_detail'=>$detail
                 ];
                 $images = $item['images'];
-//                $stockId = $item['id']?$item['id']:0;
-                $this->handle->delStocks($product_id);
-                $stock_id = $this->handle->addStock(0,$stockData);
+                $stockId = $item['id']?$item['id']:0;
+//                $this->handle->delStocks($product_id);
+                $stock_id = $this->handle->addStock($stockId,$stockData);
                 foreach ($images as $image){
                     $this->handle->addStockImage($stock_id,$image);
                 }

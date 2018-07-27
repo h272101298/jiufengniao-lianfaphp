@@ -9,6 +9,7 @@ use App\Modules\Proxy\Model\BrokerageQueue;
 use App\Modules\Proxy\Model\BrokerageRatio;
 use App\Modules\Proxy\Model\ProxyList;
 use App\Modules\WeChatUser\Model\WeChatUser;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class Brokerage extends Command
@@ -47,7 +48,8 @@ class Brokerage extends Command
         //
         $config = BrokerageRatio::first();
 
-        $queues = BrokerageQueue::where('state','=',1)->get();
+        $queues = BrokerageQueue::where('state','=',1)->where('created_at','<',Carbon::parse(date('Y-m-d',strtotime('-7 days'))))->get();
+//        dd($queues);
         foreach ($queues as $queue){
             $order = Order::find($queue->order_id);
             $swap = ProxyList::where('user_id','=',$order->user_id)->pluck('proxy_id')->first();
