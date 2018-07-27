@@ -82,7 +82,7 @@ class Handler extends ExceptionHandler
             $code = 401;
         }
         else{
-            $message = $exception->getTraceAsString();
+            $message = $exception->getMessage();
             $code = 500;
         }
         return response()->json([
