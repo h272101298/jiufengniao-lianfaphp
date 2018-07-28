@@ -119,7 +119,14 @@ trait ProductHandle
             'count' => $count
         ];
     }
-
+    public function countTypeProducts($type_id)
+    {
+        return Product::where('type_id','=',$type_id)->count();
+    }
+    public function checkTypeChild($type_id)
+    {
+        return ProductTypeBind::where('parent_id','=',$type_id)->count();
+    }
     public function getProductTypesTree()
     {
         $level1 = ProductTypeBind::where('parent_id', '=', 0)->pluck('type_id')->toArray();

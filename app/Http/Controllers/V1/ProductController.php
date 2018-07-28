@@ -56,6 +56,16 @@ class ProductController extends Controller
     public function delProductType()
     {
         $id = Input::get('id');
+        if ($this->handle->checkTypeChild($id)){
+            return jsonResponse([
+                'msg'=>'当前分类存在子分类！'
+            ],400);
+        }
+        if ($this->handle->countTypeProducts($id)){
+            return jsonResponse([
+                'msg'=>'当前分类下存在商品！'
+            ],400);
+        }
         if ($this->handle->delProductType($id)){
             $this->handle->delHotType($id);
             return jsonResponse([
