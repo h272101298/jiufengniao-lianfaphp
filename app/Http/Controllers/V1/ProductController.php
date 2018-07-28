@@ -531,21 +531,19 @@ class ProductController extends Controller
                     "page"=>"pages/goods/detail/detail?id=".$id,
                     "data"=>[
                         "keyword1"=>[
-                            "value"=>$stock->cover
-                        ],
-                        "keyword2"=>[
                             "value"=>$product->name
                         ],
-                        "keyword3"=>[
+                        "keyword2"=>[
                             "value"=>$store->name
                         ],
-                        "keyword4"=>[
+                        "keyword3"=>[
                             "value"=>$typeString
                         ],
-                        "keyword5"=>[
+                        "keyword4"=>[
                             "value"=>$stock->price
                         ]
-                    ]
+                    ],
+                    "emphasis_keyword"=>"keyword1.DATA"
                 ];
                 $this->handle->addNotifyQueue(json_encode($data));
                 $this->handle->delNotifyList($list->id);
