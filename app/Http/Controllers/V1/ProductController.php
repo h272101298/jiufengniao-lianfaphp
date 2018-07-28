@@ -430,9 +430,6 @@ class ProductController extends Controller
                 'msg'=>'ok'
             ]);
         }
-//        $notifyList = $this->handle->getNotifyList();
-//        $product = $this->handle->getProductById($product_id);
-//        $stock = $this->handle->getStockById()
         return jsonResponse([
             'msg'=>'系统错误！'
         ]);
