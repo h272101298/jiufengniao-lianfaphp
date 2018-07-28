@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Modules\System\Model\NotifyQueue;
 use App\Modules\WeChatUser\Model\NotifyList;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class ClearQueue extends Command
