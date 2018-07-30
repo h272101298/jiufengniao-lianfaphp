@@ -13,6 +13,7 @@ use App\Libraries\ExpressSearch;
 use App\Libraries\Wxxcx;
 use App\Modules\Order\Model\AddressSnapshot;
 use App\Modules\Order\Model\Order;
+use App\Modules\Order\Model\OrderType;
 use App\Modules\Order\Model\Refuse;
 use App\Modules\Order\Model\StockSnapshot;
 use App\Modules\Product\Model\Product;
@@ -364,5 +365,24 @@ trait OrderHandle
         }
         $idArray = $OrderDB->pluck('id')->toArray();
         return StockSnapshot::whereIn('order_id',$idArray)->sum('number');
+    }
+    public function addOrderType($id=0,$data)
+    {
+        if ($id){
+            $type = OrderType::find($id);
+        }else{
+            $type = new OrderType();
+        }
+        foreach ($data as $key => $value){
+            $type -> $key = $value;
+        }
+        if ($type->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getOrderTypeByOrderId($orderId)
+    {
+        return OrderType::where('order_id','=',$orderId)->first();
     }
 }

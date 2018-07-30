@@ -63,6 +63,12 @@ class OrderController extends Controller
                         'address' => $address->city . $address->address,
                         'zip_code' => $address->zip_code
                     ];
+                    $orderType = [
+                        'order_id'=>$order_id,
+                        'type'=>'card',
+                        'promotion_id'=>$card_promotion
+                    ];
+                    $this->handle->addOrderType(0,$orderType);
                     if ($this->handle->addAddressSnapshot($order_id, $addressSnapshot)) {
                         $swapStock = $this->handle->getStockById($stock->id);
                         $product = $this->handle->getProductById($swapStock->product_id);
@@ -118,13 +124,18 @@ class OrderController extends Controller
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
                 if ($order_id) {
-                    $this->handle->addBargainPromotion($bargain_promotion,['number'=>$promotion->number-1]);
                     $addressSnapshot = [
                         'name' => $address->name,
                         'phone' => $address->phone,
                         'address' => $address->city . $address->address,
                         'zip_code' => $address->zip_code
                     ];
+                    $orderType = [
+                        'order_id'=>$order_id,
+                        'type'=>'bargain',
+                        'promotion_id'=>$bargain_promotion
+                    ];
+                    $this->handle->addOrderType(0,$orderType);
                     if ($this->handle->addAddressSnapshot($order_id, $addressSnapshot)) {
                         $swapStock = $this->handle->getStockById($stock->id);
                         $product = $this->handle->getProductById($swapStock->product_id);
@@ -178,6 +189,12 @@ class OrderController extends Controller
                         'address' => $address->city . $address->address,
                         'zip_code' => $address->zip_code
                     ];
+                    $orderType = [
+                        'order_id'=>$order_id,
+                        'type'=>'origin',
+                        'promotion_id'=>0
+                    ];
+                    $this->handle->addOrderType(0,$orderType);
                     if ($this->handle->addAddressSnapshot($order_id, $addressSnapshot)) {
                         $member = $this->handle->getMemberUser($user_id);
                         if (empty($member)||$member->end<time()){
@@ -507,6 +524,11 @@ class OrderController extends Controller
         if ($sign == $wx['sign']) {
             $orders = Order::where(['group_number' => $wx['out_trade_no']])->get();
             foreach ($orders as $order) {
+                $type = $this->handle->getOrderTypeByOrderId($order->id);
+                if ($type->type=='bargain'){
+                    $promotion = $this->handle->getBargainPromotion($type->promotion_id);
+                    $this->handle->addBargainPromotion($promotion->id,['number'=>$promotion->number-1]);
+                }
                 $data = [
                     'state' => 'paid',
                     'transaction_id' => $wx['transaction_id']
