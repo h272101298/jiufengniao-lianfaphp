@@ -525,9 +525,11 @@ class OrderController extends Controller
             $orders = Order::where(['group_number' => $wx['out_trade_no']])->get();
             foreach ($orders as $order) {
                 $type = $this->handle->getOrderTypeByOrderId($order->id);
-                if ($type->type=='bargain'){
-                    $promotion = $this->handle->getBargainPromotion($type->promotion_id);
-                    $this->handle->addBargainPromotion($promotion->id,['number'=>$promotion->number-1]);
+                if (!empty($type)){
+                    if ($type->type=='bargain'){
+                        $promotion = $this->handle->getBargainPromotion($type->promotion_id);
+                        $this->handle->addBargainPromotion($promotion->id,['number'=>$promotion->number-1]);
+                    }
                 }
                 $data = [
                     'state' => 'paid',
