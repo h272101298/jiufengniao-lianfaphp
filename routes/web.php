@@ -25,7 +25,7 @@ Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middle
 //Route::options('/{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('v1/{all}',function (){jsonResponse(['msg'=>'ok']);})->middleware('cross');
 Route::get('test',function (){
-    dd(0.00==0) ;
+   dd(\Carbon\Carbon::parse(date('Y-m-d',strtotime('-7 days'))));
 });
 Route::post('test2','V1\SystemController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
@@ -130,4 +130,15 @@ Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::post('member/user','V2\MemberController@addMemberUser');
     Route::get('member/users','V2\MemberController@getMemberUsers');
     Route::get('member/records','V2\MemberController@getMemberRecords');
+});
+Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
+    Route::post('group/buy/promotion','V3\GroupBuyController@addGroupBuyPromotion');
+    Route::get('group/buy/promotion','V3\GroupBuyController@getGroupBuyPromotion');
+    Route::delete('group/buy/promotion','V3\GroupBuyController@delGroupBuyPromotion');
+    Route::put('group/buy/promotion','V3\GroupBuyController@modifyGroupBuyPromotion');
+    Route::get('group/buy/promotions','V3\GroupBuyController@getGroupBuyPromotions');
+    Route::get('check/group/buy/promotion','V3\GroupBuyController@checkPromotion');
+    Route::get('enable/group/buy/promotion','V3\GroupBuyController@enablePromotion');
+    Route::get('hot/group/buy/promotion','V3\GroupBuyController@addHotPromotion');
+
 });

@@ -352,6 +352,7 @@ class WeChatController extends Controller
     public function addUserInfo(Request $post)
     {
         $user_id = getRedisData($post->token);
+        $info = $this->handle->getUserInfoByUserId($user_id);
         $data = [
             'user_id'=>$user_id,
             'phone'=>$post->phone,
@@ -359,7 +360,8 @@ class WeChatController extends Controller
             'sex'=>$post->sex,
             'email'=>$post->email
         ];
-        if ($this->handle->addUserInfo(0,$data)){
+        $id = empty($info)?0:$info->id;
+        if ($this->handle->addUserInfo($id,$data)){
             return \jsonResponse([
                 'msg'=>'ok'
             ]);

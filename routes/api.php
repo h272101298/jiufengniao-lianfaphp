@@ -91,3 +91,11 @@ Route::group(['prefix'=>'v2'],function (){
         Route::post('member/order','V2\MemberController@addMemberRecord');
     });
 });
+Route::group(['prefix'=>'v3'],function (){
+    Route::get('group/buy/promotions','V3\GroupBuyController@getPromotions');
+    Route::get('group/buy/promotion','V3\GroupBuyController@getPromotion');
+    Route::get('group/buy/stock','V3\GroupBuyController@getGroupBuyStock');
+    Route::post('group/buy/order','V3\OrderController@makeOrder');
+    Route::get('group/buy/lists','V3\GroupBuyController@getOrderBuyList');
+    Route::get('group/buy/list','V3\GroupBuyController@getGroupBuyList');
+});

@@ -166,9 +166,10 @@ class ProductController extends Controller
                     'product_detail'=>$detail
                 ];
                 $images = $item['images'];
-                $stockId = isset($item['id'])?$item['id']:0;
+                $stockId = isset($item['id'])&&$item!=0?$item['id']:0;
 //                $this->handle->delStocks($product_id);
                 $stock_id = $this->handle->addStock($stockId,$stockData);
+                $this->handle->delStockImages($stock_id);
                 foreach ($images as $image){
                     $this->handle->addStockImage($stock_id,$image);
                 }
@@ -257,7 +258,9 @@ class ProductController extends Controller
     {
         $name = Input::get('name');
         $type = Input::get('type');
-        $data = $this->handle->getProductsApi($name,$type);
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $data = $this->handle->getProductsApi($name,$type,$page,$limit);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data
@@ -410,6 +413,18 @@ class ProductController extends Controller
     public function delCollect()
     {
         $id = Input::get('id');
+        $product_id = Input::get('product_id');
+        $user_id = getRedisData(Input::get('token'));
+        if ($user_id){
+            if ($this->handle->delCollectByProductId($user_id,$product_id)){
+                return jsonResponse([
+                    'msg'=>'ok'
+                ]);
+            }
+            return jsonResponse([
+                'msg'=>'操作失败！'
+            ]);
+        }
         if ($this->handle->delCollect($id)){
             return jsonResponse([
                 'msg'=>'ok'

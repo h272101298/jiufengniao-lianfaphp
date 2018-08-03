@@ -371,6 +371,7 @@ trait ProductHandle
 //        dd($sql);
         $count = $db->count();
         $data = $db->limit($limit)->offset(($page - 1) * $limit)->get();
+//        var_dump($data);
         $this->formatProducts($data);
         return [
             'data' => $data,
@@ -416,7 +417,7 @@ trait ProductHandle
         ];
     }
 
-    public function getProductsApi($name, $type)
+    public function getProductsApi($name, $type,$page=1,$limit=10)
     {
         $db = DB::table('products')->where('deleted', '!=', 1)->where('state', '=', 1)->where('review', '=', 1);
         if ($name) {
@@ -427,7 +428,7 @@ trait ProductHandle
         }
         $db->where('review', '=', 1)->where('state', '=', 1)->where('deleted', '=', 0);
         $count = $db->count();
-        $data = $db->select(['name', 'id', 'norm'])->get();
+        $data = $db->select(['name', 'id', 'norm'])->limit($limit)->offset(($page-1)*$limit)->get();
         $data = $this->formatProductApi($data);
         return [
             'data' => $data,
@@ -540,7 +541,10 @@ trait ProductHandle
         }
         return false;
     }
-
+    public function delStockImages($stock_id)
+    {
+        return StockImage::where('stock_id','=',$stock_id)->delete();
+    }
     public function getStock($product, $detail)
     {
         $stock = Stock::where('product_id', '=', $product)->where('product_detail', '=', $detail)->first();
@@ -713,6 +717,17 @@ trait ProductHandle
     {
         $collect = ProductCollect::findOrFail($id);
         if ($collect->delete()) {
+            return true;
+        }
+        return false;
+    }
+    public function delCollectByProductId($user_id,$product_id)
+    {
+        $collect = ProductCollect::where('user_id', '=', $user_id)->where('product_id', '=', $product_id)->first();
+        if (empty($collect)){
+            return true;
+        }
+        if ($collect->delete()){
             return true;
         }
         return false;
