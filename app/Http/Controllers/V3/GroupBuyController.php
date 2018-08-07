@@ -230,11 +230,33 @@ class GroupBuyController extends Controller
     {
         $id = Input::get('id');
         $list = $this->handle->getGroupBuyList($id);
-        $this->handle->formatGroupBuyList($list);
+        $this->handle->formatGroupBuyList($list,1,0);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$list
         ]);
-
+    }
+    public function getMyGroupBuy()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $free = Input::get('free',0);
+        $idArray = $this->handle->getGroupBuyPromotionsId($free);
+        $data = $this->handle->getGroupBuyJoins($user_id,$idArray,$page,$limit);
+        $this->handle->formatGroupBuyJoins($data['data']);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function getUserGroupFree()
+    {
+        $user_id = getRedisData(Input::get('token'));
+        $free = $this->handle->getGroupFree($user_id);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$free
+        ]);
     }
 }

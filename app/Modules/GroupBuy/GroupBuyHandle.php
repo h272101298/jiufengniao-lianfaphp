@@ -13,6 +13,7 @@ use App\Modules\GroupBuy\Model\GroupBuyJoin;
 use App\Modules\GroupBuy\Model\GroupBuyList;
 use App\Modules\GroupBuy\Model\GroupBuyPromotion;
 use App\Modules\GroupBuy\Model\GroupBuyStock;
+use App\Modules\GroupBuy\Model\GroupFree;
 use App\Modules\Product\Model\Product;
 use App\Modules\Product\Model\Stock;
 use App\Modules\Product\Model\StockImage;
@@ -202,12 +203,21 @@ trait GroupBuyHandle
     {
         return GroupBuyList::find($id);
     }
+    public function getGroupBuyListByOrderId($order_id)
+    {
+        return GroupBuyList::where('order_id','=',$order_id)->first();
+    }
+    public function getGroupBuyJoinByOrderId($order_id)
+    {
+        return GroupBuyJoin::where('order_id','=',$order_id)->first();
+    }
     public function formatGroupBuyList($list,$product=1,$stock=1)
     {
         $promotion = $this->getGroupBuyPromotion($list->group_id);
         if ($product){
             $product = Product::find($promotion->product_id);
             $promotion->product = $product;
+            $list->product_id = $promotion->product_id;
         }
         if ($stock){
             $stocks = GroupBuyStock::where('group_id','=',$promotion->id)->orderBy('group_price','ASC')->get();
@@ -217,12 +227,20 @@ trait GroupBuyHandle
             }
             $promotion->stocks = $stocks;
         }
+        $stock_id = GroupBuyJoin::where('list_id','=',$list->id)->where('user_id','=',$list->user_id)->pluck('stock_id')->first();
+        $stock = GroupBuyStock::where('group_id','=',$promotion->id)->where('stock_id','=',$stock_id)->first();
+        if ($stock){
+            $stock->stock = Stock::find($stock_id);
+        }
+        $list->stock = $stock;
+        $list->store = Store::find($promotion->store_id);
         $joins = GroupBuyJoin::where('list_id','=',$list->id)->where('state','=',1)->get();
         if (!empty($joins)){
             foreach ($joins as $join){
                 $join->user = WeChatUser::find($join->user_id);
             }
         }
+
         $list->promotion = $promotion;
         $list->joins = $joins;
         return $list;
@@ -250,5 +268,69 @@ trait GroupBuyHandle
     public function getGroupBuyJoinNumber($list_id)
     {
         return GroupBuyJoin::where('list_id','=',$list_id)->where('state','=',1)->count();
+    }
+    public function getGroupBuyJoins($user_id=0,$group_id=null,$page=1,$limit=10)
+    {
+        $db = DB::table('group_buy_joins');
+        if ($user_id){
+            $db->where('user_id','=',$user_id);
+        }
+        if ($group_id){
+            $db->whereIn('group_id',$group_id);
+        }
+        $count = $db->count();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function getGroupBuyPromotionsId($free=0)
+    {
+        $db = DB::table('group_buy_promotions');
+        if ($free){
+            $db->where('free','=',$free-1);
+        }
+        return $db->pluck('id')->toArray();
+    }
+    public function formatGroupBuyJoins($joins)
+    {
+        if (empty($joins)){
+            return [];
+        }
+        foreach ($joins as $join) {
+            $list = GroupBuyList::find($join->list_id);
+            $group = GroupBuyPromotion::find($list->group_id);
+            $product = Product::find($group->product_id);
+            $stock = Stock::find($join->stock_id);
+            $store = Store::find($group->store_id);
+//            $stock->images = StockImage::where('stock_id','=',$group->stock_id)->get();
+            $join->stock = $stock;
+            $join->store = $store;
+            $join->product = $product;
+            $join->group = $group;
+        }
+        return $joins;
+    }
+    public function addGroupFree($user_id,$count)
+    {
+        $free = GroupFree::where('user_id','=',$user_id)->first();
+        if (empty($free)){
+            $free = new GroupFree();
+            $free->user_id = $user_id;
+        }
+        $free->count = $count;
+        if ($free->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getGroupFree($user_id)
+    {
+        $free = GroupFree::where('user_id','=',$user_id)->first();
+        if (empty($free)){
+            return 0;
+        }
+        return $free->count;
     }
 }

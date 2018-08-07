@@ -98,4 +98,9 @@ Route::group(['prefix'=>'v3'],function (){
     Route::post('group/buy/order','V3\OrderController@makeOrder');
     Route::get('group/buy/lists','V3\GroupBuyController@getOrderBuyList');
     Route::get('group/buy/list','V3\GroupBuyController@getGroupBuyList');
+    Route::get('my/group/buy','V3\GroupBuyController@getMyGroupBuy');
+    Route::get('my/group/free','V3\GroupBuyController@getUserGroupFree');
+    Route::post('sign','V3\SignController@sign');
+    Route::get('sign','V3\SignController@getSignRecords');
+    Route::get('sign/configs','V3\SignController@getSignConfigs');
 });

@@ -89,6 +89,7 @@ class OrderController extends Controller
                             'list_id'=>$list_id,
                             'stock_id' => $stock->id,
                             'order_id'=>$order_id,
+                            'group_id'=>$group_id,
                             'state'=>1
                         ];
                         $this->handle->addGroupBuyJoin(0,$joinData);
@@ -99,7 +100,8 @@ class OrderController extends Controller
                     'msg' => 'ok',
                     'data' => [
                         'order' => $groupNumber,
-                        'price'=>$price
+                        'price'=>$price,
+                        'list_id'=>$list_id
                     ]
                 ]);
             }
@@ -164,6 +166,7 @@ class OrderController extends Controller
                     $joinData = [
                         'user_id'=>$user_id,
                         'list_id'=>$list_id,
+                        'group_id'=>$group_id,
                         'stock_id'=>$stock_id,
                         'order_id'=>$order_id
                     ];
@@ -175,7 +178,8 @@ class OrderController extends Controller
                 'msg' => 'ok',
                 'data' => [
                     'order' => $groupNumber,
-                    'price'=>$price
+                    'price'=>$price,
+                    'list_id'=>$list_id
                 ]
             ]);
 

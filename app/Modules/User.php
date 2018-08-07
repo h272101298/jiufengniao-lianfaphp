@@ -21,6 +21,7 @@ use App\Modules\Role\Model\Role;
 use App\Modules\Role\Model\RoleUser;
 use App\Modules\Role\RoleHandle;
 use App\Modules\SettleApply\SettleApplyHandle;
+use App\Modules\Sign\SignHandle;
 use App\Modules\Store\StoreHandle;
 use App\Modules\System\SystemHandle;
 use App\Modules\WeChatUser\Model\UserAmount;
@@ -40,6 +41,7 @@ class User
     use BargainHandle;
     use MemberHandle;
     use GroupBuyHandle;
+    use SignHandle;
     public function addUser($id,$data,$role)
     {
         if ($id){
