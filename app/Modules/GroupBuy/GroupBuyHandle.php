@@ -306,6 +306,9 @@ trait GroupBuyHandle
             $list = GroupBuyList::find($join->list_id);
             $group = GroupBuyPromotion::find($list->group_id);
             $product = Product::find($group->product_id);
+            if (!empty($product)){
+                unset($product->detail);
+            }
             $stock = Stock::find($join->stock_id);
             $store = Store::find($group->store_id);
 //            $stock->images = StockImage::where('stock_id','=',$group->stock_id)->get();

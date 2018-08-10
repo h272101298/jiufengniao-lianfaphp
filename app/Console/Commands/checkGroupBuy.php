@@ -62,6 +62,5 @@ class checkGroupBuy extends Command
                 $list->save();
             }
         }
-//        dd($lists);
     }
 }
