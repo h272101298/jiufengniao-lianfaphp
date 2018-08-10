@@ -244,6 +244,7 @@ class GroupBuyController extends Controller
         $limit = Input::get('limit',10);
         $free = Input::get('free',0);
         $idArray = $this->handle->getGroupBuyPromotionsId($free);
+        dd($idArray);
         $data = $this->handle->getGroupBuyJoins($user_id,$idArray,$page,$limit);
         $this->handle->formatGroupBuyJoins($data['data']);
         return jsonResponse([
