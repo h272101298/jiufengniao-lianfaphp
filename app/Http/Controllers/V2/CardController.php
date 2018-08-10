@@ -129,6 +129,7 @@ class CardController extends Controller
         $id = Input::get('id');
         $this->handle->delPromotionCardList($id);
         $this->handle->delCardPromotion($id);
+        $this->handle->delHotCardPromotion($id);
         return jsonResponse([
             'msg'=>'ok'
         ]);
