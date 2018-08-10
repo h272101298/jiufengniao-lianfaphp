@@ -26,6 +26,7 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('adverts','V1\AdvertController@getAdverts');
     Route::get('recommend/list','V1\ProductController@getRecommendList');
     Route::get('hot/types','V1\ProductController@getHotTypes');
+    Route::get('poster/configs','V1\SystemController@getPosterConfigs');
     Route::group(['middleware'=>'checkToken'],function (){
         Route::post('address','V1\WeChatController@createAddress');
         Route::get('addresses','V1\WeChatController@getAddresses');
@@ -67,7 +68,6 @@ Route::group(['prefix'=>'v1'],function (){
         Route::post('proxy/list','V1\WeChatController@addProxyList');
         Route::get('brokerages','V1\WeChatController@getBrokerageList');
         Route::post('notify/list','V1\WeChatController@addNotifyList');
-        Route::get('poster/configs','V1\SystemController@getPosterConfigs');
     });
 
 });
