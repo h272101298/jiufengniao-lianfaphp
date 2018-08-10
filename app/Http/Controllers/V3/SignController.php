@@ -60,8 +60,7 @@ class SignController extends Controller
         $check = $this->handle->checkSign($user_id,1);
         $continue = $this->handle->getContinueSign($user_id);
         if ($continue){
-            dd($continue);
-            if ($continue['date']==date('Y-m-d',time()||$continue['date']==date('Y-m-d',strtotime('-1 days')))){
+            if ($continue['date']==date('Y-m-d',time())||$continue['date']==date('Y-m-d',strtotime('-1 days'))){
                 $days = $continue['count'];
             }else{
                 $days = 0;
