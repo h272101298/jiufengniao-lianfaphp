@@ -59,8 +59,10 @@ class checkGroupBuy extends Command
                     }
 
                 }
-                $list->save();
+            }else{
+                $list->state = 3;
             }
+            $list->save();
         }
     }
 }
