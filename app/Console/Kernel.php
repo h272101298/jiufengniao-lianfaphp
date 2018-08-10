@@ -3,8 +3,10 @@
 namespace App\Console;
 
 use App\Console\Commands\Brokerage;
+use App\Console\Commands\checkGroupBuy;
 use App\Console\Commands\ClearQueue;
 use App\Console\Commands\Notify;
+use App\Console\Commands\refuseOrder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -19,7 +21,9 @@ class Kernel extends ConsoleKernel
         //
         Brokerage::class,
         Notify::class,
-        ClearQueue::class
+        ClearQueue::class,
+        checkGroupBuy::class,
+        refuseOrder::class
     ];
 
     /**
@@ -35,6 +39,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('brokerage:make')->dailyAt('2:00');
         $schedule->command('notify:send')->everyFiveMinutes();
         $schedule->command('clearQueues')->everyFiveMinutes();
+        $schedule->command('checkGroupBuy')->everyFiveMinutes();
+        $schedule->command('refuseOrder')->everyFiveMinutes();
     }
 
     /**
