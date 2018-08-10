@@ -61,6 +61,12 @@ class checkGroupBuy extends Command
                 }
             }else{
                 $list->state = 3;
+                $joins = GroupBuyJoin::where('state','=',1)->where('list_id','=',$list->id)->get();
+                foreach ($joins as $join){
+                    $refuse = new RefuseList();
+                    $refuse->order_id = $join->order_id;
+                    $refuse->save();
+                }
             }
             $list->save();
         }

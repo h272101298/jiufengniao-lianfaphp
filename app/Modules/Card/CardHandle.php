@@ -418,7 +418,7 @@ trait CardHandle
     }
     public function delHotCardPromotion($id)
     {
-        return HotCardPromotion::where('promotion_id','!=',$id)->delete();
+        return HotCardPromotion::where('promotion_id','=',$id)->delete();
     }
 
 }
