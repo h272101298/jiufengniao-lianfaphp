@@ -28,20 +28,24 @@ class SignController extends Controller
         if ($continue){
             if ($continue['date']==date('Y-m-d',strtotime('-1 days'))){
                 if ($continue['count']!=7){
+                    $step =  '1';
                     $count = $continue['count']+1;
                 }else{
+                    $step = '2';
                     $count = 1;
                 }
                 $continue['count'] = $count;
                 $continue['date'] = date('Y-m-d',time());
                 $this->handle->setContinueSign($user_id,$continue);
             }else{
+                $step = '3';
                 $count = 1;
                 $continue['count'] = $count;
                 $continue['date'] = date('Y-m-d',time());
                 $this->handle->setContinueSign($user_id,$continue);
             }
         }else{
+            $step = '4';
             $count = 1;
             $continue['count'] = $count;
             $continue['date'] = date('Y-m-d',time());
@@ -50,7 +54,8 @@ class SignController extends Controller
         $this->handle->addSignRecord($user_id);
         return jsonResponse([
             'msg'=>'ok',
-            'data'=>$count
+            'data'=>$count,
+            'step'=>$step
         ]);
     }
     public function getSignRecords()
