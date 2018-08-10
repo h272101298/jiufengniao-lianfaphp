@@ -265,6 +265,10 @@ trait GroupBuyHandle
         }
         return $lists;
     }
+    public function checkGroupJoin($group_id,$user_id)
+    {
+        return GroupBuyJoin::where('group_id','=',$group_id)->where('user_id','=',$user_id)->count();
+    }
     public function getGroupBuyJoinNumber($list_id)
     {
         return GroupBuyJoin::where('list_id','=',$list_id)->where('state','=',1)->count();

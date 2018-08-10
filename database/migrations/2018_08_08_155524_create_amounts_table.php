@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserAmountsTable extends Migration
+class CreateAmountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateUserAmountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_amounts', function (Blueprint $table) {
+        Schema::create('amounts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->float('amount',10,2)->default(0);
+            $table->float('amount',8,2)->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateUserAmountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_amounts');
+        Schema::dropIfExists('amounts');
     }
 }

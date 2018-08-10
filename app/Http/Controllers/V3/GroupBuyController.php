@@ -185,6 +185,7 @@ class GroupBuyController extends Controller
         $user_id = getRedisData(Input::get('token'));
         $data = $this->handle->getGroupBuyPromotion($id);
         $data->collect = $this->handle->checkCollect($user_id,$data->product_id);
+        $data->join = $this->handle->checkGroupJoin($id,$user_id);
         $this->handle->formatGroupBuyPromotion($data,1,1,1);
         return jsonResponse([
             'msg'=>'ok',
