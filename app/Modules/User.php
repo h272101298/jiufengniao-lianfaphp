@@ -13,6 +13,7 @@ use App\Modules\Advert\AdvertHandle;
 use App\Modules\Amount\AmountHandle;
 use App\Modules\Bargain\BargainHandle;
 use App\Modules\Card\CardHandle;
+use App\Modules\Coupon\CouponHandle;
 use App\Modules\GroupBuy\GroupBuyHandle;
 use App\Modules\Member\MemberHandle;
 use App\Modules\Order\OrderHandle;
@@ -21,6 +22,7 @@ use App\Modules\Proxy\ProxyHandle;
 use App\Modules\Role\Model\Role;
 use App\Modules\Role\Model\RoleUser;
 use App\Modules\Role\RoleHandle;
+use App\Modules\Score\ScoreHandle;
 use App\Modules\SettleApply\SettleApplyHandle;
 use App\Modules\Sign\SignHandle;
 use App\Modules\Store\StoreHandle;
@@ -44,6 +46,8 @@ class User
     use GroupBuyHandle;
     use SignHandle;
     use AmountHandle;
+    use CouponHandle;
+    use ScoreHandle;
     public function addUser($id,$data,$role)
     {
         if ($id){

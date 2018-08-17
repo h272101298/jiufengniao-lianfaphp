@@ -142,5 +142,9 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('hot/group/buy/promotion','V3\GroupBuyController@addHotPromotion');
     Route::post('sign/configs','V3\SignController@setSignConfigs');
     Route::get('sign/configs','V3\SignController@getSignConfigs');
+    Route::post('coupon','V3\CouponController@addCoupon');
+    Route::get('coupons','V3\CouponController@getCoupons');
+    Route::delete('coupon','V3\CouponController@delCoupon');
+    Route::get('enable/coupon','V3\CouponController@enableCoupon');
 
 });

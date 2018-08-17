@@ -96,6 +96,7 @@ Route::group(['prefix'=>'v3'],function (){
     Route::get('group/buy/promotion','V3\GroupBuyController@getPromotion');
     Route::get('group/buy/stock','V3\GroupBuyController@getGroupBuyStock');
     Route::post('group/buy/order','V3\OrderController@makeOrder');
+    Route::post('order','V3\OrderController@createOrder');
     Route::get('group/buy/lists','V3\GroupBuyController@getOrderBuyList');
     Route::get('group/buy/list','V3\GroupBuyController@getGroupBuyList');
     Route::get('my/group/buy','V3\GroupBuyController@getMyGroupBuy');
@@ -103,4 +104,9 @@ Route::group(['prefix'=>'v3'],function (){
     Route::post('sign','V3\SignController@sign');
     Route::get('sign','V3\SignController@getSignRecords');
     Route::get('sign/configs','V3\SignController@getSignConfigs');
+    Route::get('coupons','V3\CouponController@getStoreCoupons');
+    Route::get('take/coupon','V3\CouponController@addUserCoupon');
+    Route::get('my/coupons','V3\CouponController@myCoupons');
+    Route::get('my/score','V3\UserController@getUserScore');
+    Route::get('score/store','V3\UserController@getUserScore');
 });

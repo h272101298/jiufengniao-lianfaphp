@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserCouponsTable extends Migration
+class CreateCouponRecordsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateUserCouponsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_coupons', function (Blueprint $table) {
+        Schema::create('coupon_records', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
             $table->unsignedInteger('coupon_id');
-            $table->unsignedInteger('store_id');
-            $table->integer('end')->default(0);
-            $table->tinyInteger('state')->default(1);
+            $table->unsignedInteger('order_id');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateUserCouponsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_coupons');
+        Schema::dropIfExists('coupon_records');
     }
 }

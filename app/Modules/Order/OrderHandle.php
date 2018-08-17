@@ -102,7 +102,7 @@ trait OrderHandle
             $db->where('state','=',$state);
         }
         $count = $db->count();
-        $data = $db->limit($limit)->offset(($page-1)*$limit)->get()->toArray();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get()->toArray();
         $data = $this->formatMyOrders($data);
         return [
             'data'=>$data,
@@ -148,22 +148,25 @@ trait OrderHandle
 //                dd($snapshots);
                 if (!empty($swapCarts)){
                     for ($j=0;$j<count($swapCarts);$j++){
+//                        dd($swapCarts);
                         $stock = Stock::find($swapCarts[$j]['stock_id']);
-                        $product = Product::find($stock->product_id);
+                        if (!empty($stock)){
+                            $product = Product::find($stock->product_id);
+                        }else{
+                            $product = new Product();
+                        }
+//                        dd($stock);
+
+                        if (empty($product)){
+                            $product = new Product();
+                        }
                         $swapCarts[$j]['goodid'] = $swapCarts[$j]['stock_id'];
                         $swapCarts[$j]['shopid'] = $store[$k];
                         $swapCarts[$j]['goodname'] = $product->name;
-                        $swapCarts[$j]['goodpic'] = $stock->cover;
-                        $swapCarts[$j]['goodprice'] = $stock->price;
+                        $swapCarts[$j]['goodpic'] = $swapCarts[$j]['cover'];
+                        $swapCarts[$j]['goodprice'] = $swapCarts[$j]['price'];
                         $swapCarts[$j]['goodnum'] = $swapCarts[$j]['number'];
-                        if ($product->norm=='fixed'){
-                            $swapCarts[$j]['goodformat'] = 'fixed';
-                        }else{
-                            $detail = explode(',',$stock->product_detail);
-                            $detail = ProductDetailSnapshot::whereIn('id',$detail)->pluck('title')->toArray();
-                            $detail = implode(' ',$detail);
-                            $swapCarts[$j]['goodformat'] = $detail;
-                        }
+                        $swapCarts[$j]['goodformat'] = $swapCarts[$j]['detail'];
                     }
                 }
                 $data[$i]['shop'][$k]['goods'] = $swapCarts;

@@ -34,7 +34,7 @@ class OrderController extends Controller
         $groupNumber = self::makePaySn($user_id);
         DB::beginTransaction();
         try {
-            $price = 0;
+
             if ($card_promotion) {
                 if ($this->handle->countCardPrize($user_id,$card_promotion)!=0){
                     throw new \Exception('活动已兑换！');
@@ -172,7 +172,9 @@ class OrderController extends Controller
             $stocks = $post->stocks;
             $stocksId = array_column($stocks, 'id');
             $storesId = $this->handle->getStoresIdByStockId($stocksId);
+            $amount = 0;
             foreach ($storesId as $item) {
+                $price = 0;
                 $data = [
                     'user_id' => $user_id,
                     'number' => self::makePaySn($user_id),
@@ -207,7 +209,9 @@ class OrderController extends Controller
 
                             $product = $this->handle->getProductById($swapStock->product_id);
                             if ($product->store_id == $item) {
-                                $price += $swapStock->price * $stock['number'] * $discount;
+                               // var_dump($swapStock->price);
+                                //var_dump($stock['number']);
+                                $price += $swapStock->price * $stock['number'];
                                 if ($product->norm == 'fixed') {
                                     $detail = 'fixed';
                                 } else {
@@ -227,24 +231,26 @@ class OrderController extends Controller
                                 ];
                                 $this->handle->addStockSnapshot($order_id, $stockData);
                             }
-
                         }
+                        $price = $price;
+                        $amount += $price*$discount;
+                        //var_dump($amount);
                         $orderPrice = [
                             'price' => $price
                         ];
-                        if (number_format($price,2)!=number_format($post->price,2)){
-                            throw new \Exception('非法价格！'.$price);
-                        }
                         $this->handle->addOrder($order_id, $orderPrice);
                     }
                 }
+            }
+            if (number_format($amount,2)!=number_format($post->price,2)){
+                throw new \Exception('非法价格！'.$amount);
             }
             DB::commit();
             return jsonResponse([
                 'msg' => 'ok',
                 'data' => [
                     'order' => $groupNumber,
-                    'price'=>number_format($price,2)
+                    'price'=>number_format($amount,2)
                 ]
             ]);
         } catch (\Exception $exception) {
@@ -261,7 +267,26 @@ class OrderController extends Controller
         $url = $post->getScheme() . '://' . $post->getHttpHost() . '/api/pay/notify';
         $user_id = getRedisData($post->token);
         $order_id = $post->order_id;
+        $repay = $post->repay?$post->repay:0;
         $user = WeChatUser::findOrFail($user_id);
+//        dd($user);
+        if ($repay){
+            $order = Order::where('number', '=', $order_id)->first();
+            if ($order->state!='created'){
+                return jsonResponse([
+                    'msg' => '订单已支付！'
+                ], 400);
+            }
+            //$price = Order::where('group_number', '=', $order_id)->sum('price');
+            $wxPay = getWxPay($user->open_id);
+            $data = $wxPay->pay($order_id, '购买商品', ($order->price) * 100, $url);
+            $notify_id = $wxPay->getPrepayId();
+            Order::where('group_number', '=', $order_id)->update(['notify_id' => $notify_id]);
+            return response()->json([
+                'msg' => 'ok',
+                'data' => $data
+            ]);
+        }
         $count = Order::where('group_number', '=', $order_id)->where('state', '!=', 'created')->count();
         if ($count != 0) {
             return jsonResponse([
