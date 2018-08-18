@@ -295,4 +295,25 @@ class SystemController extends Controller
             'data'=>$data
         ]);
     }
+    public function getIconConfigs()
+    {
+        $configs = $this->handle->getIconConfigs();
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$configs
+        ]);
+    }
+    public function addIconConfig()
+    {
+        $position = Input::get('position');
+        $url = Input::get('url');
+        if ($this->handle->addIconConfig($position,$url)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
 }

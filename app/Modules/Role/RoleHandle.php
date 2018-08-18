@@ -1,5 +1,6 @@
 <?php
 namespace App\Modules\Role;
+use App\Modules\Role\Model\DefaultRole;
 use App\Modules\Role\Model\Permission;
 use App\Modules\Role\Model\Role;
 use App\Modules\Role\Model\RolePermission;
@@ -44,6 +45,7 @@ trait RoleHandle
             foreach ($roles as $role){
                 $idArray = RolePermission::where('role_id','=',$role->id)->pluck('permission_id')->toArray();
                 $role->permissions = Permission::whereIn('id',$idArray)->get();
+                $role->default = $this->checkDefaultRole($role->id);
             }
         }
         return [
@@ -127,6 +129,50 @@ trait RoleHandle
             $permission->$key = $value;
         }
         if ($permission->save()){
+            return true;
+        }
+        return false;
+    }
+    public function addDefaultRole($role_id)
+    {
+        $role = DefaultRole::first();
+        if (empty($role)){
+            $role = new DefaultRole();
+        }
+        $role->role_id = $role_id;
+        if ($role->save()){
+            return true;
+        }
+        return false;
+    }
+    public function checkDefaultRole($role_id,$filter=0)
+    {
+        $db = DB::table('default_roles');
+        if ($role_id){
+            $db->where('role_id','=',$role_id);
+        }
+        if ($filter){
+            $db->where('role_id','!=',$role_id);
+        }
+        return $db->count();
+    }
+    public function delDefaultRole($role_id)
+    {
+
+    }
+    public function getDefaultRole()
+    {
+        return DefaultRole::first();
+    }
+    public function addRoleUser($role_id,$user_id)
+    {
+        $role = RoleUser::where('user_id','=',$user_id)->first();
+        if (empty($role)){
+            $role = new RoleUser();
+            $role->user_id = $user_id;
+        }
+        $role->role_id = $role_id;
+        if ($role->save()){
             return true;
         }
         return false;

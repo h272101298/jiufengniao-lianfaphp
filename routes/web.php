@@ -25,7 +25,9 @@ Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middle
 //Route::options('/{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('v1/{all}',function (){jsonResponse(['msg'=>'ok']);})->middleware('cross');
 Route::get('test',function (){
-   dd(date('Y-m-d',strtotime('-1 days')));
+   return jsonResponse([
+       'sga'=>'da'
+   ],298);
 });
 Route::post('test2','V1\SystemController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
@@ -65,6 +67,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('type/products','V1\ProductController@getProductsByType')->middleware(['checkStore','permission:productListAll|productListStore']);
         Route::post('role','V1\SystemController@addRole')->middleware('permission:roleAdd');
         Route::get('roles','V1\SystemController@getRoles')->middleware('permission:roleList');
+        Route::get('default/role','V1\RoleController@addDefaultRole')->middleware('permission:roleList');
         Route::delete('role','V1\SystemController@delRole')->middleware('permission:roleDel');
         Route::post('user','V1\UserController@addUser')->middleware('permission:adminAdd');
         Route::get('users','V1\UserController@getUsers')->middleware('permission:adminList');
@@ -102,6 +105,8 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('notify/configs','V1\SystemController@getNotifyConfigs');
         Route::post('poster/configs','V1\SystemController@addPosterConfigs');
         Route::get('poster/configs','V1\SystemController@getPosterConfigs');
+        Route::post('icon/config','V1\SystemController@addIconConfig');
+        Route::get('icon/configs','V1\SystemController@getIconConfigs');
     });
 });
 Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){

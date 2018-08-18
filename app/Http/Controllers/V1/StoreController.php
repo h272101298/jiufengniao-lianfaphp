@@ -72,6 +72,11 @@ class StoreController extends Controller
         $id = Input::get('id');
         $state = Input::get('state',2);
         $result = $this->handle->checkSettleApply($id,$state);
+        if ($this->handle->checkDefaultRole()){
+            return jsonResponse([
+                'msg'=>'没有默认角色！'
+            ],400);
+        }
         if (!$result){
             return jsonResponse([
                 'msg'=>'操作失败！'
@@ -84,7 +89,8 @@ class StoreController extends Controller
                 $user->phone = $apply->phone;
                 $user->password = bcrypt('123456');
                 $user->save();
-
+                $role = $this->handle->getDefaultRole();
+                $this->handle->addRoleUser($role->id,$user->id);
             }
             return jsonResponse([
                 'msg'=>'ok'

@@ -68,6 +68,7 @@ Route::group(['prefix'=>'v1'],function (){
         Route::post('proxy/list','V1\WeChatController@addProxyList');
         Route::get('brokerages','V1\WeChatController@getBrokerageList');
         Route::post('notify/list','V1\WeChatController@addNotifyList');
+        Route::get('icon/configs','V1\SystemController@getIconConfigs');
     });
 
 });

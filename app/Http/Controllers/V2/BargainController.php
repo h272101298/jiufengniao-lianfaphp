@@ -170,9 +170,14 @@ class BargainController extends Controller
         if ($count>=$promotion->clickNum){
             return jsonResponse([
                 'msg'=>'砍价已结束，请直接购买！'
-            ],400);
+            ],298);
         }
         $swapPrice = $this->handle->getBargainPromotionPrice($promotion_id);
+        if($promotion->origin_price-$swapPrice==0){
+            return jsonResponse([
+                'msg'=>'砍价已结束，请直接购买！'
+            ],299);
+        }
         $price = $this->handle->getBargainPrice($promotion->clickNum-$count,$promotion->origin_price-$promotion->min_price-$swapPrice);
         if ($this->handle->addBargainRecord($user_id,$promotion_id,$price)){
             $this->handle->addBargainCount($promotion_id,$count+1);

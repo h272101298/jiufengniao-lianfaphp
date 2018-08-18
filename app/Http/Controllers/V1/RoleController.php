@@ -51,4 +51,18 @@ class RoleController extends Controller
     {
 
     }
+    public function addDefaultRole()
+    {
+        $role_id = Input::get('role_id');
+//        if ($this->handle->checkDefaultRole(0,$role_id)){
+//            return jsonResponse([
+//                'msg'=>'不能设置多个默认角色！'
+//            ],400);
+//        }
+        if ($this->handle->addDefaultRole($role_id)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+    }
 }

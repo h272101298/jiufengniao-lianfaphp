@@ -10,6 +10,7 @@ namespace App\Modules\System;
 
 
 use App\Modules\System\Model\Document;
+use App\Modules\System\Model\IconConfig;
 use App\Modules\System\Model\NotifyConfig;
 use App\Modules\System\Model\NotifyQueue;
 use App\Modules\System\Model\PosterConfig;
@@ -222,6 +223,23 @@ trait SystemHandle
         if (empty($config)){
             $config = new PosterConfig();
             $config->title = $title;
+        }
+        $config->url = $url;
+        if ($config->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getIconConfigs()
+    {
+        return IconConfig::all()->toArray();
+    }
+    public function addIconConfig($position,$url)
+    {
+        $config = IconConfig::where('position','=',$position)->first();
+        if (empty($config)){
+            $config = new IconConfig();
+            $config->position = $position;
         }
         $config->url = $url;
         if ($config->save()){
