@@ -55,7 +55,8 @@ class SignController extends Controller
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$count,
-            'step'=>$step
+            'step'=>$step,
+            'continue'=>$continue
         ]);
     }
     public function getSignRecords()
