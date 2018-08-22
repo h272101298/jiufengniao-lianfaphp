@@ -50,14 +50,15 @@ class checkGroupBuy extends Command
                 if ($joinNumber>=$promotion->people_number){
                     $list->state = 2;
                 }else{
-                    $list->state = 3;
-                    $joins = GroupBuyJoin::where('state','=',1)->where('list_id','=',$list->id)->get();
-                    foreach ($joins as $join){
-                        $refuse = new RefuseList();
-                        $refuse->order_id = $join->order_id;
-                        $refuse->save();
+                    if ($list->end<time()){
+                        $list->state = 3;
+                        $joins = GroupBuyJoin::where('state','=',1)->where('list_id','=',$list->id)->get();
+                        foreach ($joins as $join){
+                            $refuse = new RefuseList();
+                            $refuse->order_id = $join->order_id;
+                            $refuse->save();
+                        }
                     }
-
                 }
             }else{
                 $list->state = 3;
