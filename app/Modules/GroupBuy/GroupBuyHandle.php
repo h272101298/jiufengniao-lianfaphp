@@ -128,6 +128,7 @@ trait GroupBuyHandle
         }
         if ($product){
             $product = Product::find($promotion->product_id);
+            unset($product->detail);
             $promotion->product = $product;
         }
         if ($stock){
@@ -312,6 +313,7 @@ trait GroupBuyHandle
             $stock = Stock::find($join->stock_id);
             $store = Store::find($group->store_id);
 //            $stock->images = StockImage::where('stock_id','=',$group->stock_id)->get();
+            $join->state = $list->state;
             $join->stock = $stock;
             $join->store = $store;
             $join->product = $product;
