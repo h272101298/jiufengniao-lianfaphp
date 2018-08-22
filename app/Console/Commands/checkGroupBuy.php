@@ -42,7 +42,7 @@ class checkGroupBuy extends Command
     public function handle()
     {
         //
-        $lists = GroupBuyList::where('state','=',1)->where('end','<',time())->get();
+        $lists = GroupBuyList::where('state','=',1)->get();
         foreach ($lists as $list){
             $promotion = GroupBuyPromotion::find($list->group_id);
             if (!empty($promotion)){
