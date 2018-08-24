@@ -17,12 +17,13 @@ class CreateBargainPromotionsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('store_id');
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('stock_id');
-            $table->float('min_price',10,2);
-            $table->float('origin_price',10,2);
+            //$table->unsignedInteger('stock_id');
+            //$table->float('min_price',10,2);
+            //$table->float('origin_price',10,2);
             $table->unsignedInteger('clickNum');
-            $table->integer('start');
-            $table->integer('end');
+            //$table->integer('start');
+            //$table->integer('end');
+            $table->integer('time')->default(0);
             $table->string('description');
             $table->integer('number');
             $table->tinyInteger('hot')->default(0);

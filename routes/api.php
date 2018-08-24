@@ -27,6 +27,7 @@ Route::group(['prefix'=>'v1'],function (){
     Route::get('recommend/list','V1\ProductController@getRecommendList');
     Route::get('hot/types','V1\ProductController@getHotTypes');
     Route::get('poster/configs','V1\SystemController@getPosterConfigs');
+    Route::get('icon/configs','V1\SystemController@getIconConfigs');
     Route::group(['middleware'=>'checkToken'],function (){
         Route::post('address','V1\WeChatController@createAddress');
         Route::get('addresses','V1\WeChatController@getAddresses');
@@ -68,7 +69,7 @@ Route::group(['prefix'=>'v1'],function (){
         Route::post('proxy/list','V1\WeChatController@addProxyList');
         Route::get('brokerages','V1\WeChatController@getBrokerageList');
         Route::post('notify/list','V1\WeChatController@addNotifyList');
-        Route::get('icon/configs','V1\SystemController@getIconConfigs');
+
     });
 
 });
@@ -76,6 +77,7 @@ Route::group(['prefix'=>'v2'],function (){
     Route::get('card/promotions','V2\CardController@getEnablePromotions');
     Route::get('hot/card/promotions','V2\CardController@getHotCardPromotions');
     Route::get('bargain/promotions','V2\BargainController@getEnablePromotions');
+    Route::get('bargain/stock','V2\BargainController@getBargainStock');
     Route::group(['middleware'=>'checkToken'],function (){
         Route::get('card/promotion','V2\CardController@getEnablePromotion');
         Route::get('card/draw','V2\CardController@drawCard');
@@ -84,6 +86,7 @@ Route::group(['prefix'=>'v2'],function (){
         Route::get('member','V2\WeChatController@member');
         Route::get('card/records','V2\CardController@getCardJoinRecords');
         Route::get('bargain/promotion','V2\BargainController@getEnablePromotion');
+        Route::post('bargain/list','V2\BargainController@addBargainList');
         Route::post('bargain','V2\BargainController@bargain');
         Route::get('bargain/records','V2\BargainController@getBargainRecords');
         Route::get('bargain/status','V2\BargainController@getBargainPrice');

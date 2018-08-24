@@ -149,20 +149,10 @@ trait OrderHandle
                 if (!empty($swapCarts)){
                     for ($j=0;$j<count($swapCarts);$j++){
 //                        dd($swapCarts);
-                        $stock = Stock::find($swapCarts[$j]['stock_id']);
-                        if (!empty($stock)){
-                            $product = Product::find($stock->product_id);
-                        }else{
-                            $product = new Product();
-                        }
-//                        dd($stock);
-
-                        if (empty($product)){
-                            $product = new Product();
-                        }
+                        //$stock = Stock::find($swapCarts[$j]['stock_id']);
                         $swapCarts[$j]['goodid'] = $swapCarts[$j]['stock_id'];
                         $swapCarts[$j]['shopid'] = $store[$k];
-                        $swapCarts[$j]['goodname'] = $product->name;
+                        $swapCarts[$j]['goodname'] = $swapCarts[$j]['product'];
                         $swapCarts[$j]['goodpic'] = $swapCarts[$j]['cover'];
                         $swapCarts[$j]['goodprice'] = $swapCarts[$j]['price'];
                         $swapCarts[$j]['goodnum'] = $swapCarts[$j]['number'];

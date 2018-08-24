@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateScoreProductDetailsTable extends Migration
+class CreateBargainStocksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateScoreProductDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('score_product_details', function (Blueprint $table) {
+        Schema::create('bargain_stocks', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('bargain_id');
+            $table->unsignedInteger('stock_id');
+            $table->double('origin_price',10,2);
+            $table->double('min_price',10,2);
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateScoreProductDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('score_product_details');
+        Schema::dropIfExists('bargain_stocks');
     }
 }

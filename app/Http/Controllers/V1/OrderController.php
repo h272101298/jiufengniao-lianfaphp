@@ -31,6 +31,7 @@ class OrderController extends Controller
         $address = Address::find($post->address);
         $card_promotion = $post->card_promotion ? $post->card_promotion : 0;
         $bargain_promotion = $post->bargain_promotion ? $post->bargain_promotion : 0;
+        $list_id = $post->list_id ? $post->list_id : 0;
         $groupNumber = self::makePaySn($user_id);
         DB::beginTransaction();
         try {
@@ -87,7 +88,8 @@ class OrderController extends Controller
                             'name' => $product->name,
                             'detail' => $detail,
                             'price' => $price,
-                            'number' => 1
+                            'number' => 1,
+                            'product'=>$product->name
                         ];
                         $this->handle->addStockSnapshot($order_id, $stockData);
                         $this->handle->addCardPrize($user_id,$card_promotion);
@@ -104,16 +106,18 @@ class OrderController extends Controller
             }
             if ($bargain_promotion){
                 $promotion = $this->handle->getBargainPromotion($bargain_promotion);
+                $list = $this->handle->getBargainListById($list_id);
                 if ($promotion->number==0){
                     throw new \Exception('已无库存');
                 }
-                $stock = $this->handle->getStockById($promotion->stock_id);
+                $stock = $this->handle->getStockById($list->stock_id);
                 $product = $this->handle->getProductById($stock->product_id);
-                $price = $post->price;
+                $bargainStock = $this->handle->getBargainStock($bargain_promotion,$list->stock_id);
+                $price = $bargainStock->origin_price - $this->handle->getBargainPromotionPrice($list_id);
                 $state = $price==0?'paid':'created';
-                if ($price<$promotion->min_price){
-                    throw new \Exception('非法价格！');
-                }
+//                if ($price<$promotion->min_price){
+//                    throw new \Exception('非法价格！');
+//                }
                 $data = [
                     'user_id' => $user_id,
                     'number' => self::makePaySn($user_id),
@@ -154,7 +158,8 @@ class OrderController extends Controller
                             'name' => $product->name,
                             'detail' => $detail,
                             'price' => $price,
-                            'number' => 1
+                            'number' => 1,
+                            'product'=>$product->name
                         ];
                         $this->handle->addStockSnapshot($order_id, $stockData);
                         $this->handle->addCardPrize($user_id,$card_promotion);
@@ -227,7 +232,8 @@ class OrderController extends Controller
                                     'name' => $product->name,
                                     'detail' => $detail,
                                     'price' => $swapStock->price*$discount,
-                                    'number' => $stock['number']
+                                    'number' => $stock['number'],
+                                    'product'=>$product->name
                                 ];
                                 $this->handle->addStockSnapshot($order_id, $stockData);
                             }

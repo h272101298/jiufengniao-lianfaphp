@@ -96,7 +96,8 @@ class OrderController extends Controller
                             'name' => $product->name,
                             'detail' => $detail,
                             'price' => $price,
-                            'number' => $number
+                            'number' => $number,
+                            'product'=>$product->name
                         ];
                         $this->handle->addStockSnapshot($order_id, $stockData);
                         $joinData = [
@@ -182,7 +183,8 @@ class OrderController extends Controller
                         'name' => $product->name,
                         'detail' => $detail,
                         'price' => $price,
-                        'number' => $number
+                        'number' => $number,
+                        'product'=>$product->name
                     ];
                     $this->handle->addStockSnapshot($order_id, $stockData);
                     $listData = [
@@ -284,7 +286,8 @@ class OrderController extends Controller
                                     'name' => $product->name,
                                     'detail' => $detail,
                                     'price' => $swapStock->price*$discount,
-                                    'number' => $stock['number']
+                                    'number' => $stock['number'],
+                                    'product'=>$product->name
                                 ];
                                 $this->handle->addStockSnapshot($order_id, $stockData);
                             }

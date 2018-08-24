@@ -15,6 +15,21 @@ class CreateScoreProductsTable extends Migration
     {
         Schema::create('score_products', function (Blueprint $table) {
             $table->increments('id');
+            $table->increments('id');
+            $table->unsignedInteger('store_id');
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->longText('detail');
+            $table->smallInteger('brokerage')->default(0);
+            $table->unsignedInteger('express')->default(0);
+            $table->float('express_price')->default(0);
+            $table->string('share_title')->nullable();
+            $table->string('share_detail')->nullable();
+            $table->string('norm')->default('fixed');
+            $table->tinyInteger('state')->default(0);
+            $table->tinyInteger('review')->default(0);
+            $table->tinyInteger('deleted')->default(0);
+//            $table->unsignedInteger('type_id')->default(0);
             $table->timestamps();
         });
     }

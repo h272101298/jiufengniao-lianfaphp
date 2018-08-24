@@ -27,7 +27,7 @@ class WeChatController extends Controller
                 $this->handle->formatUserJoinPromotions($data['data'],$user_id);
                 break;
             case 'bargain':
-                $data = $this->handle->getBargainRecords($user_id,0,$page,$limit);
+                $data = $this->handle->getBargainLists($user_id,$page,$limit);
                 $this->handle->formatBargainRecords($data['data'],1);
                 break;
         }
