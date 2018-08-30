@@ -151,5 +151,11 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('coupons','V3\CouponController@getCoupons');
     Route::delete('coupon','V3\CouponController@delCoupon');
     Route::get('enable/coupon','V3\CouponController@enableCoupon');
-
+    Route::post('score/product','V3\ScoreController@addScoreProduct');
+    Route::get('score/products','V3\ScoreController@getScoreProducts');
+    Route::get('review/score/product','V3\ScoreController@reviewScoreProduct');
+    Route::get('hot/score/product','V3\ScoreController@hotScoreProduct');
+    Route::get('enable/score/product','V3\ScoreController@enableScoreProduct');
+    Route::delete('score/product','V3\ScoreController@delScoreProduct');
+    Route::get('score/product','V3\ScoreController@getScoreProduct');
 });

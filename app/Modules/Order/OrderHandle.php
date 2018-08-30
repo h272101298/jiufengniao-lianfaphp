@@ -117,6 +117,7 @@ trait OrderHandle
             return $data;
         }
         for($i=0;$i<count($orders);$i++) {
+            $orders[$i]->type = OrderType::where('order_id','=',$orders[$i]['id'])->pluck('type')->first();
             $snapshots = StockSnapshot::where('order_id','=',$orders[$i]['id'])->get()->toArray();
             $store = array_column($snapshots,'store_id');
             $store = array_unique($store);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\V3;
 
 use App\Modules\Address\Model\Address;
 use App\Modules\Product\Model\ProductDetailSnapshot;
+use App\Modules\Score\Model\ScoreProduct;
+use App\Modules\Score\Model\ScoreProductStock;
 use App\Modules\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -332,6 +334,85 @@ class OrderController extends Controller
             DB::rollBack();
             return jsonResponse(['msg' => '参数错误！'.$exception->getMessage(),
                 'line'=>$exception->getTrace()], 400);
+        }
+    }
+    public function createScoreOrder(Request $post)
+    {
+        $user_id = getRedisData($post->token);
+        $address = Address::find($post->address);
+        $groupNumber = self::makePaySn($user_id);
+        DB::beginTransaction();
+        $stock_id = $post->stock_id;
+        try{
+            $stock = ScoreProductStock::find($stock_id);
+            $product = ScoreProduct::find($stock->product_id);
+            $score = $this->handle->getUserScore($user_id);
+            if ($score<$stock->score){
+                throw new \Exception('积分不足!');
+            }
+            $data = [
+                'user_id' => $user_id,
+                'number' => self::makePaySn($user_id),
+                'price' => $stock->price,
+                'state' => $stock->price==0?'paid':'created',
+                'group_number' => $groupNumber,
+                'store_id' => $product->store_id
+            ];
+            $order_id = $this->handle->addOrder(0, $data);
+            if ($order_id) {
+                $addressSnapshot = [
+                    'name' => $address->name,
+                    'phone' => $address->phone,
+                    'address' => $address->city . $address->address,
+                    'zip_code' => $address->zip_code
+                ];
+                $orderType = [
+                    'order_id'=>$order_id,
+                    'type'=>'scoreOrder',
+                    'promotion_id'=>0
+                ];
+                $this->handle->addOrderType(0,$orderType);}
+                if ($this->handle->addAddressSnapshot($order_id, $addressSnapshot)){
+                    if ($product->norm == 'fixed') {
+                        $detail = 'fixed';
+                    } else {
+                        $detail = explode(',', $stock->product_detail);
+                        $detail = ProductDetailSnapshot::whereIn('id', $detail)->pluck('title')->toArray();
+                        $detail = implode(' ', $detail);
+                    }
+                    $stockData = [
+                        'product_id' => $stock->product_id,
+                        'stock_id' => $stock->id,
+                        'store_id' => $product->store_id,
+                        'cover' => $stock->cover,
+                        'name' => $product->name,
+                        'detail' => $detail,
+                        'price' => $stock->price,
+                        'number' => 1,
+                        'product'=>$product->name
+                    ];
+                    $recordData = [
+                        'user_id'=>$user_id,
+                        'product_id'=>$product->id,
+                        'order_id'=>$order_id
+                    ];
+                    $this->handle->addExchangeRecord(0,$recordData);
+                    $this->handle->addStockSnapshot($order_id, $stockData);
+                    $this->handle->addUserScore($user_id,$score-$stock->score);
+                }
+            DB::commit();
+            return jsonResponse([
+                'msg' => 'ok',
+                'data' => [
+                    'order' => $groupNumber,
+                    'price'=>$stock->price
+                ]
+            ]);
+        }catch (\Exception $exception){
+            DB::rollback();
+            return jsonResponse([
+                'msg'=>$exception->getMessage()
+            ],400);
         }
     }
 }
