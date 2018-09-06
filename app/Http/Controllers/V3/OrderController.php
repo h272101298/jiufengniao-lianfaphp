@@ -7,6 +7,7 @@ use App\Modules\Product\Model\ProductDetailSnapshot;
 use App\Modules\Score\Model\ScoreProduct;
 use App\Modules\Score\Model\ScoreProductStock;
 use App\Modules\User;
+use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -229,7 +230,22 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $amount = 0;
+            $discount2 = 1;
+            $config = $this->handle->getDiscountConfig();
+            $items = $this->handle->getDisCountItems();
+            $discountConfig = 0;
+            if (!empty($config)&&$config->state==1){
+                $discountConfig = $config->type;
+                if ($discountConfig==1){
+                    $discount2 = $config->ratio/100;
+                }
+            }
             foreach ($stores as $item) {
+                if ($discountConfig==3){
+                    if (in_array($item,$items)){
+                        $discount2 = $config->ratio/100;
+                    }
+                }
                 $price = 0;
                 $stocks = $item['stocks'];
                 $originPrice = 0;
@@ -276,8 +292,14 @@ class OrderController extends Controller
                         foreach ($stocks as $stock) {
 //                            var_dump($stock);
                             $swapStock = $this->handle->getStockById($stock['id']);
-//                            var_dump($swapStock);
                             $product = $this->handle->getProductById($swapStock->product_id);
+                            if ($discountConfig==2){
+                               if (in_array($product->type_id,$items)){
+                                   $discount2 = $config->ratio/100;
+                               }
+                            }
+//                            var_dump($swapStock);
+
 //                            var_dump($product);
                             if ($product->store_id == $item['id']) {
 //                                 var_dump($swapStock->price);
@@ -322,7 +344,7 @@ class OrderController extends Controller
                             //var_dump($couponPrice);
                         }
 //                        var_dump($price);
-                        $price = $price*$discount;
+                        $price = $price*$discount*$discount2;
 //                        var_dump($price);
                         $amount += $price-$couponPrice+$expressPrice;
 //                        var_dump($amount);

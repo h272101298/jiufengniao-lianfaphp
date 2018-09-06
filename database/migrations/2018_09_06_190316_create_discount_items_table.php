@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDiscountConfigsTable extends Migration
+class CreateDiscountItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateDiscountConfigsTable extends Migration
      */
     public function up()
     {
-        Schema::create('discount_configs', function (Blueprint $table) {
+        Schema::create('discount_items', function (Blueprint $table) {
             $table->increments('id');
-            $table->tinyInteger('type');
-            $table->tinyInteger('ratio');
-            $table->tinyInteger('state')->default(1);
+            $table->unsignedInteger('item');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateDiscountConfigsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('discount_configs');
+        Schema::dropIfExists('discount_items');
     }
 }

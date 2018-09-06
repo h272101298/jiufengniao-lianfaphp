@@ -13,3 +13,8 @@ store/express post
 
 小程序获得积分记录 
 score/records get token page limit
+打折设置
+discount/config post
+参数 items[类型或店铺id] 示例[1,2,3] ，type类型 1全局 2 类型 3店铺 ratio 比例
+
+discount/config get
