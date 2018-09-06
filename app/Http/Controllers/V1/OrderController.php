@@ -33,6 +33,7 @@ class OrderController extends Controller
         $card_promotion = $post->card_promotion ? $post->card_promotion : 0;
         $bargain_promotion = $post->bargain_promotion ? $post->bargain_promotion : 0;
         $list_id = $post->list_id ? $post->list_id : 0;
+        $express = $post->express ? $post->express : 0;
         $groupNumber = self::makePaySn($user_id);
         DB::beginTransaction();
         try {
@@ -45,8 +46,13 @@ class OrderController extends Controller
                     throw new \Exception('未集齐卡牌不能兑换！');
                 }
                 $promotion = $this->handle->getCardPromotion($card_promotion);
+                $expressPrice = 0 ;
+                if ($express){
+                    $storeExpress = $this->handle->getStoreExpress($promotion->store_id);
+                    $expressPrice = $storeExpress->price;
+                }
                 $stock = $this->handle->getStockById($promotion->stock_id);
-                $price = sprintf('%.2f', $stock->price * ($promotion->offer / 10));
+                $price = sprintf('%.2f', $stock->price * ($promotion->offer / 10))+$expressPrice;
                 $product = $this->handle->getProductById($stock->product_id);
                 $state = $price==0?'paid':'created';
                 $data = [
@@ -106,7 +112,13 @@ class OrderController extends Controller
                 ]);
             }
             if ($bargain_promotion){
+
                 $promotion = $this->handle->getBargainPromotion($bargain_promotion);
+                $expressPrice = 0 ;
+                if ($express){
+                    $storeExpress = $this->handle->getStoreExpress($promotion->store_id);
+                    $expressPrice = $storeExpress->price;
+                }
                 $list = $this->handle->getBargainListById($list_id);
                 if ($promotion->number==0){
                     throw new \Exception('已无库存');
@@ -114,7 +126,7 @@ class OrderController extends Controller
                 $stock = $this->handle->getStockById($list->stock_id);
                 $product = $this->handle->getProductById($stock->product_id);
                 $bargainStock = $this->handle->getBargainStock($bargain_promotion,$list->stock_id);
-                $price = $bargainStock->origin_price - $this->handle->getBargainPromotionPrice($list_id);
+                $price = $bargainStock->origin_price - $this->handle->getBargainPromotionPrice($list_id) + $expressPrice;
                 $state = $price==0?'paid':'created';
 //                if ($price<$promotion->min_price){
 //                    throw new \Exception('非法价格！');

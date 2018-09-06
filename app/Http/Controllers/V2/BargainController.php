@@ -138,7 +138,8 @@ class BargainController extends Controller
         $list_id = !isset($join)?0:$join->id;
         $data = $this->handle->getBargainPromotion($id);
         $data->join = isset($join)?$join:null;
-        $this->handle->formatBargainPromotion($data,0,$this->handle->checkUserBargain($user_id,$list_id));
+        $this->handle->formatBargainPromotion($data,0,$this->handle->checkUserBargain($user_id,$list_id),0,1);
+        $data->store = $this->handle->getStoreById($data->store_id);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data

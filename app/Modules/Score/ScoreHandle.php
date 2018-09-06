@@ -238,6 +238,10 @@ trait ScoreHandle
         }
         return $db->count();
     }
+    public function getOrderExchangeRecord($order_id)
+    {
+        return ExchangeRecord::where('order_id','=',$order_id)->first();
+    }
     public function getScoreConfig()
     {
         return ScoreConfig::first();

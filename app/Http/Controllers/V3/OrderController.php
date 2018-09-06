@@ -358,18 +358,26 @@ class OrderController extends Controller
         $groupNumber = self::makePaySn($user_id);
         DB::beginTransaction();
         $stock_id = $post->stock_id;
+        $express = $post->express ? $post->express : 0;
+        $number = $post->number ? $post->number : 1;
         try{
+            $expressPrice = 0;
             $stock = ScoreProductStock::find($stock_id);
             $product = ScoreProduct::find($stock->product_id);
+            if ($express){
+                $storeExpress = $this->handle->getStoreExpress($product->store_id);
+                $expressPrice = $storeExpress->price;
+            }
             $score = $this->handle->getUserScore($user_id);
             if ($score<$stock->score){
                 throw new \Exception('积分不足!');
             }
+            $price = $stock->price + $expressPrice;
             $data = [
                 'user_id' => $user_id,
                 'number' => self::makePaySn($user_id),
-                'price' => $stock->price,
-                'state' => $stock->price==0?'paid':'created',
+                'price' => $price,
+                'state' => $price==0?'paid':'created',
                 'group_number' => $groupNumber,
                 'store_id' => $product->store_id
             ];
@@ -403,24 +411,26 @@ class OrderController extends Controller
                         'name' => $product->name,
                         'detail' => $detail,
                         'price' => $stock->price,
-                        'number' => 1,
+                        'number' => $number,
+                        'score'=>$stock->score,
                         'product'=>$product->name
                     ];
                     $recordData = [
                         'user_id'=>$user_id,
                         'product_id'=>$product->id,
-                        'order_id'=>$order_id
+                        'order_id'=>$order_id,
+                        'score'=>$stock->score*$number
                     ];
                     $this->handle->addExchangeRecord(0,$recordData);
                     $this->handle->addStockSnapshot($order_id, $stockData);
-                    $this->handle->addUserScore($user_id,$score-$stock->score);
+                    $this->handle->addUserScore($user_id,$score-($stock->score*$number));
                 }
             DB::commit();
             return jsonResponse([
                 'msg' => 'ok',
                 'data' => [
                     'order' => $groupNumber,
-                    'price'=>$stock->price
+                    'price'=>$price
                 ]
             ]);
         }catch (\Exception $exception){

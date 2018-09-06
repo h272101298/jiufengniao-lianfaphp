@@ -175,6 +175,7 @@ class ScoreController extends Controller
         $product->categories = $this->handle->getScoreProductCategories($id);
         $product->store = $this->handle->getStoreById($product->store_id);
         $product->stocks = $this->handle->getScoreProductStocks($id);
+        $product->express = $this->handle->getStoreExpress($product->store_id);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$product

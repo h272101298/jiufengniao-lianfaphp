@@ -15,6 +15,7 @@ use App\Modules\Bargain\Model\BargainRecord;
 use App\Modules\Bargain\Model\BargainStock;
 use App\Modules\Product\Model\Product;
 use App\Modules\Product\Model\Stock;
+use App\Modules\Store\Model\StoreExpress;
 use App\Modules\WeChatUser\Model\WeChatUser;
 use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Support\Facades\DB;
@@ -98,7 +99,7 @@ trait BargainHandle
     {
         return BargainPromotion::findOrFail($id);
     }
-    public function formatBargainPromotion(&$promotion,$time=0,$bargain=0,$join=0)
+    public function formatBargainPromotion(&$promotion,$time=0,$bargain=0,$join=0,$express=0)
     {
         $promotion->product = Product::find($promotion->product_id);
         $stocks = BargainStock::where('bargain_id','=',$promotion->id)->get();
@@ -111,6 +112,9 @@ trait BargainHandle
         }
         if ($join){
             $promotion->join = BargainList::where('promotion_id','=',$promotion->id)->where('user_id','=',$join)->first();
+        }
+        if ($express){
+            $promotion->express = StoreExpress::where('store_id','=',$promotion->store_id)->first();
         }
         $promotion->stocks = $stocks;
         $promotion->bargain = $bargain;

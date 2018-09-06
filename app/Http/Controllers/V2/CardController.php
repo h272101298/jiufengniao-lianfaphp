@@ -106,6 +106,8 @@ class CardController extends Controller
         $founder_id = $founder_id==0?$user_id:$founder_id;
         $data = $this->handle->getCardPromotion($id);
         $this->handle->formatCardPromotion($data,$user_id,$founder_id);
+        $data->express = $this->handle->getStoreExpress($data->store_id);
+        $data->store = $this->handle->getStoreById($data->store_id);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data

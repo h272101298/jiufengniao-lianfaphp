@@ -19,6 +19,7 @@ use App\Modules\Order\Model\StockSnapshot;
 use App\Modules\Product\Model\Product;
 use App\Modules\Product\Model\ProductDetailSnapshot;
 use App\Modules\Product\Model\Stock;
+use App\Modules\Score\Model\ExchangeRecord;
 use App\Modules\Store\Model\Express;
 use App\Modules\Store\Model\ExpressConfig;
 use App\Modules\Store\Model\Store;
@@ -141,6 +142,7 @@ trait OrderHandle
             $data[$i]['orderprice'] = $orders[$i]['price'];
             $data[$i]['state'] = $orders[$i]['state'];
             $data[$i]['type'] = OrderType::where('order_id','=',$orders[$i]['id'])->pluck('type')->first();
+            $data[$i]['score'] = ExchangeRecord::where('order_id','=',$orders[$i]['id'])->first();
             for ($k=0;$k<count($store);$k++){
 //                dd($store[$k]);
                 $data[$i]['shop'][$k]['shopname'] = Store::find($store[$k])->name;
