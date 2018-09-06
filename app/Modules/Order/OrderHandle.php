@@ -95,11 +95,14 @@ trait OrderHandle
         }
         return true;
     }
-    public function getMyOrders($user_id,$page=1,$limit=10,$state='')
+    public function getMyOrders($user_id,$page=1,$limit=10,$state='',$order_id=null)
     {
         $db = Order::where('user_id','=',$user_id);
         if ($state){
             $db->where('state','=',$state);
+        }
+        if (!empty($order_id)){
+            $db->whereIn('id',$order_id);
         }
         $count = $db->count();
         $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get()->toArray();
@@ -117,7 +120,7 @@ trait OrderHandle
             return $data;
         }
         for($i=0;$i<count($orders);$i++) {
-            $orders[$i]->type = OrderType::where('order_id','=',$orders[$i]['id'])->pluck('type')->first();
+
             $snapshots = StockSnapshot::where('order_id','=',$orders[$i]['id'])->get()->toArray();
             $store = array_column($snapshots,'store_id');
             $store = array_unique($store);
@@ -137,6 +140,7 @@ trait OrderHandle
             $data[$i]['orderid'] = $orders[$i]['number'];
             $data[$i]['orderprice'] = $orders[$i]['price'];
             $data[$i]['state'] = $orders[$i]['state'];
+            $data[$i]['type'] = OrderType::where('order_id','=',$orders[$i]['id'])->pluck('type')->first();
             for ($k=0;$k<count($store);$k++){
 //                dd($store[$k]);
                 $data[$i]['shop'][$k]['shopname'] = Store::find($store[$k])->name;
@@ -240,7 +244,7 @@ trait OrderHandle
     public function getExpressInfo($order_id)
     {
         $order = Order::where('number','=',$order_id)->firstOrFail();
-        $config = ExpressConfig::where('store_id','=',$order->store_id)->first();
+        $config = ExpressConfig::first();
         if (empty($config)){
             return false;
         }
@@ -378,5 +382,9 @@ trait OrderHandle
     public function getOrderTypeByOrderId($orderId)
     {
         return OrderType::where('order_id','=',$orderId)->first();
+    }
+    public function getOrdersIdByType($type)
+    {
+        return OrderType::where('type','=',$type)->pluck('order_id')->toArray();
     }
 }

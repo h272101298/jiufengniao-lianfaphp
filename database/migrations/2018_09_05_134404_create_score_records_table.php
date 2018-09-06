@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExpressesTable extends Migration
+class CreateScoreRecordsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateExpressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expresses', function (Blueprint $table) {
+        Schema::create('score_records', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('store_id')->default(0);
-            $table->string('title');
-            $table->string('code');
+            $table->unsignedInteger('user_id');
+            $table->tinyInteger('type');
+            $table->integer('score');
+            $table->string('remark')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateExpressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expresses');
+        Schema::dropIfExists('score_records');
     }
 }

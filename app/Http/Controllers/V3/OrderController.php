@@ -234,15 +234,24 @@ class OrderController extends Controller
                 $stocks = $item['stocks'];
                 $originPrice = 0;
                 $couponPrice = 0;
+                $expressPrice = 0;
+                $delivery = 0;
+                if ($item['express']==1){
+                    $express = $this->handle->getStoreExpress($item['id']);
+                    $expressPrice+=$express->price;
+                    $delivery = 1;
+                }
                 $data = [
                     'user_id' => $user_id,
                     'number' => self::makePaySn($user_id),
                     'price' => 0,
                     'state' => 'created',
                     'group_number' => $groupNumber,
-                    'store_id' => $item['id']
+                    'store_id' => $item['id'],
+                    'delivery'=>$delivery
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
+
                 if ($order_id) {
                     $addressSnapshot = [
                         'name' => $address->name,
@@ -263,15 +272,20 @@ class OrderController extends Controller
                         }else{
                             $discount = $member->discount/10;
                         }
+//                        var_dump($stocks);
                         foreach ($stocks as $stock) {
+//                            var_dump($stock);
                             $swapStock = $this->handle->getStockById($stock['id']);
-
+//                            var_dump($swapStock);
                             $product = $this->handle->getProductById($swapStock->product_id);
+//                            var_dump($product);
                             if ($product->store_id == $item['id']) {
-                                // var_dump($swapStock->price);
+//                                 var_dump($swapStock->price);
                                 //var_dump($stock['number']);
                                 $originPrice +=  $swapStock->price * $stock['number'];
                                 $price += $swapStock->price * $stock['number'];
+//                                var_dump($price);
+//                                var_dump($swapStock->price);
 
                                 if ($product->norm == 'fixed') {
                                     $detail = 'fixed';
@@ -307,19 +321,20 @@ class OrderController extends Controller
                             $couponPrice = $info->price;
                             //var_dump($couponPrice);
                         }
-                        //var_dump($price);
+//                        var_dump($price);
                         $price = $price*$discount;
-                        $amount += $price-$couponPrice;
-                        //var_dump($amount);
+//                        var_dump($price);
+                        $amount += $price-$couponPrice+$expressPrice;
+//                        var_dump($amount);
                         $orderPrice = [
-                            'price' => $price-$couponPrice
+                            'price' => $price-$couponPrice+$expressPrice
                         ];
                         $this->handle->addOrder($order_id, $orderPrice);
                     }
                 }
             }
             if (number_format($amount,2)!=number_format($post->price,2)){
-                throw new \Exception('非法价格！'.$amount);
+                throw new \Exception('非法价格！'.$amount.'d'.$expressPrice);
             }
             DB::commit();
             return jsonResponse([

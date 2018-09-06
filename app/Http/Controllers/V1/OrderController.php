@@ -8,6 +8,7 @@ use App\Modules\Address\Model\Address;
 use App\Modules\Order\Model\Order;
 use App\Modules\Product\Model\ProductDetailSnapshot;
 use App\Modules\Product\Model\Stock;
+use App\Modules\Score\Model\ScoreConfig;
 use App\Modules\User;
 use App\Modules\WeChatUser\Model\WeChatUser;
 use Illuminate\Http\Request;
@@ -322,7 +323,13 @@ class OrderController extends Controller
         $state = Input::get('state', '');
         $page = Input::get('page', 1);
         $limit = Input::get('limit', 10);
-        $data = $this->handle->getMyOrders($user_id, $page, $limit, $state);
+        $type = Input::get('type');
+        if ($type){
+            $order_id = $this->handle->getOrdersIdByType($type);
+        }else{
+            $order_id = null;
+        }
+        $data = $this->handle->getMyOrders($user_id, $page, $limit, $state,$order_id);
         return jsonResponse([
             'msg' => 'ok',
             'data' => $data
@@ -430,6 +437,20 @@ class OrderController extends Controller
         $data = [
             'state' => 'finished'
         ];
+        $config = $this->handle->getScoreConfig();
+        if (!empty($config)&&$config->state!=0){
+            $score = floor(($config->ratio/100)*$order->price);
+            if ($score!=0){
+                $data = [
+                    'user_id'=>$user_id,
+                    'type'=>'1',
+                    'score'=>$score,
+                    'remark'=>'订单获得'
+                ];
+                $this->handle->addScoreRecord(0,$data);
+                $this->handle->addUserScore2($user_id,$score);
+            }
+        }
         if ($this->handle->addOrder($order->id, $data)) {
             return jsonResponse([
                 'msg' => 'ok'

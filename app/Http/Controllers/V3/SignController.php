@@ -51,6 +51,19 @@ class SignController extends Controller
             $continue['date'] = date('Y-m-d',time());
             $this->handle->setContinueSign($user_id,$continue);
         }
+        $config = $this->handle->getSignConfig($count);
+        if (!empty($config)){
+            if ($config->type==1){
+                $data = [
+                    'user_id'=>$user_id,
+                    'type'=>'2',
+                    'score'=>$config->reward,
+                    'remark'=>'签到获得'
+                ];
+                $this->handle->addScoreRecord(0,$data);
+                $this->handle->addUserScore2($user_id,$config->reward);
+            }
+        }
         $this->handle->addSignRecord($user_id);
         return jsonResponse([
             'msg'=>'ok',

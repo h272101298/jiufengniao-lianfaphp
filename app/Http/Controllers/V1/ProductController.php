@@ -281,6 +281,7 @@ class ProductController extends Controller
         $product = $this->handle->getProduct($id);
         $user_id = getRedisData(Input::get('token'))?getRedisData(Input::get('token')):0;
         $product->collect = $this->handle->checkCollect($user_id,$product->id);
+        $product->express = $this->handle->getStoreExpress($product->store_id);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$product

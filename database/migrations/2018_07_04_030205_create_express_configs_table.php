@@ -15,7 +15,7 @@ class CreateExpressConfigsTable extends Migration
     {
         Schema::create('express_configs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('store_id');
+            $table->unsignedInteger('store_id')->default(0);
             $table->string('business_id');
             $table->string('api_key');
             $table->timestamps();

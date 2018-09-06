@@ -117,4 +117,6 @@ Route::group(['prefix'=>'v3'],function (){
     Route::get('score/product','V3\ScoreController@getScoreProductApi');
     Route::get('score/product/stock','V3\ScoreController@getScoreProductStock');
     Route::post('score/order','V3\OrderController@createScoreOrder');
+    Route::get('score/config','V3\ScoreController@getScoreConfig');
+    Route::get('score/records','V3\ScoreController@getScoreRecords');
 });

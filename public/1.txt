@@ -1,0 +1,15 @@
+积分设置
+score/config post 
+参数 state ratio
+获取 score/config get
+
+积分海报 字段 score_poster
+
+店铺设置默认快递
+store/express post 
+参数 express_id price
+
+获取 store/express get
+
+小程序获得积分记录 
+score/records get token page limit

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExpressesTable extends Migration
+class CreateDiscountConfigsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateExpressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expresses', function (Blueprint $table) {
+        Schema::create('discount_configs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('store_id')->default(0);
-            $table->string('title');
-            $table->string('code');
+            $table->tinyInteger('type');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateExpressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expresses');
+        Schema::dropIfExists('discount_configs');
     }
 }

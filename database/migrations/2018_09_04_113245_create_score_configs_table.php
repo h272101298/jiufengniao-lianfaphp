@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExpressesTable extends Migration
+class CreateScoreConfigsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateExpressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expresses', function (Blueprint $table) {
+        Schema::create('score_configs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('store_id')->default(0);
-            $table->string('title');
-            $table->string('code');
+            $table->tinyInteger('state')->default(0);
+            $table->tinyInteger('ratio')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateExpressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expresses');
+        Schema::dropIfExists('score_configs');
     }
 }

@@ -158,4 +158,8 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('enable/score/product','V3\ScoreController@enableScoreProduct');
     Route::delete('score/product','V3\ScoreController@delScoreProduct');
     Route::get('score/product','V3\ScoreController@getScoreProduct');
+    Route::post('score/config','V3\ScoreController@setScoreConfig');
+    Route::get('score/config','V3\ScoreController@getScoreConfig');
+    Route::post('store/express','V3\StoreController@setStoreExpress');
+    Route::get('store/express','V3\StoreController@getStoreExpress');
 });

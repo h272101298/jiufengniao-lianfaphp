@@ -198,4 +198,37 @@ class ScoreController extends Controller
             'data'=>$stock
         ]);
     }
+    public function getScoreConfig()
+    {
+        $config = $this->handle->getScoreConfig();
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$config
+        ]);
+    }
+    public function setScoreConfig()
+    {
+        $state = Input::get('state',0);
+        $ratio = Input::get('ratio',1);
+        if ($this->handle->setScoreConfig($state,$ratio)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
+    public function getScoreRecords()
+    {
+        $type = Input::get('type',0);
+        $page = Input::get('page',1);
+        $limit = Input::get('limit',10);
+        $user_id = getRedisData(Input::get('token'));
+        $data = $this->handle->getScoreRecords($user_id,$type,$page,$limit);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 }

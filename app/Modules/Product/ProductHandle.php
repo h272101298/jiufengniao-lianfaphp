@@ -26,6 +26,7 @@ use App\Modules\Product\Model\ProductTypeBind;
 use App\Modules\Product\Model\Stock;
 use App\Modules\Product\Model\StockImage;
 use App\Modules\Store\Model\Store;
+use App\Modules\Store\Model\StoreExpress;
 use App\Modules\WeChatUser\Model\ProductCollect;
 use App\Modules\WeChatUser\Model\WeChatUser;
 use Illuminate\Support\Facades\Auth;
@@ -621,6 +622,8 @@ trait ProductHandle
         for ($i = 0; $i < count($store); $i++) {
             $data[$i]['shopname'] = Store::find($store[$i])->name;
             $data[$i]['shopid'] = $store[$i];
+            $express = StoreExpress::where('store_id','=',$store[$i])->first();
+            $data[$i]['express'] = empty($express)?0:$express->price;
             $store_id = $store[$i];
             $swapCarts = array_filter($carts, function ($item) use ($store_id) {
                 return $item['store_id'] == $store_id;

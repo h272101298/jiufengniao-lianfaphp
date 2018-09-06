@@ -12,14 +12,17 @@ namespace App\Modules\Score;
 use App\Modules\Product\Model\CategoryDetail;
 use App\Modules\Product\Model\ProductCategory;
 use App\Modules\Score\Model\ExchangeRecord;
+use App\Modules\Score\Model\ScoreConfig;
 use App\Modules\Score\Model\ScoreProduct;
 use App\Modules\Score\Model\ScoreProductCategorySnapshot;
 use App\Modules\Score\Model\ScoreProductDetailSnapshot;
 use App\Modules\Score\Model\ScoreProductStock;
+use App\Modules\Score\Model\ScoreRecord;
 use App\Modules\Score\Model\ScoreStockImage;
 use App\Modules\Score\Model\UserScore;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use function PHPSTORM_META\type;
 
 trait ScoreHandle
 {
@@ -39,6 +42,19 @@ trait ScoreHandle
             $userScore->score = 0 ;
         }
         $userScore->score = $score;
+        if ($userScore->save()){
+            return true;
+        }
+        return false;
+    }
+    public function addUserScore2($user_id,$score)
+    {
+        $userScore = UserScore::where('user_id','=',$user_id)->first();
+        if (empty($userScore)){
+            $userScore = new UserScore();
+            $userScore->score = 0 ;
+        }
+        $userScore->score += $score;
         if ($userScore->save()){
             return true;
         }
@@ -221,5 +237,53 @@ trait ScoreHandle
             $db->where('product_id','=',$product_id);
         }
         return $db->count();
+    }
+    public function getScoreConfig()
+    {
+        return ScoreConfig::first();
+    }
+    public function setScoreConfig($state,$ratio)
+    {
+        $config = ScoreConfig::first();
+        if (empty($config)){
+            $config = new ScoreConfig();
+        }
+        $config->state = $state;
+        $config->ratio = $ratio;
+        if ($config->save()){
+            return true;
+        }
+        return false;
+    }
+    public function addScoreRecord($id=0,$data)
+    {
+        if ($id){
+            $record = ScoreRecord::find($id);
+        }else{
+            $record = new ScoreRecord();
+        }
+        foreach ($data as $key => $value){
+            $record->$key = $value;
+        }
+        if ($record->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getScoreRecords($user_id=0,$type=0,$page=1,$limit=10)
+    {
+        $db = DB::table('score_records');
+        if ($user_id){
+            $db->where('user_id','=',$user_id);
+        }
+        if ($type){
+            $db->where('type','=',$type);
+        }
+        $count = $db->count();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'count'=>$count,
+            'data'=>$data
+        ];
     }
 }

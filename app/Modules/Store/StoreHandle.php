@@ -15,6 +15,7 @@ use App\Modules\Store\Model\Express;
 use App\Modules\Store\Model\ExpressConfig;
 use App\Modules\Store\Model\Store;
 use App\Modules\Store\Model\StoreCategory;
+use App\Modules\Store\Model\StoreExpress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -181,5 +182,31 @@ trait StoreHandle
             $config = new ExpressConfig();
         }
         return $config;
+    }
+    public function setStoreExpress($store_id,$express_id,$price)
+    {
+        $storeExpress = StoreExpress::where('store_id','=',$store_id)->first();
+        if (empty($storeExpress)){
+            $storeExpress = new StoreExpress();
+            $storeExpress->store_id = $store_id;
+        }
+        $storeExpress->express_id = $express_id;
+        $storeExpress->price = $price;
+        if ($storeExpress->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getStoreExpress($store_id)
+    {
+        return StoreExpress::where('store_id','=',$store_id)->first();
+    }
+    public function formatStoreExpress(&$data)
+    {
+        if (empty($data)){
+            return null;
+        }
+        $data->express = Express::find($data->express_id);
+        return $data;
     }
 }

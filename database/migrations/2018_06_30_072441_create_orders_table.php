@@ -26,6 +26,7 @@ class CreateOrdersTable extends Migration
             $table->string('state');
             $table->float('score')->default(0);
             $table->tinyInteger('is_assess')->default(0);
+            $table->tinyInteger('delivery')->default(0);
             $table->timestamps();
         });
     }
