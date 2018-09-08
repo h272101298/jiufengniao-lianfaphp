@@ -282,6 +282,32 @@ class ProductController extends Controller
         $user_id = getRedisData(Input::get('token'))?getRedisData(Input::get('token')):0;
         $product->collect = $this->handle->checkCollect($user_id,$product->id);
         $product->express = $this->handle->getStoreExpress($product->store_id);
+        $config = $this->handle->getDiscountConfig();
+        if (!empty($config)&&$config->state==1){
+            switch ($config->type){
+                case 1:
+                    $product->discount = $config;
+                    break;
+                case 2:
+                    $items = $this->handle->getDisCountItems();
+                    if (in_array($product->type_id,$items)){
+                        $product->discount = $config;
+                    }
+                    break;
+                case 3:
+                    $items = $this->handle->getDisCountItems();
+                    if (in_array($product->store_id,$items)){
+                        $product->discount = $config;
+                    }
+                    break;
+                case 4:
+                    $items = $this->handle->getDisCountItems();
+                    if (in_array($product->id,$items)){
+                        $product->discount = $config;
+                    }
+                    break;
+            }
+        }
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$product

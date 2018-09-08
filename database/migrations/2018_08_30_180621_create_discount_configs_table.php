@@ -16,7 +16,7 @@ class CreateDiscountConfigsTable extends Migration
         Schema::create('discount_configs', function (Blueprint $table) {
             $table->increments('id');
             $table->tinyInteger('type');
-            $table->tinyInteger('ratio');
+            $table->float('ratio',2,1);
             $table->tinyInteger('state')->default(1);
             $table->timestamps();
         });

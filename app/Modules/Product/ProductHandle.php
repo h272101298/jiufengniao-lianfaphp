@@ -9,6 +9,8 @@
 namespace App\Modules\Product;
 
 
+use App\Modules\Discount\Model\DiscountConfig;
+use App\Modules\Discount\Model\DiscountItem;
 use App\Modules\Order\Model\Order;
 use App\Modules\Order\Model\StockSnapshot;
 use App\Modules\Product\Model\Cart;
@@ -634,6 +636,33 @@ trait ProductHandle
                     $stock = Stock::find($swapCart['stock_id']);
                     if (!empty($stock)) {
                         $product = Product::find($stock->product_id);
+                        $config = DiscountConfig::first();
+                        if (!empty($config)&&$config->state==1){
+                            $items = DiscountItem::pluck('item')->toArray();
+                            switch ($config->type){
+                                case 1:
+                                    $swapCart['discount'] = $config;
+                                    break;
+                                case 2:
+                                    //$items = $this->getDisCountItems();
+                                    if (in_array($product->type_id,$items)){
+                                        $swapCart['discount'] = $config;
+                                    }
+                                    break;
+                                case 3:
+                                   // $items = $this->getDisCountItems();
+                                    if (in_array($product->store_id,$items)){
+                                        $swapCart['discount'] = $config;
+                                    }
+                                    break;
+                                case 4:
+                                   // $items = $this->getDisCountItems();
+                                    if (in_array($product->id,$items)){
+                                        $swapCart['discount'] = $config;
+                                    }
+                                    break;
+                            }
+                        }
                         $swapCart['goodid'] = $swapCart['stock_id'];
                         $swapCart['shopid'] = $store[$i];
                         $swapCart['goodname'] = $product->name;
@@ -858,4 +887,5 @@ trait ProductHandle
         }
         return $db->count();
     }
+
 }

@@ -237,13 +237,13 @@ class OrderController extends Controller
             if (!empty($config)&&$config->state==1){
                 $discountConfig = $config->type;
                 if ($discountConfig==1){
-                    $discount2 = $config->ratio/100;
+                    $discount2 = $config->ratio/10;
                 }
             }
             foreach ($stores as $item) {
                 if ($discountConfig==3){
                     if (in_array($item,$items)){
-                        $discount2 = $config->ratio/100;
+                        $discount2 = $config->ratio/10;
                     }
                 }
                 $price = 0;
@@ -295,8 +295,13 @@ class OrderController extends Controller
                             $product = $this->handle->getProductById($swapStock->product_id);
                             if ($discountConfig==2){
                                if (in_array($product->type_id,$items)){
-                                   $discount2 = $config->ratio/100;
+                                   $discount2 = $config->ratio/10;
                                }
+                            }
+                            if ($discountConfig==4){
+                                if (in_array($product->id,$items)){
+                                    $discount2 = $config->ratio/10;
+                                }
                             }
 //                            var_dump($swapStock);
 

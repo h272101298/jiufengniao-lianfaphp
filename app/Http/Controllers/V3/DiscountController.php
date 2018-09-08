@@ -18,14 +18,18 @@ class DiscountController extends Controller
     {
         $type = $post->type;
         $ratio = $post->ratio;
+        $state = $post->state?$post->state-1:1;
         $items = $post->items;
         if ($this->handle->addDiscountConfig([
             'type'=>$type,
-            'ratio'=>$ratio
+            'ratio'=>$ratio,
+            'state'=>$state
         ])){
             $this->handle->delDisCountItem();
-            foreach ($items as $item){
-                $this->handle->addDiscountItem($item);
+            if (!empty($items)){
+                foreach ($items as $item){
+                    $this->handle->addDiscountItem($item);
+                }
             }
         }
         return jsonResponse([
@@ -35,7 +39,9 @@ class DiscountController extends Controller
     public function getDiscountConfig()
     {
         $data = $this->handle->getDiscountConfig();
-        $data->items = $this->handle->getDisCountItems();
+        if (!empty($data)){
+            $data->items = $this->handle->getDisCountItems();
+        }
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data
