@@ -351,17 +351,17 @@ class OrderController extends Controller
 //                        var_dump($price);
                         $price = $price*$discount*$discount2;
 //                        var_dump($price);
-                        $amount += $price-$couponPrice+$expressPrice;
+                        $amount += round($price-$couponPrice+$expressPrice,2);
 //                        var_dump($amount);
                         $orderPrice = [
-                            'price' => $price-$couponPrice+$expressPrice
+                            'price' => $amount
                         ];
                         $this->handle->addOrder($order_id, $orderPrice);
                     }
                 }
             }
             if (number_format($amount,2)!=number_format($post->price,2)){
-                throw new \Exception('非法价格！'.$amount.'d'.$expressPrice);
+                throw new \Exception('非法价格！'.number_format($amount,2).'d'.$expressPrice);
             }
             DB::commit();
             return jsonResponse([
