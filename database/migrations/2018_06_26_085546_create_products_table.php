@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->longText('detail');
             $table->smallInteger('brokerage')->default(0);
             $table->unsignedInteger('express')->default(0);
+            $table->unsignedInteger('sales_volume')->default(0);
             $table->float('express_price')->default(0);
             $table->string('share_title')->nullable();
             $table->string('share_detail')->nullable();
