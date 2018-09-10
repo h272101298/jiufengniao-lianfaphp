@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('store_id');
             $table->string('number');
+            $table->string('group_number');
             $table->string('transaction_id')->nullable();
             $table->string('notify_id')->nullable();
             $table->unsignedInteger('express')->default(0);

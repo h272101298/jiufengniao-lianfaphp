@@ -162,6 +162,6 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('score/config','V3\ScoreController@getScoreConfig');
     Route::post('store/express','V3\StoreController@setStoreExpress');
     Route::get('store/express','V3\StoreController@getStoreExpress');
-    Route::post('discount/config','V3\disCountController@addDiscountConfig');
-    Route::get('discount/config','V3\disCountController@getDiscountConfig');
+    Route::post('discount/config','V3\DicountController@addDiscountConfig');
+    Route::get('discount/config','V3\DiscountController@getDiscountConfig');
 });

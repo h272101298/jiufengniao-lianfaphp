@@ -22,6 +22,7 @@ class CreateStockSnapshotsTable extends Migration
             $table->string('cover');
             $table->string('name');
             $table->string('detail');
+            $table->string('product');
             $table->float('price');
             $table->integer('number');
             $table->float('score')->default(0);
