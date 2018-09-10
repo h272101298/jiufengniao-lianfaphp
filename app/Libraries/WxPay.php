@@ -120,6 +120,9 @@ class WxPay
     {
         $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee,$notifyUrl);
 //        dd($unifiedOrder);
+        if (!isset($unifiedOrder['prepay_id'])){
+            var_dump($unifiedOrder);
+        }
         $this->prepay_id = $unifiedOrder['prepay_id'];
         $parameters = [
             'appId' => $this->appid,
