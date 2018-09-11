@@ -53,6 +53,7 @@ trait ScoreHandle
         if (empty($userScore)){
             $userScore = new UserScore();
             $userScore->score = 0 ;
+            $userScore->user_id = $user_id;
         }
         $userScore->score += $score;
         if ($userScore->save()){
