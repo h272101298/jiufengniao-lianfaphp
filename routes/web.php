@@ -164,4 +164,7 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('store/express','V3\StoreController@getStoreExpress');
     Route::post('discount/config','V3\DiscountController@addDiscountConfig');
     Route::get('discount/config','V3\DiscountController@getDiscountConfig');
+    Route::post('store/withdraw','V3\StoreController@addWithdraw');
+    Route::get('store/withdraws','V3\StoreController@getWithdraws')->middleware('permission:StoreWithdrawStore|StoreWithdrawAll');;
+    Route::post('check/withdraw','V3\StoreController@checkWithdraw');
 });

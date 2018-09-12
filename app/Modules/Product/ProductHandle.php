@@ -393,6 +393,7 @@ trait ProductHandle
             $item->hot = HotList::where('product_id', '=', $item->id)->count();
             $item->new = NewList::where('product_id', '=', $item->id)->count();
             $item->offer = OfferList::where('product_id', '=', $item->id)->count();
+            $item->offerData = OfferList::where('product_id', '=', $item->id)->first();
         }
         return $data;
     }
@@ -808,12 +809,13 @@ trait ProductHandle
         return false;
     }
 
-    public function addOffer($product_id)
+    public function addOffer($product_id,$sort)
     {
         $offer = OfferList::where('product_id', '=', $product_id)->first();
         if (empty($offer)) {
             $offer = new OfferList();
             $offer->product_id = $product_id;
+            $offer->sort = $sort;
             $offer->save();
             return true;
         }
@@ -846,7 +848,7 @@ trait ProductHandle
     public function getOfferList($page = 1, $limit = 10)
     {
         $count = OfferList::count();
-        $list = OfferList::limit($limit)->offset(($page - 1) * $limit)->get();
+        $list = OfferList::limit($limit)->offset(($page - 1) * $limit)->orderBy('sort','DESC')->get();
         return [
             'data' => $list,
             'count' => $count

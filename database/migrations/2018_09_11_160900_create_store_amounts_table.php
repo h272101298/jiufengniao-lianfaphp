@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOfferListsTable extends Migration
+class CreateStoreAmountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateOfferListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('offer_lists', function (Blueprint $table) {
+        Schema::create('store_amounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('product_id');
-            $table->integer('sort')->default(0);
+            $table->unsignedInteger('store_id');
+            $table->float('amount',18,2)->default(0);
+            $table->float('available',18,2)->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateOfferListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('offer_lists');
+        Schema::dropIfExists('store_amounts');
     }
 }

@@ -243,12 +243,16 @@ class SystemController extends Controller
     public function getCount()
     {
         $storeId = checkPermission(Auth::id(),'productListAll')?0:getStoreId();
+        $amount = $this->handle->getStoreAmount(getStoreId());
         $data = [
             'productCount'=>$this->handle->countProduct($storeId),
             'todayOrderCount'=>$this->handle->countOrders(0,'',date('Y-m-d')),
             'todaySalesCount'=>$this->handle->countSales(0,date('Y-m-d')),
             'todayUserCount'=>$this->handle->countWeChatUsers(date('Y-m-d')),
             'reviewProductCount'=>$this->handle->countProduct($storeId,0,1),
+            'storeAmount'=>$amount->amount,
+            'withdrawAmount'=>$this->handle->countStoreWithdraw($storeId),
+            'amount'=>$amount->available
         ];
         return jsonResponse([
             'msg'=>'ok',

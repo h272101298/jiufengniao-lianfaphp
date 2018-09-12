@@ -14,8 +14,10 @@ use App\Modules\Product\Model\Stock;
 use App\Modules\Store\Model\Express;
 use App\Modules\Store\Model\ExpressConfig;
 use App\Modules\Store\Model\Store;
+use App\Modules\Store\Model\StoreAmount;
 use App\Modules\Store\Model\StoreCategory;
 use App\Modules\Store\Model\StoreExpress;
+use App\Modules\Store\Model\StoreWithdraw;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -208,5 +210,99 @@ trait StoreHandle
         }
         $data->express = Express::find($data->express_id);
         return $data;
+    }
+    public function addStoreAmount($store_id,$amount)
+    {
+        $storeAmount = StoreAmount::where('store_id','=',$store_id)->first();
+        if (empty($storeAmount)){
+            $storeAmount = new StoreAmount();
+            $storeAmount->store_id = $store_id;
+            $storeAmount->amount = 0;
+        }
+        $storeAmount->amount += $amount;
+        $storeAmount->available += $amount;
+        if ($storeAmount->save()){
+            return true;
+        }
+        return false;
+    }
+    public function setStoreAmount($store_id,$amount)
+    {
+        $storeAmount = StoreAmount::where('store_id','=',$store_id)->first();
+        if (empty($storeAmount)){
+            $storeAmount = new StoreAmount();
+            $storeAmount->store_id = $store_id;
+        }
+        $storeAmount->amount = $amount;
+        $storeAmount->available = $amount;
+        if ($storeAmount->save()){
+            return true;
+        }
+        return false;
+    }
+    public function setStoreAmountAvailable($store_id,$amount)
+    {
+        $storeAmount = StoreAmount::where('store_id','=',$store_id)->first();
+        if (empty($storeAmount)){
+            return false;
+        }
+        $storeAmount->available -= $amount;
+        if ($storeAmount->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getStoreAmount($store_id)
+    {
+        return StoreAmount::where('store_id','=',$store_id)->first();
+    }
+    public function countStoreWithdraw($store_id,$state=1)
+    {
+        return StoreWithdraw::where('store_id','=',$store_id)->where('state','=',$state)->sum('price');
+    }
+    public function addStoreWithdraw($id,$data)
+    {
+        if ($id){
+            $withdraw = StoreWithdraw::find($id);
+        }else{
+            $withdraw = new StoreWithdraw();
+        }
+        foreach ($data as $key=>$value){
+            $withdraw->$key = $value;
+        }
+        if ($withdraw->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getStoreWithdraws($page=1,$limit=10,$store_id=0,$state=0)
+    {
+        $db = DB::table('store_withdraws');
+        if ($store_id){
+            $db->where('store_id','=',$store_id);
+        }
+        if ($state){
+            $db->where('state','=',$state);
+        }
+        $count = $db->count();
+        $data = $db->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
+        return [
+            'data'=>$data,
+            'count'=>$count
+        ];
+    }
+    public function getStoreWithdraw($id)
+    {
+        return StoreWithdraw::find($id);
+    }
+    public function formatStoreWithdraws(&$withdraws)
+    {
+        if (empty($withdraws)){
+            return [];
+        }
+        foreach ($withdraws as $withdraw){
+            $withdraw->store = Store::find($withdraw->store_id);
+        }
+        return $withdraws;
     }
 }

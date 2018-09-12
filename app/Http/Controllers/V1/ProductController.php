@@ -501,7 +501,8 @@ class ProductController extends Controller
     public function addOffer()
     {
         $product_id = Input::get('product_id');
-        if ($this->handle->addOffer($product_id)){
+        $sort = Input::get('sort',0);
+        if ($this->handle->addOffer($product_id,$sort)){
             return jsonResponse([
                 'msg'=>'ok'
             ]);

@@ -30,6 +30,7 @@ class OrderController extends Controller
         $coupon_id = $post->coupon_id ? $post->coupon_id : 0;
         $groupNumber = self::makePaySn($user_id);
         $number = $post->number ? $post->number :1;
+        $express = $post->express?$post->express:0;
         $couponPrice = 0;
         DB::beginTransaction();
         try {
@@ -61,7 +62,11 @@ class OrderController extends Controller
                     $couponPrice = $info->price;
                     $price -= $couponPrice;
                 }
-
+                if ($express==1){
+                    $express = $this->handle->getStoreExpress($groupBuy->store_id);
+                    $price+=$express->price;
+                    $delivery = 1;
+                }
                 $data = [
                     'user_id' => $user_id,
                     'number' => self::makePaySn($user_id),
@@ -98,7 +103,7 @@ class OrderController extends Controller
                             'cover' => $stock->cover,
                             'name' => $product->name,
                             'detail' => $detail,
-                            'price' => $price,
+                            'price' => $groupStock->group_price,
                             'number' => $number,
                             'product'=>$product->name
                         ];
@@ -148,6 +153,11 @@ class OrderController extends Controller
                 $couponPrice = $info->price;
                 $price -= $couponPrice;
             }
+            if ($express==1){
+                $express = $this->handle->getStoreExpress($groupBuy->store_id);
+                $price+=$express->price;
+                $delivery = 1;
+            }
             $data = [
                 'user_id' => $user_id,
                 'number' => self::makePaySn($user_id),
@@ -185,7 +195,7 @@ class OrderController extends Controller
                         'cover' => $stock->cover,
                         'name' => $product->name,
                         'detail' => $detail,
-                        'price' => $price,
+                        'price' => $groupStock->group_price,
                         'number' => $number,
                         'product'=>$product->name
                     ];
