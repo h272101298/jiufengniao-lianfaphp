@@ -18,6 +18,7 @@ class CreateAdvertsTable extends Migration
             $table->string('url')->nullable();
             $table->string('pic')->commit('图片');
             $table->string('detail')->nullable();
+            $table->unsignedInteger('product_id')->default(0);
 //            $table->string('category_id')->commit('位置');
             $table->tinyInteger('type')->default(1)->commit('类型');
             $table->timestamps();

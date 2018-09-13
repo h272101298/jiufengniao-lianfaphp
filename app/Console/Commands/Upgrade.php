@@ -59,20 +59,22 @@ class Upgrade extends Command
 //            DB::select(' alter table orders add `delivery` tinyint(4) DEFAULT 0 ');
 //            DB::select(' alter table exchange_records add `score` int(11)  DEFAULT 0 ');
         //第二次更新
-//          $stores = Store::all();
-//          foreach ($stores as $store){
-//              $amount = StoreAmount::where('store_id','=',$store->id)->first();
-//              if (empty($amount)){
-//                  $count = Order::where('store_id','=',$store->id)->whereNotIn('state',['canceled','created'])->sum('price');
-//                  $amount = new StoreAmount();
-//                  $amount->store_id = $store->id;
-//                  $amount->amount = $count;
-//                  $amount->available = $count;
-//                  $amount->save();
-//              }
-//          }
+          $stores = Store::all();
+          foreach ($stores as $store){
+              $amount = StoreAmount::where('store_id','=',$store->id)->first();
+              if (empty($amount)){
+                  $count = Order::where('store_id','=',$store->id)->whereNotIn('state',['canceled','created'])->sum('price');
+                  $amount = new StoreAmount();
+                  $amount->store_id = $store->id;
+                  $amount->amount = $count;
+                  $amount->available = $count;
+                  $amount->save();
+              }
+          }
             //第三次 更新 增加商品推荐排序
             DB::select(' alter table offer_lists add `sort` int(11)  DEFAULT 0 ');
+            //第四次更新 增加广告跳转商品
+            DB::select(' alter table adverts add `product_id` int(11)  DEFAULT 0 ');
         }catch (\Exception $exception){
             echo $exception->getMessage();
         }

@@ -22,16 +22,19 @@ class AdvertController extends Controller
     /**
      * 添加广告
      */
-    public function addAdvert(AdvertPost $post)
+    public function addAdvert(Request $post)
     {
 //        return response()
         $id = $post->id?$post->id:0;
         $category_id = $post->category_id?$post->category_id:0;
+        $product_id = $post->product_id ? $post->product_id : 0;
+        $type = $post->type? $post->type:0;
         $data = [
-            'type'=>$post->type,
+            'type'=>$type,
             'url'=>$post->url?$post->url:'',
             'pic'=>$post->pic,
-            'detail'=>$post->detail?$post->detail:''
+            'detail'=>$post->detail?$post->detail:'',
+            'product_id'=>$product_id
         ];
         $result = $this->handle->createAdvert($id,$data,$category_id);
         if ($result){
