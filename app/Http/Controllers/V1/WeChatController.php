@@ -40,6 +40,9 @@ class WeChatController extends Controller
             if ($user){
                 $token = CreateNonceStr(8);
                 setRedisData($token,$user->id);
+                $count = getRedisData('LoginCount',0);
+                $time = strtotime(date('Y-m-d').' 23:59:59')-time();
+                setRedisData('LoginCount',$count+1,$time);
                 return \jsonResponse([
                     'msg'=>'ok',
                     'data'=>[
@@ -68,6 +71,9 @@ class WeChatController extends Controller
                     }
                     $token = CreateNonceStr(8);
                     setRedisData($token,$userId);
+                    $count = getRedisData('LoginCount',0);
+                    $time = strtotime(date('Y-m-d').' 23:59:59')-time();
+                    setRedisData('LoginCount',$count+1,$time);
                     return \jsonResponse([
                         'msg'=>'ok',
                         'data'=>[

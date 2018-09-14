@@ -26,4 +26,24 @@ class SystemController extends Controller
             ]);
         };
     }
+    public function addPickUpConfig()
+    {
+        $state = Input::get('state',0);
+        if ($this->handle->setPickUpConfig($state)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
+    public function getPickUpConfig()
+    {
+        $data = $this->handle->getPickUpConfig();
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
 }

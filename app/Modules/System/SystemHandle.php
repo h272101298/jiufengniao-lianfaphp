@@ -13,6 +13,7 @@ use App\Modules\System\Model\Document;
 use App\Modules\System\Model\IconConfig;
 use App\Modules\System\Model\NotifyConfig;
 use App\Modules\System\Model\NotifyQueue;
+use App\Modules\System\Model\PickUpConfig;
 use App\Modules\System\Model\PosterConfig;
 use App\Modules\System\Model\TxConfig;
 use App\Modules\WeChatUser\Model\NotifyList;
@@ -246,5 +247,24 @@ trait SystemHandle
             return true;
         }
         return false;
+    }
+    public function getPickUpConfig()
+    {
+        $config = PickUpConfig::first();
+        if (empty($config)){
+            return 0;
+        }
+        return $config->state;
+    }
+    public function setPickUpConfig($state)
+    {
+        $config = PickUpConfig::first();
+        if (empty($config)){
+            $config = new PickUpConfig();
+        }
+        $config->state = $state;
+        if ($config->save()){
+            return true;
+        }
     }
 }

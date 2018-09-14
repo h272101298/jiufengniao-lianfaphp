@@ -252,7 +252,8 @@ class SystemController extends Controller
             'reviewProductCount'=>$this->handle->countProduct($storeId,0,1),
             'storeAmount'=>$amount->amount,
             'withdrawAmount'=>$this->handle->countStoreWithdraw($storeId),
-            'amount'=>$amount->available
+            'amount'=>$amount->available,
+            'loginCount'=>getRedisData('LoginCount',0)
         ];
         return jsonResponse([
             'msg'=>'ok',

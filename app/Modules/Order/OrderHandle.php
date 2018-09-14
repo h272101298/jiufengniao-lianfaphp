@@ -47,7 +47,7 @@ trait OrderHandle
     }
     public function getUserOrder($user_id)
     {
-        $orders = Order::where('user_id','=',$user_id)->get();
+        $orders = Order::where('user_id','=',$user_id)->orderBy('id','DESC')->get();
         return $orders;
     }
     public function getOrderById($id)
@@ -188,7 +188,7 @@ trait OrderHandle
             $db->whereIn('id',$idArray);
         }
         $count = $db->count();
-        $data = $db->limit($limit)->offset(($page-1)*$limit)->get();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
         return [
             'count'=>$count,
             'data'=>$data

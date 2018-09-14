@@ -119,4 +119,5 @@ Route::group(['prefix'=>'v3'],function (){
     Route::post('score/order','V3\OrderController@createScoreOrder');
     Route::get('score/config','V3\ScoreController@getScoreConfig');
     Route::get('score/records','V3\ScoreController@getScoreRecords');
+    Route::get('pickup/config','V3\SystemController@getPickUpConfig');
 });

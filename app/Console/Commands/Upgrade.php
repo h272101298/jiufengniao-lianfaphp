@@ -43,6 +43,8 @@ class Upgrade extends Command
      */
     public function handle()
     {
+
+        //dd();
         try{
             //第一次
 //            DB::select('alter table bargain_promotions drop column stock_id,drop column min_price,drop column origin_price,drop column start,drop column `end`');
