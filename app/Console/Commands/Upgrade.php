@@ -50,6 +50,7 @@ class Upgrade extends Command
             DB::select('alter table bargain_promotions drop column stock_id,drop column min_price,drop column origin_price,drop column start,drop column `end`');
             DB::select(' alter table bargain_promotions add `time` int DEFAULT 0');
             DB::select(' alter table stock_snapshots add `product` VARCHAR(50) DEFAULT NULL ');
+            DB::select(' alter table proxy_applies add `notify_id` VARCHAR(194) DEFAULT NULL ');
             $snapshots = StockSnapshot::all();
             foreach ($snapshots as $snapshot){
                 $product = Product::find($snapshot->product_id);
