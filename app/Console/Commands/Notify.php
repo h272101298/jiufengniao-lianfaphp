@@ -47,6 +47,8 @@ class Notify extends Command
             $data = $notify->send($queue->content);
             if ($data['errmsg']=='ok'){
                 $this->delNotifyQueue($queue->id);
+            }else{
+                var_dump($data);
             }
         }
     }
