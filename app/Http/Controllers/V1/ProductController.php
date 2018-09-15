@@ -593,7 +593,7 @@ class ProductController extends Controller
                             "value"=>$typeString
                         ],
                         "keyword4"=>[
-                            "value"=>$stock->price
+                            "value"=>number_format($stock->price,2)
                         ]
                     ],
                     "emphasis_keyword"=>"keyword1.DATA"
