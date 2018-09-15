@@ -46,4 +46,25 @@ class SystemController extends Controller
             'data'=>$data
         ]);
     }
+    public function makeQrcode(Request $post)
+    {
+        $data = $post->all();
+        $page = $data['page'];
+        unset($data['page']);
+        $scene = '';
+        foreach ($data as $key =>$value){
+            $scene .=$key.'='.$value.'&';
+        }
+        $scene = substr($scene,0,-1);
+//        dd($scene);
+        $wx =  getWxXcx();
+        $data = [
+            'scene'=>$scene,
+            'page'=>$page
+        ];
+        $data = json_encode($data);
+        $token = $wx->getAccessToken();
+        $qrcode = $wx->get_http_array('https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$token['access_token'],$data,'json');
+        return response()->make($qrcode,200,['content-type'=>'image/gif']);
+    }
 }

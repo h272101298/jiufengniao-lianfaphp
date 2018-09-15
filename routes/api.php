@@ -120,4 +120,5 @@ Route::group(['prefix'=>'v3'],function (){
     Route::get('score/config','V3\ScoreController@getScoreConfig');
     Route::get('score/records','V3\ScoreController@getScoreRecords');
     Route::get('pickup/config','V3\SystemController@getPickUpConfig');
+    Route::get('qrcode','V3\SystemController@makeQrcode');
 });
