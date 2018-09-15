@@ -40,12 +40,13 @@ class CouponController extends Controller
     public function delCoupon()
     {
         $id = Input::get('id');
-        if ($this->handle->checkUserCoupon(0,$id)){
-            return jsonResponse([
-                'msg'=>'已被领券的优惠券不能删除！'
-            ]);
-        };
+//        if ($this->handle->checkUserCoupon(0,$id)){
+//            return jsonResponse([
+//                'msg'=>'已被领券的优惠券不能删除！'
+//            ]);
+//        };
         if ($this->handle->delCoupon($id)){
+            $this->handle->delUserCoupon(0,$id);
             return jsonResponse([
                 'msg'=>'ok'
             ]);

@@ -126,6 +126,17 @@ trait CouponHandle
         }
         return $db->count();
     }
+    public function delUserCoupon($user_id=0,$coupon_id=0)
+    {
+        $db = DB::table('user_coupons');
+        if ($user_id){
+            $db->where('user_id','=',$user_id);
+        }
+        if ($coupon_id){
+            $db->where('coupon_id','=',$coupon_id);
+        }
+        return $db->delete();
+    }
     public function getUserCoupons($user_id,$state=0,$page=1,$limit=10,$store_id=0)
     {
         $db = UserCoupon::where('user_id','=',$user_id);
