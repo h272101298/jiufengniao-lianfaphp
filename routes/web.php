@@ -169,4 +169,5 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::post('check/withdraw','V3\StoreController@checkWithdraw');
     Route::post('pickup/config','V3\SystemController@addPickUpConfig');
     Route::get('pickup/config','V3\SystemController@getPickUpConfig');
+    Route::post('notify/promotion','V3\SystemController@notifyPromotion');
 });

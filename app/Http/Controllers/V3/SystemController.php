@@ -67,4 +67,53 @@ class SystemController extends Controller
         $qrcode = $wx->get_http_array('https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='.$token['access_token'],$data,'json');
         return response()->make($qrcode,200,['content-type'=>'image/gif']);
     }
+    public function notifyPromotion(Request $post)
+    {
+        $id = $post->id;
+        $type = $post->type;
+        $title = $post->title;
+        $time = $post->time;
+        $remark = $post->remark;
+        $page = $post->page;
+        switch ($type){
+            case 'card':
+                $typeString = '集卡牌';
+                break;
+            case 'bargain':
+                $typeString = '限时砍价';
+                break;
+            case 'group':
+                $typeString = '限时团购';
+                break;
+        }
+        if (!empty($lists)){
+            foreach ($lists as $list){
+                $data = [
+                    "touser"=>$list->open_id,
+                    "template_id"=>$this->handle->getNotifyConfigByTitle('promotion_notify'),
+                    "form_id"=>$list->notify_id,
+                    "page"=>$page,
+                    "data"=>[
+                        "keyword1"=>[
+                            "value"=>$title
+                        ],
+                        "keyword2"=>[
+                            "value"=>$time
+                        ],
+                        "keyword3"=>[
+                            "value"=>$typeString
+                        ],
+                        "keyword4"=>[
+                            "value"=>$remark
+                        ]
+                    ]
+                ];
+                $this->handle->addNotifyQueue(json_encode($data));
+                $this->handle->delNotifyList($list->id);
+            }
+        }
+        return jsonResponse([
+            'msg'=>'ok'
+        ]);
+    }
 }
