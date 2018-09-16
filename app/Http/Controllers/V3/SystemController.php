@@ -74,16 +74,24 @@ class SystemController extends Controller
         $title = $post->title;
         $time = $post->time;
         $remark = $post->remark;
-        $page = $post->page;
+        //$page = $post->page;
         switch ($type){
             case 'card':
                 $typeString = '集卡牌';
+                $typeIndex = 2;
                 break;
             case 'bargain':
                 $typeString = '限时砍价';
+                $typeIndex = 1;
                 break;
             case 'group':
                 $typeString = '限时团购';
+                $promotion = $this->handle->getGroupBuyPromotion($id);
+                if ($promotion->free == 1){
+                    $typeIndex = 4;
+                }else{
+                    $typeIndex = 3;
+                }
                 break;
         }
         if (!empty($lists)){
@@ -92,7 +100,7 @@ class SystemController extends Controller
                     "touser"=>$list->open_id,
                     "template_id"=>$this->handle->getNotifyConfigByTitle('promotion_notify'),
                     "form_id"=>$list->notify_id,
-                    "page"=>$page,
+                    "page"=>"pages/activity/index?acttab=".$typeIndex,
                     "data"=>[
                         "keyword1"=>[
                             "value"=>$title
