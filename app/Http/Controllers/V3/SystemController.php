@@ -75,6 +75,7 @@ class SystemController extends Controller
         $time = $post->time;
         $remark = $post->remark;
         //$page = $post->page;
+        $lists = $this->handle->getNotifyList();
         switch ($type){
             case 'card':
                 $typeString = '集卡牌';
