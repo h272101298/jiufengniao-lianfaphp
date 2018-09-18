@@ -320,17 +320,17 @@ trait OrderHandle
         if ($data['return_code']=='FAIL'){
             $refuse->state = 3;
             $refuse->save();
-            var_dump($data);
+            //var_dump($data);
             return false;
         }else{
             if ($data['result_code']=='FAIL'){
                 $refuse->state = 3;
                 $refuse->save();
-                var_dump($data);
+                //var_dump($data);
                 return false;
             }else{
                 $refuse->state = 2;
-                var_dump($data);
+                ///var_dump($data);
                 $refuse->save();
                 return true;
             }
