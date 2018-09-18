@@ -111,7 +111,7 @@ trait ProxyHandle
             $db->where('name', 'like', '%' . $name . '%');
         }
         if ($phone) {
-            $db->where('phone', 'like', '%' . $phone . '%');
+            $db->orWhere('phone', 'like', '%' . $phone . '%');
         }
         $count = $db->count();
         $data = $db->limit($limit)->offset(($page - 1) * $limit)->get();
