@@ -287,7 +287,7 @@ trait OrderHandle
     public function getRefuses($store_id,$page,$limit)
     {
         $count = Refuse::where('store_id','=',$store_id)->count();
-        $refuses = Refuse::where('store_id','=',$store_id)->limit($limit)->offset(($page-1)*$limit)->get();
+        $refuses = Refuse::where('store_id','=',$store_id)->limit($limit)->offset(($page-1)*$limit)->orderBy('id','DESC')->get();
         $this->formatRefuses($refuses);
         return [
             'data'=>$refuses,

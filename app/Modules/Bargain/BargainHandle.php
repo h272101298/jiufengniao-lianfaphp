@@ -146,7 +146,7 @@ trait BargainHandle
     public function getBargainPrice($count,$price)
     {
         if ($count==1){
-            return $price;
+            return sprintf('%.2f',$price);
         }
         $swap = ($price/$count)*2;
         $result =  0.01 + mt_rand() / mt_getrandmax() * ($swap - 0.01);
