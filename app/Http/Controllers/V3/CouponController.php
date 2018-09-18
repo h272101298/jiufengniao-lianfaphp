@@ -93,7 +93,7 @@ class CouponController extends Controller
         }
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $coupons = $this->handle->getCoupons($page,$limit,$product->store_id);
+        $coupons = $this->handle->getCoupons($page,$limit,$product->store_id,1);
         $this->handle->formatCoupons($coupons['data']);
         return jsonResponse([
             'msg'=>'ok',

@@ -39,7 +39,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('brokerage:make')->dailyAt('2:00');
         $schedule->command('notify:send')->everyFiveMinutes();
         $schedule->command('clearQueues')->everyFiveMinutes();
-        $schedule->command('checkGroupBuy')->everyFiveMinutes();
+        $schedule->command('checkGroupBuy')->everyMinute();
         $schedule->command('refuseOrder')->everyFiveMinutes();
     }
 

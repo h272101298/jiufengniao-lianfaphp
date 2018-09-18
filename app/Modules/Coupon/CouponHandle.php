@@ -33,11 +33,14 @@ trait CouponHandle
         }
         return false;
     }
-    public function getCoupons($page=1,$limit=10,$store_id=0)
+    public function getCoupons($page=1,$limit=10,$store_id=0,$enable=0)
     {
         $db = DB::table('coupons');
         if ($store_id){
             $db->where('store_id','=',$store_id);
+        }
+        if ($enable){
+            $db->where('enable','=',$enable);
         }
         $count = $db->count();
         $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
