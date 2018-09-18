@@ -588,38 +588,40 @@ class OrderController extends Controller
         if ($sign == $wx['sign']) {
             $orders = Order::where(['group_number' => $wx['out_trade_no']])->get();
             foreach ($orders as $order) {
-                $type = $this->handle->getOrderTypeByOrderId($order->id);
-                if (!empty($type)){
-                    if ($type->type=='bargain'){
-                        $promotion = $this->handle->getBargainPromotion($type->promotion_id);
-                        $this->handle->addBargainPromotion($promotion->id,['number'=>$promotion->number-1]);
+                if ($order->state =='created'){
+                    $type = $this->handle->getOrderTypeByOrderId($order->id);
+                    if (!empty($type)){
+                        if ($type->type=='bargain'){
+                            $promotion = $this->handle->getBargainPromotion($type->promotion_id);
+                            $this->handle->addBargainPromotion($promotion->id,['number'=>$promotion->number-1]);
+                        }
+                        if ($type->type=='groupCreate'){
+                            $promotion = $this->handle->getGroupBuyPromotion($type->promotion_id);
+                            $list = $this->handle->getGroupBuyListByOrderId($order->id);
+                            $time = time();
+                            $data = [
+                                'start'=>$time,
+                                'end'=>$time+$promotion->time*60*60,
+                                'state'=>1
+                            ];
+                            $this->handle->addGroupBuyList($list->id,$data);
+                            $join = $this->handle->getGroupBuyJoinByOrderId($order->id);
+                            $this->handle->addGroupBuyJoin($join->id,['state'=>1]);
+                        }
+                        if ($type->type=='groupJoin'){
+                            $join = $this->handle->getGroupBuyJoinByOrderId($order->id);
+                            $this->handle->addGroupBuyJoin($join->id,['state'=>1]);
+                        }
                     }
-                    if ($type->type=='groupCreate'){
-                        $promotion = $this->handle->getGroupBuyPromotion($type->promotion_id);
-                        $list = $this->handle->getGroupBuyListByOrderId($order->id);
-                        $time = time();
-                        $data = [
-                            'start'=>$time,
-                            'end'=>$time+$promotion->time*60*60,
-                            'state'=>1
-                        ];
-                        $this->handle->addGroupBuyList($list->id,$data);
-                        $join = $this->handle->getGroupBuyJoinByOrderId($order->id);
-                        $this->handle->addGroupBuyJoin($join->id,['state'=>1]);
-                    }
-                    if ($type->type=='groupJoin'){
-                        $join = $this->handle->getGroupBuyJoinByOrderId($order->id);
-                        $this->handle->addGroupBuyJoin($join->id,['state'=>1]);
-                    }
+                    $data = [
+                        'state' => 'paid',
+                        'transaction_id' => $wx['transaction_id']
+                    ];
+                    $this->handle->addBrokerageQueue($order->id);
+                    $this->handle->addOrder($order->id, $data);
+                    $free = $this->handle->getGroupFree($order->user_id);
+                    $this->handle->addGroupFree($order->user_id,$free->count+1);
                 }
-                $data = [
-                    'state' => 'paid',
-                    'transaction_id' => $wx['transaction_id']
-                ];
-                $this->handle->addBrokerageQueue($order->id);
-                $this->handle->addOrder($order->id, $data);
-                $free = $this->handle->getGroupFree($order->user_id);
-                $this->handle->addGroupFree($order->user_id,$free->count+1);
             }
             return 'SUCCESS';
         }
