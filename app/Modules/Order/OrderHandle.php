@@ -101,6 +101,9 @@ trait OrderHandle
         $db = Order::where('user_id','=',$user_id);
         if ($state){
             $db->where('state','=',$state);
+            if ($state=='finished'){
+                $db->orWhere('state','=','closed');
+            }
         }
         if (!empty($order_id)){
             $db->whereIn('id',$order_id);
