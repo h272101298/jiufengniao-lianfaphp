@@ -176,11 +176,14 @@ trait OrderHandle
         return $data;
     }
 
-    public function getOrders($page,$limit,$start,$end,$number,$idArray=null,$user_id=null,$state='')
+    public function getOrders($page,$limit,$start,$end,$number,$idArray=null,$user_id=null,$state='',$store_id=0)
     {
         $db = DB::table('orders');
         if ($start){
             $db->whereBetween('created_at',[$start,$end]);
+        }
+        if ($store_id){
+            $db->where('store_id','=',$store_id);
         }
         if ($number){
             $db->where('number','like','%'.$number.'%');
@@ -231,6 +234,38 @@ trait OrderHandle
             $orders[$i]->store = $store?$store->name:'';
         }
     }
+    public function formatExcelOrders($orders)
+    {
+        $status = [
+            'created'=>'已下单',
+            'paid'=>'已支付',
+            'delivery'=>'配送中',
+            'finished'=>'已完成',
+            'canceled'=>'已取消',
+            'closed'=>'已完成'
+        ];
+        $data = [];
+        if (empty($orders)){
+            return [];
+        }
+        for ($i=0;$i<count($orders);$i++){
+            $swap = [];
+            $user = WeChatUser::find($orders[$i]->user_id);
+            $address = AddressSnapshot::where('order_id','=',$orders[$i]->id)->first();
+            $swap['id'] = $i+1;
+            $swap['number'] = $orders[$i]->number.' ';
+            $swap['user'] = $user?$user->nickname:'';
+            $swap['amount'] = $orders[$i]->price. ' ';
+            $swap['delivery'] = $orders[$i]->delivery==1?'自提':'配送';
+            $swap['state'] = $status[$orders[$i]->state];
+            $swap['time'] = $orders[$i]->created_at;
+            $swap['name'] = !empty($address)?$address->name:"";
+            $swap['phone'] = !empty($address)?$address->phone.' ':"";
+            $swap['address'] = !empty($address)?$address->address:"";
+            array_push($data,$swap);
+        }
+        return $data;
+    }
     public function getOrderIdByExpressName($name)
     {
         $idArray = AddressSnapshot::where('name','like','%'.$name.'%')->pluck('order_id')->toArray();
@@ -246,6 +281,16 @@ trait OrderHandle
         }
         return $orderId;
 
+    }
+    public function getOrdersIdByOrderType($type)
+    {
+        $db = DB::table('order_types');
+        if ($type=='groupCreate'||$type=='groupJoin'){
+            $db->whereIn('type',['groupCreate','groupJoin']);
+        }else{
+            $db->where('type','=',$type);
+        }
+        return $db->pluck('order_id')->toArray();
     }
     public function formatOrder(&$order)
     {
