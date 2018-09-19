@@ -100,9 +100,10 @@ trait OrderHandle
     {
         $db = Order::where('user_id','=',$user_id);
         if ($state){
-            $db->where('state','=',$state);
             if ($state=='finished'){
-                $db->orWhere('state','=','closed');
+                $db->whereIn('state',['closed','finished']);
+            }else{
+                $db->where('state','=',$state);
             }
         }
         if (!empty($order_id)){
@@ -175,7 +176,7 @@ trait OrderHandle
         return $data;
     }
 
-    public function getOrders($page,$limit,$start,$end,$number,$idArray=null,$user_id=null)
+    public function getOrders($page,$limit,$start,$end,$number,$idArray=null,$user_id=null,$state='')
     {
         $db = DB::table('orders');
         if ($start){
@@ -189,6 +190,13 @@ trait OrderHandle
         }
         if ($idArray){
             $db->whereIn('id',$idArray);
+        }
+        if ($state){
+            if ($state=='finished'){
+                $db->whereIn('state',['closed','finished']);
+            }else{
+                $db->where('state','=',$state);
+            }
         }
         $count = $db->count();
         $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();

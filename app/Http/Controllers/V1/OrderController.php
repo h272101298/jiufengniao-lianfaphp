@@ -358,7 +358,8 @@ class OrderController extends Controller
         $idArr = $this->handle->getOrderIdByExpressName($search);
         $idArray = $this->handle->getOrderIdByStoreName($search);
         $idArray = array_merge($idArr, $idArray);
-        $data = $this->handle->getOrders($page, $limit, $start, $end, $search, $idArray);
+        $state = Input::get('state');
+        $data = $this->handle->getOrders($page, $limit, $start, $end, $search, $idArray,null,$state);
         $this->handle->formatOrders($data['data']);
         return jsonResponse([
             'msg' => 'ok',
