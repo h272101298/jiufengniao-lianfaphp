@@ -50,18 +50,18 @@ class OrderController extends Controller
                 //$store = $this->handle->getStoreById($product->store_id);
                 $state = 'created';
                 $price = $groupStock->group_price*$number;
-                if (isset($coupon_id)&&$coupon_id!=0){
-                    $coupon = $this->handle->getUserCoupon($coupon_id);
-                    if ($coupon->user_id!=$user_id||$coupon->store_id!=$product->store_id||$coupon->state!=1){
-                        throw new \Exception('优惠券不可用！');
-                    }
-                    $info = $this->handle->getCoupon($coupon->coupon_id);
-                    if ($info->limit_price>$price){
-                        throw new \Exception('优惠券不可用！');
-                    }
-                    $couponPrice = $info->price;
-                    $price -= $couponPrice;
-                }
+//                if (isset($coupon_id)&&$coupon_id!=0){
+//                    $coupon = $this->handle->getUserCoupon($coupon_id);
+//                    if ($coupon->user_id!=$user_id||$coupon->store_id!=$product->store_id||$coupon->state!=1){
+//                        throw new \Exception('优惠券不可用！');
+//                    }
+//                    $info = $this->handle->getCoupon($coupon->coupon_id);
+//                    if ($info->limit_price>$price){
+//                        throw new \Exception('优惠券不可用！');
+//                    }
+//                    $couponPrice = $info->price;
+//                    $price -= $couponPrice;
+//                }
                 if ($express==1){
                     $express = $this->handle->getStoreExpress($groupBuy->store_id);
                     $price+=$express->price;
@@ -142,18 +142,18 @@ class OrderController extends Controller
             $state = $groupBuy->free == 1 ? 'paid':'created';
             $price = $groupBuy->free == 1 ?0:$groupStock->group_price*$number;
 //            dd($groupBuy);
-            if (isset($coupon_id)&&$coupon_id!=0){
-                $coupon = $this->handle->getUserCoupon($coupon_id);
-                if ($coupon->user_id!=$user_id||$coupon->store_id!=$product->store_id||$coupon->state!=1){
-                    throw new \Exception('优惠券不可用！');
-                }
-                $info = $this->handle->getCoupon($coupon->coupon_id);
-                if ($info->limit_price>$price){
-                    throw new \Exception('优惠券不可用！'.$price);
-                }
-                $couponPrice = $info->price;
-                $price -= $couponPrice;
-            }
+//            if (isset($coupon_id)&&$coupon_id!=0){
+//                $coupon = $this->handle->getUserCoupon($coupon_id);
+//                if ($coupon->user_id!=$user_id||$coupon->store_id!=$product->store_id||$coupon->state!=1){
+//                    throw new \Exception('优惠券不可用！');
+//                }
+//                $info = $this->handle->getCoupon($coupon->coupon_id);
+//                if ($info->limit_price>$price){
+//                    throw new \Exception('优惠券不可用！'.$price);
+//                }
+//                $couponPrice = $info->price;
+//                $price -= $couponPrice;
+//            }
             if ($express==1){
                 $express = $this->handle->getStoreExpress($groupBuy->store_id);
                 $price+=$express->price;
