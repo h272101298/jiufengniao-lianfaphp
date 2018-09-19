@@ -165,7 +165,8 @@ class OrderController extends Controller
                 'price' => $price,
                 'state' => $state,
                 'group_number' => $groupNumber,
-                'store_id' => $product->store_id
+                'store_id' => $product->store_id,
+                'delivery'=>$delivery
             ];
             $order_id = $this->handle->addOrder(0, $data);
             if ($order_id){
