@@ -41,6 +41,6 @@ class ClearQueue extends Command
     public function handle()
     {
         //
-        NotifyList::where('created_at','<',Carbon::parse(date('Y-m-d',strtotime('-7 days'))))->orWhere('notify_id','=','the formId is a mock one')->delete();
+        NotifyList::where('created_at','<',Carbon::parse(date('Y-m-d',strtotime('-6 days'))))->orWhere('notify_id','=','the formId is a mock one')->delete();
     }
 }
