@@ -452,6 +452,10 @@ trait OrderHandle
     {
         return OrderType::where('order_id','=',$orderId)->first();
     }
+    public function getOrderTypeByBargain($bargain_id)
+    {
+        return OrderType::where('type','=','bargain')->where('promotion_id','=',$bargain_id)->first();
+    }
     public function getOrdersIdByType($type)
     {
         return OrderType::where('type','=',$type)->pluck('order_id')->toArray();
