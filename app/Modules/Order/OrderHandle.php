@@ -11,6 +11,7 @@ namespace App\Modules\Order;
 
 use App\Libraries\ExpressSearch;
 use App\Libraries\Wxxcx;
+use App\Modules\GroupBuy\Model\GroupBuyJoin;
 use App\Modules\GroupBuy\Model\GroupBuyList;
 use App\Modules\Order\Model\AddressSnapshot;
 use App\Modules\Order\Model\Order;
@@ -236,8 +237,14 @@ trait OrderHandle
             $orders[$i]->groupState = 0;
             $type = $this->getOrderTypeByOrderId($orders[$i]->id);
             if (!empty($type)){
-                if ($type->type=='groupCreate'||$type->type=='groupJoin'){
+                if ($type->type=='groupCreate'){
                     $list = GroupBuyList::where('order_id','=',$orders[$i]->id)->first();
+                    if (!empty($list)){
+                        $orders[$i]->groupState = $list->state;
+                    }
+                }elseif($type->type=='groupJoin'){
+                    $join = GroupBuyJoin::where('order_id','=',$orders[$i]->id)->first();
+                    $list = GroupBuyList::find($join->list_id);
                     if (!empty($list)){
                         $orders[$i]->groupState = $list->state;
                     }
