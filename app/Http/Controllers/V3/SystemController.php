@@ -101,7 +101,7 @@ class SystemController extends Controller
                     "touser"=>$list->open_id,
                     "template_id"=>$this->handle->getNotifyConfigByTitle('promotion_notify'),
                     "form_id"=>$list->notify_id,
-                    "page"=>"pages/activity/index?acttab=".$typeIndex,
+                    "page"=>"pages/activity/index?curtab=".$typeIndex,
                     "data"=>[
                         "keyword1"=>[
                             "value"=>$title
