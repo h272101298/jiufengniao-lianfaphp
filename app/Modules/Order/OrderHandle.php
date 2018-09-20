@@ -11,6 +11,7 @@ namespace App\Modules\Order;
 
 use App\Libraries\ExpressSearch;
 use App\Libraries\Wxxcx;
+use App\Modules\GroupBuy\Model\GroupBuyList;
 use App\Modules\Order\Model\AddressSnapshot;
 use App\Modules\Order\Model\Order;
 use App\Modules\Order\Model\OrderType;
@@ -232,6 +233,13 @@ trait OrderHandle
             $store = Store::find($orders[$i]->store_id);
             $orders[$i]->user = $user?$user->nickname:'';
             $orders[$i]->store = $store?$store->name:'';
+            $orders[$i]->groupState = 0;
+            $type = $this->getOrderTypeByOrderId($orders[$i]->id);
+            if ($type->type=='groupCreate'||$type->type=='groupJoin'){
+                $list = GroupBuyList::where('order_id','=',$orders[$i]->id)->first();
+                $orders[$i]->groupState = $list->state;
+            }
+            $orders[$i]->type = $type->type;
         }
     }
     public function formatExcelOrders($orders)
