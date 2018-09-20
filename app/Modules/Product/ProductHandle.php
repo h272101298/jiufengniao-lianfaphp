@@ -179,9 +179,11 @@ trait ProductHandle
             $bind = ProductTypeBind::where('type_id', '=', $type->id)->first();
             if ($bind->parent_id == 0) {
                 $type->level = 1;
+                $type->parent = null;
             } else {
                 $type->level = 2;
                 $swap = ProductTypeBind::where('type_id', '=', $bind->parent_id)->first();
+                $type->parent = ProductType::find($bind->parent_id);
                 if (!empty($swap) && $swap->parent_id != 0) {
                     $type->level = 3;
                 }
