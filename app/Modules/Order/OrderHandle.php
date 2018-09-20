@@ -235,11 +235,15 @@ trait OrderHandle
             $orders[$i]->store = $store?$store->name:'';
             $orders[$i]->groupState = 0;
             $type = $this->getOrderTypeByOrderId($orders[$i]->id);
-            if ($type->type=='groupCreate'||$type->type=='groupJoin'){
-                $list = GroupBuyList::where('order_id','=',$orders[$i]->id)->first();
-                $orders[$i]->groupState = $list->state;
+            if (!empty($type)){
+                if ($type->type=='groupCreate'||$type->type=='groupJoin'){
+                    $list = GroupBuyList::where('order_id','=',$orders[$i]->id)->first();
+                    $orders[$i]->groupState = $list->state;
+                }
+                $orders[$i]->type = $type->type;
+            }else{
+                $orders[$i]->type = 'origin';
             }
-            $orders[$i]->type = $type->type;
         }
     }
     public function formatExcelOrders($orders)
