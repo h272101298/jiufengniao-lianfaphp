@@ -112,8 +112,8 @@ class OrderController extends Controller
                 ]);
             }
             if ($bargain_promotion){
-                $list = $this->handle->getOrderTypeByBargain($bargain_promotion);
-                if (!empty($list)){
+                $bargainRecord = $this->handle->getOrderTypeByBargain($bargain_promotion);
+                if (!empty($bargainRecord)){
                     return jsonResponse([
                         'msg'=>'已参加过该活动！'
                     ],400);
