@@ -15,7 +15,7 @@ class CreateNotifyQueuesTable extends Migration
     {
         Schema::create('notify_queues', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('content',1000);
+            $table->text('content');
             $table->timestamps();
         });
     }
