@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Input;
 
 class ScoreController extends Controller
 {
-    //
+    //初始化控制器
     private $handle;
     public function __construct()
     {
         $this->handle = new User();
     }
+    //添加积分商品
     public function addScoreProduct(Request $post)
     {
         $id = $post->id?$post->id:0;
@@ -31,7 +32,6 @@ class ScoreController extends Controller
         $norm = $post->norm;
         $product_id = $this->handle->addScoreProduct($id,$data);
         if ($product_id){
-//            $this->handle->delScoreProductStocks($product_id);
             foreach ($stocks as $item){
                 if ($norm!='fixed'){
                     $swap = [];

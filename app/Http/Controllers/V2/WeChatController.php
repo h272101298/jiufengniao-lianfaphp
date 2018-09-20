@@ -45,7 +45,6 @@ class WeChatController extends Controller
             'msg'=>'ok',
             'data'=>$member
         ]);
-
     }
 
 }

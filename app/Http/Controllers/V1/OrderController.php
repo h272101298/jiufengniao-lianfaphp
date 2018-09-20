@@ -356,13 +356,13 @@ class OrderController extends Controller
         $start = Input::get('start');
         $end = Input::get('end');
         $idArray = [];
-        if ($search){
+        if (!empty($search)){
             $idArr = $this->handle->getOrderIdByExpressName($search);
             $idArray = $this->handle->getOrderIdByStoreName($search);
             $idArray = array_merge($idArr, $idArray);
         }
         $type = Input::get('type');
-        if ($type){
+        if (!empty($type)){
             $ordersId = $this->handle->getOrdersIdByOrderType($type);
 //            var_dump($ordersId);
             $idArray = $ordersId;

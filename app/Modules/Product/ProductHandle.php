@@ -190,7 +190,6 @@ trait ProductHandle
             }
         }
         return $types;
-
     }
 
     public function addHotType($type_id)
@@ -244,7 +243,10 @@ trait ProductHandle
 
     public function getProductCategories($store_id = 0, $page = 1, $limit = 10, $title = '')
     {
-        $db = DB::table('product_categories')->where('store_id', '=', $store_id);
+        $db = DB::table('product_categories');
+        if ($store_id){
+            $db->where('store_id', '=', $store_id);
+        }
         if ($title) {
             $db->where('title', 'like', '%' . $title . '%');
         }

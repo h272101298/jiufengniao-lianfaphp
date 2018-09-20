@@ -185,7 +185,7 @@ trait OrderHandle
         if ($store_id){
             $db->where('store_id','=',$store_id);
         }
-        if ($number){
+        if ($number!=''){
             $db->where('number','like','%'.$number.'%');
         }
         if ($user_id){
