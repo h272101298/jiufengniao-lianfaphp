@@ -367,6 +367,7 @@ class OrderController extends Controller
 //            var_dump($ordersId);
             $idArray = $ordersId;
         }
+        var_dump($idArray);
         $state = Input::get('state');
         $data = $this->handle->getOrders($page, $limit, $start, $end, $search, $idArray,null,$state,getStoreId());
         $this->handle->formatOrders($data['data']);
