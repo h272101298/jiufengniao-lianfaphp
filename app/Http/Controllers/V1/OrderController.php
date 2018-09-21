@@ -113,12 +113,12 @@ class OrderController extends Controller
                 ]);
             }
             if ($bargain_promotion){
-                $bargainRecord = $this->handle->getOrderTypeByBargain($bargain_promotion);
-                if (!empty($bargainRecord)){
-                    return jsonResponse([
-                        'msg'=>'已参加过该活动！'
-                    ],400);
-                }
+//                $bargainRecord = $this->handle->getOrderTypeByBargain($bargain_promotion);
+//                if (!empty($bargainRecord)){
+//                    return jsonResponse([
+//                        'msg'=>'已参加过该活动！'
+//                    ],400);
+//                }
                 $promotion = $this->handle->getBargainPromotion($bargain_promotion);
                 $expressPrice = 0 ;
                 if ($express){
