@@ -61,7 +61,8 @@ class OrderController extends Controller
                     'price' => $price,
                     'state' => $state,
                     'group_number' => $groupNumber,
-                    'store_id' => $product->store_id
+                    'store_id' => $product->store_id,
+                    'delivery'=>$express
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
                 if ($order_id) {
@@ -142,7 +143,8 @@ class OrderController extends Controller
                     'price' => $price,
                     'state' => $state,
                     'group_number' => $groupNumber,
-                    'store_id' => $product->store_id
+                    'store_id' => $product->store_id,
+                    'delivery'=>$express
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
                 if ($order_id) {
@@ -204,7 +206,8 @@ class OrderController extends Controller
                     'price' => 0,
                     'state' => 'created',
                     'group_number' => $groupNumber,
-                    'store_id' => $item
+                    'store_id' => $item,
+                    'delivery'=>$express
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
                 if ($order_id) {
