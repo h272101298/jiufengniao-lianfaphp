@@ -654,7 +654,7 @@ class OrderController extends Controller
             'created' => $this->handle->countUserOrders($user_id, 'created'),
             'paid' => $this->handle->countUserOrders($user_id, 'paid'),
             'delivery' => $this->handle->countUserOrders($user_id, 'delivery'),
-            'finish' => $this->handle->countUserOrders($user_id, 'finish'),
+            'finish' => $this->handle->countUserOrders($user_id, 'finished'),
             'closed' => $this->handle->countUserOrders($user_id, 'closed'),
             'canceled' => $this->handle->countUserOrders($user_id, 'canceled'),
         ];
