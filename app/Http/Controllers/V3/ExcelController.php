@@ -45,6 +45,6 @@ class ExcelController extends Controller
                     $sheet->row($j+1,$data[$j]);
                 }
             });
-        })->export('xlsx');
+        })->export('xls');
     }
 }
