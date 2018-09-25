@@ -25,6 +25,10 @@ Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middle
 //Route::options('/{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('v1/{all}',function (){jsonResponse(['msg'=>'ok']);})->middleware('cross');
 Route::get('test',function (){
+    if (\Illuminate\Support\Facades\Auth::check()){
+        return 'yes';
+    }
+    return 'no';
 });
 Route::post('test2','V1\SystemController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
