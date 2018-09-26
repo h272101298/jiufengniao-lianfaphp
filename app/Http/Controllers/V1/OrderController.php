@@ -113,8 +113,9 @@ class OrderController extends Controller
                 ]);
             }
             if ($bargain_promotion){
-                $bargainRecord = $this->handle->getOrderTypeByBargain($bargain_promotion);
-                if (!empty($bargainRecord)){
+                $bargainRecord = $this->handle->getOrderTypesIdByBargain($bargain_promotion);
+                $bargainCount = $this->handle->countOrder($bargainRecord,$user_id);
+                if (!$bargainCount){
                     return jsonResponse([
                         'msg'=>'已参加过该活动！'
                     ],400);

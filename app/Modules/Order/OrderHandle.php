@@ -469,6 +469,14 @@ trait OrderHandle
     {
         return OrderType::where('type','=','bargain')->where('promotion_id','=',$bargain_id)->first();
     }
+    public function getOrderTypesIdByBargain($bargain_id)
+    {
+        return OrderType::where('type','=','bargain')->where('promotion_id','=',$bargain_id)->pluck('order_id')->toArray();
+    }
+    public function countOrder($idArray,$user_id)
+    {
+        return Order::whereIn('id',$idArray)->where('user_id','=',$user_id)->count();
+    }
     public function getOrdersIdByType($type)
     {
         return OrderType::where('type','=',$type)->pluck('order_id')->toArray();
