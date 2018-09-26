@@ -117,7 +117,9 @@ class OrderController extends Controller
                 $bargainCount = empty($bargainRecord)?0:$this->handle->countOrder($bargainRecord,$user_id);
                 if (empty($bargainRecord)||!$bargainCount){
                     return jsonResponse([
-                        'msg'=>'已领取过该活动,请到我的订单页面查看！'
+                        'msg'=>'已领取过该活动,请到我的订单页面查看！',
+                        'bargainRecord'=>$bargainRecord,
+                        'bargainCount'=>$bargainCount
                     ],400);
                 }
                 $promotion = $this->handle->getBargainPromotion($bargain_promotion);
