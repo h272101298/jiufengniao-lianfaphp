@@ -58,7 +58,7 @@ trait OrderHandle
     }
     public function getOrderByNumber($number)
     {
-        return Order::where('number','=',$number)->firstOrFail();
+        return Order::where('number','=',$number)->first();
     }
     public function addAddressSnapshot($order_id,$data)
     {

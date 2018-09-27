@@ -608,7 +608,7 @@ class OrderController extends Controller
         $sign = $wspay->getSign($data);
         if ($sign == $wx['sign']) {
             $orders = Order::where(['group_number' => $wx['out_trade_no']])->get();
-            if (!empty($orders)){
+            if (count($orders)){
                 foreach ($orders as $order) {
                     if ($order->state =='created'){
                         $type = $this->handle->getOrderTypeByOrderId($order->id);
