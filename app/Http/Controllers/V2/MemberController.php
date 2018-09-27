@@ -51,13 +51,14 @@ class MemberController extends Controller
     public function delMemberLevel()
     {
         $id = Input::get('id');
-        $count = $this->handle->countMemberUsers($id);
-        if ($count!=0){
-            return jsonResponse([
-                'msg'=>'存在该等级会员！'
-            ],400);
-        }
+//        $count = $this->handle->countMemberUsers($id);
+//        if ($count!=0){
+//            return jsonResponse([
+//                'msg'=>'存在该等级会员！'
+//            ],400);
+//        }
         if ($this->handle->delMemberLevel($id)){
+            $this->handle->delMemberUsers($id);
             return jsonResponse([
                 'msg'=>'ok'
             ]);

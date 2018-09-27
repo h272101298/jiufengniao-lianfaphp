@@ -48,6 +48,10 @@ trait MemberHandle
     {
         return MemberUser::where('level_id','=',$level)->where('end','>',time())->count();
     }
+    public function delMemberUsers($level)
+    {
+        return MemberUser::where('level_id','=',$level)->delete();
+    }
     public function addMemberLevel($id,$data)
     {
         if ($id){
