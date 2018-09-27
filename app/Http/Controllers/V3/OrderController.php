@@ -419,10 +419,18 @@ class OrderController extends Controller
                 'state' => $price==0?'paid':'created',
                 'group_number' => $groupNumber,
                 'store_id' => $product->store_id,
-                'delivery'=>$express
+                'delivery'=>$express,
+                'score'=>$stock->score*$number
             ];
             $order_id = $this->handle->addOrder(0, $data);
             if ($order_id) {
+                $data = [
+                    'user_id'=>$user_id,
+                    'type'=>2,
+                    'score'=>$stock->score*$number,
+                    'remark'=>'购买商品'
+                ];
+                $this->handle->addScoreUseRecord(0,$data);
                 $addressSnapshot = [
                     'name' => $address->name,
                     'phone' => $address->phone,

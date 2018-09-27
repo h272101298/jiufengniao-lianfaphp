@@ -292,4 +292,35 @@ trait ScoreHandle
             'data'=>$data
         ];
     }
+    public function addScoreUseRecord($id=0,$data)
+    {
+        if ($id){
+            $record = ScoreRecord::find($id);
+        }else{
+            $record = new ScoreRecord();
+        }
+        foreach ($data as $key => $value){
+            $record->$key = $value;
+        }
+        if ($record->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getScoreUseRecords($user_id=0,$type=0,$page=1,$limit=10)
+    {
+        $db = DB::table('score_use_records');
+        if ($user_id){
+            $db->where('user_id','=',$user_id);
+        }
+        if ($type){
+            $db->where('type','=',$type);
+        }
+        $count = $db->count();
+        $data = $db->orderBy('id','DESC')->limit($limit)->offset(($page-1)*$limit)->get();
+        return [
+            'count'=>$count,
+            'data'=>$data
+        ];
+    }
 }

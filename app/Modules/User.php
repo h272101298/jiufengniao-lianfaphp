@@ -18,6 +18,7 @@ use App\Modules\Discount\DiscountHandle;
 use App\Modules\GroupBuy\GroupBuyHandle;
 use App\Modules\Member\MemberHandle;
 use App\Modules\Order\OrderHandle;
+use App\Modules\Prize\PrizeHandle;
 use App\Modules\Product\ProductHandle;
 use App\Modules\Proxy\ProxyHandle;
 use App\Modules\Role\Model\Role;
@@ -50,6 +51,7 @@ class User
     use CouponHandle;
     use ScoreHandle;
     use DiscountHandle;
+    use PrizeHandle;
     public function addUser($id,$data,$role)
     {
         if ($id){
