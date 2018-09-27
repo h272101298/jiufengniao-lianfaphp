@@ -122,4 +122,6 @@ Route::group(['prefix'=>'v3'],function (){
     Route::get('pickup/config','V3\SystemController@getPickUpConfig');
     Route::get('qrcode','V3\SystemController@makeQrcode');
     Route::post('prize','V3\PrizeController@prize');
+    Route::get('prizes','V3\PrizeController@getPrizes');
+    Route::post('share','V3\WeChatController@share');
 });

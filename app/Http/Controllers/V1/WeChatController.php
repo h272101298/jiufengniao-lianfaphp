@@ -69,6 +69,17 @@ class WeChatController extends Controller
                     if ($proxy_id!=0){
                         $this->handle->addProxyList($userId,$proxy_id);
                     }
+                    $config = $this->handle->getPrizeConfig();
+                    if (!empty($config)){
+                        $this->handle->addUserScore2($userId,$config->share_score);
+                        $data = [
+                            'user_id'=>$userId,
+                            'type'=>3,
+                            'score'=>$config->register_score,
+                            'remark'=>'注册获得'
+                        ];
+                        $this->handle->addScoreRecord(0,$data);
+                    }
                     $token = CreateNonceStr(8);
                     setRedisData($token,$userId);
                     $count = getRedisData('LoginCount',0);
