@@ -38,7 +38,6 @@ class ExcelController extends Controller
         $data = $this->handle->formatExcelOrders($data['data']);
         $tr = [['id','订单号','用户名','总计','收货方式','订单状态','下单时间','收货人','联系方式','收货地址']];
         $data = array_merge($tr,$data);
-        dd($data);
         $this->excel->create('orders',function ($excel) use ($tr,$data){
             $excel->sheet('sheet1',function ($sheet) use ($data){
                 $count = count($data);

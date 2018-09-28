@@ -275,7 +275,7 @@ trait OrderHandle
             $address = AddressSnapshot::where('order_id','=',$orders[$i]->id)->first();
             $swap['id'] = $i+1;
             $swap['number'] = $orders[$i]->number.' ';
-            $swap['user'] = $user?$user->nickname:'';
+            $swap['user'] = $user?filterEmoji($user->nickname):'';
             $swap['amount'] = $orders[$i]->price. ' ';
             $swap['delivery'] = $orders[$i]->delivery==1?'自提':'配送';
             $swap['state'] = $status[$orders[$i]->state];

@@ -113,3 +113,17 @@ if (!function_exists('getWxNotify')) {
         return $wxNotify;
     }
 }
+if (!function_exists('filterEmoji')){
+    function filterEmoji($str)
+    {
+        $str = str_replace(PHP_EOL, '', $str);
+        $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '' : $match[0];
+            },
+            $str);
+
+        return $str;
+    }
+}
