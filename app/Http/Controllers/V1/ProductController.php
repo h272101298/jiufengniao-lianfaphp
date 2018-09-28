@@ -591,8 +591,7 @@ class ProductController extends Controller
                         "keyword6"=>[
                             "value"=>$intro
                         ]
-                    ],
-                    "emphasis_keyword"=>"keyword1.DATA"
+                    ]
                 ];
                 $this->handle->addNotifyQueue(json_encode($data));
                 $this->handle->delNotifyList($list->id);
