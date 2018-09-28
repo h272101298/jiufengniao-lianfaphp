@@ -83,8 +83,8 @@ class PrizeController extends Controller
     {
         $uid = getRedisData($post->token);
         $config = $this->handle->getPrizeConfig();
-        $user = $this->handle->getWeChatUserById($uid);
-        if ($user->score<$config->prize_score){
+        $score = $this->handle->getUserScore($uid);
+        if ($score<$config->prize_score){
             return response()->json([
                 'msg'=>'积分余额不足！'
             ]);
