@@ -22,9 +22,9 @@ class WeChatController extends Controller
         $config = $this->handle->getPrizeConfig();
         if ($shareId!=$uid){
             if (!empty($config)&&!$this->handle->checkShareRecord($uid,$shareId,$page)){
-                $this->handle->addUserScore2($uid,$config->share_score);
+                $this->handle->addUserScore2($shareId,$config->share_score);
                 $data = [
-                    'user_id'=>$uid,
+                    'user_id'=>$shareId,
                     'type'=>4,
                     'score'=>$config->share_score,
                     'remark'=>'分享获得'
@@ -32,9 +32,12 @@ class WeChatController extends Controller
                 $this->handle->addScoreRecord(0,$data);
                 $this->handle->addShareRecord($uid,$shareId,$page);
             }
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
         }
         return jsonResponse([
-            'msg'=>'ok'
-        ]);
+            'msg'=>'Error',
+        ],400);
     }
 }
