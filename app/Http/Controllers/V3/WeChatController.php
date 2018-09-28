@@ -21,7 +21,7 @@ class WeChatController extends Controller
         $page = Input::get('page');
         $config = $this->handle->getPrizeConfig();
         if ($shareId!=$uid){
-            if (!empty($config)&&$this->handle->checkShareRecord($uid,$shareId,$page)){
+            if (!empty($config)&&!$this->handle->checkShareRecord($uid,$shareId,$page)){
                 $this->handle->addUserScore2($uid,$config->share_score);
                 $data = [
                     'user_id'=>$uid,
