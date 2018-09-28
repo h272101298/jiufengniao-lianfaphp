@@ -16,17 +16,22 @@ class WeChatController extends Controller
     }
     public function share()
     {
+        $shareId = Input::get('shareid');
         $uid = getRedisData(Input::get('token'));
+        $page = Input::get('page');
         $config = $this->handle->getPrizeConfig();
-        if (!empty($config)){
-            $this->handle->addUserScore2($uid,$config->share_score);
-            $data = [
-                'user_id'=>$uid,
-                'type'=>4,
-                'score'=>$config->share_score,
-                'remark'=>'分享获得'
-            ];
-            $this->handle->addScoreRecord(0,$data);
+        if ($shareId!=$uid){
+            if (!empty($config)&&$this->handle->checkShareRecord($uid,$shareId,$page)){
+                $this->handle->addUserScore2($uid,$config->share_score);
+                $data = [
+                    'user_id'=>$uid,
+                    'type'=>4,
+                    'score'=>$config->share_score,
+                    'remark'=>'分享获得'
+                ];
+                $this->handle->addScoreRecord(0,$data);
+                $this->handle->addShareRecord($uid,$shareId,$page);
+            }
         }
         return jsonResponse([
             'msg'=>'ok'

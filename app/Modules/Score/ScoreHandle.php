@@ -19,6 +19,7 @@ use App\Modules\Score\Model\ScoreProductDetailSnapshot;
 use App\Modules\Score\Model\ScoreProductStock;
 use App\Modules\Score\Model\ScoreRecord;
 use App\Modules\Score\Model\ScoreStockImage;
+use App\Modules\Score\Model\ShareRecord;
 use App\Modules\Score\Model\UserScore;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -322,5 +323,22 @@ trait ScoreHandle
             'count'=>$count,
             'data'=>$data
         ];
+    }
+    public function addShareRecord($user_id,$share_id,$page)
+    {
+        $record = new ShareRecord();
+        $record->user_id = $user_id;
+        $record->share_id = $share_id;
+        $record->page = $page;
+        if ($record->save()){
+            return true;
+        }
+        return false;
+    }
+    public function checkShareRecord($user_id,$share_id,$page)
+    {
+        return ShareRecord::where('user_id','=',$user_id)
+            ->where('share_id','=',$share_id)
+            ->where('page','=',$page)->count();
     }
 }
