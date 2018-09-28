@@ -580,7 +580,7 @@ class ProductController extends Controller
                             "value"=>$store->name
                         ],
                         "keyword3"=>[
-                            "value"=>$product->created_at
+                            "value"=>date('Y-m-d H:i:s',strtotime($product->created_at))
                         ],
                         "keyword4"=>[
                             "value"=>number_format($stock->origin_price,2)
