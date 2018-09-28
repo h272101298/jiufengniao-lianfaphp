@@ -559,22 +559,12 @@ class ProductController extends Controller
     public function addNotifyQueue()
     {
         $id = Input::get('id');
-        $type = Input::get('type');
         $product = $this->handle->getProductById($id);
         $stock = $this->handle->getStockByProductId($id);
         $lists = $this->handle->getNotifyList();
         $store = $this->handle->getStoreById($product->store_id);
-        switch ($type){
-            case 'hot':
-                $typeString = '热门推荐';
-                break;
-            case 'new':
-                $typeString = '新品推荐';
-                break;
-            case 'offer':
-                $typeString = '优惠放送';
-                break;
-        }
+        $name = Input::get('name','');
+        $intro = Input::get('intro','');
         if (!empty($lists)){
             foreach ($lists as $list){
                 $data = [
@@ -584,16 +574,22 @@ class ProductController extends Controller
                     "page"=>"pages/goods/detail/detail?id=".$id,
                     "data"=>[
                         "keyword1"=>[
-                            "value"=>$product->name
+                            "value"=>$name
                         ],
                         "keyword2"=>[
                             "value"=>$store->name
                         ],
                         "keyword3"=>[
-                            "value"=>$typeString
+                            "value"=>$product->created_at
                         ],
                         "keyword4"=>[
+                            "value"=>number_format($stock->origin_price,2)
+                        ],
+                        "keyword5"=>[
                             "value"=>number_format($stock->price,2)
+                        ],
+                        "keyword6"=>[
+                            "value"=>$intro
                         ]
                     ],
                     "emphasis_keyword"=>"keyword1.DATA"

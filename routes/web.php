@@ -64,7 +64,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('check/product','V1\ProductController@checkProduct')->middleware('permission:productReview');
         Route::get('shelf/product','V1\ProductController@shelfProduct')->middleware('permission:productShelf');
         Route::get('products','V1\ProductController@getProducts')->middleware(['checkStore','permission:productListAll|productListStore']);
-        Route::get('product/notify','V1\ProductController@addNotifyQueue')->middleware('permission:productListAll');
+        Route::post('product/notify','V1\ProductController@addNotifyQueue')->middleware('permission:productListAll');
         Route::get('type/products','V1\ProductController@getProductsByType')->middleware(['checkStore','permission:productListAll|productListStore']);
         Route::post('role','V1\SystemController@addRole')->middleware('permission:roleAdd');
         Route::get('roles','V1\SystemController@getRoles')->middleware('permission:roleList');
