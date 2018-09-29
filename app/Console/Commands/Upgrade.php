@@ -82,7 +82,7 @@ class Upgrade extends Command
 //            echo $exception->getMessage();
 //        }
         //更新 抽奖奖品头像
-        DB::select(' alter table prizes add `icon` VARCHAR(500) DEFAULT NULL ');
+        //DB::select(' alter table prizes add `icon` VARCHAR(500) DEFAULT NULL ');
 
     }
 }
