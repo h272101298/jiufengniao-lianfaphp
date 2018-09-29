@@ -9,6 +9,7 @@
 namespace App\Modules\Score;
 
 
+use App\Modules\Order\Model\OrderType;
 use App\Modules\Product\Model\CategoryDetail;
 use App\Modules\Product\Model\ProductCategory;
 use App\Modules\Score\Model\ExchangeRecord;
@@ -151,7 +152,7 @@ trait ScoreHandle
                 $product->cover = $stock->cover;
                 $product->score = $stock->score;
             }
-            $product->exchange = rand(0,19);
+            $product->exchange = OrderType::where('type','=','scoreOrder')->where('promotion_id','=',$product->id)->count();
         }
         return $products;
     }

@@ -440,7 +440,7 @@ class OrderController extends Controller
                 $orderType = [
                     'order_id'=>$order_id,
                     'type'=>'scoreOrder',
-                    'promotion_id'=>0
+                    'promotion_id'=>$stock->product_id
                 ];
                 $this->handle->addOrderType(0,$orderType);}
                 if ($this->handle->addAddressSnapshot($order_id, $addressSnapshot)){
