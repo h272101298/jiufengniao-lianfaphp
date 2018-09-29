@@ -72,6 +72,11 @@ class Upgrade extends Command
                   $amount->amount = $count;
                   $amount->available = $count;
                   $amount->save();
+              }else{
+                  $count = Order::where('store_id','=',$store->id)->whereNotIn('state',['canceled','created'])->sum('price');
+                  $amount->amount += $count;
+                  $amount->available += $count;
+                  $amount->save();
               }
           }
 //            //第三次 更新 增加商品推荐排序
