@@ -831,7 +831,7 @@ trait ProductHandle
     public function getHotList($page = 1, $limit = 10)
     {
         $count = HotList::count();
-        $list = HotList::limit($limit)->offset(($page - 1) * $limit)->get();
+        $list = HotList::orderBy('id','DESC')->limit($limit)->offset(($page - 1) * $limit)->get();
         return [
             'data' => $list,
             'count' => $count
@@ -841,7 +841,7 @@ trait ProductHandle
     public function getNewList($page = 1, $limit = 10)
     {
         $count = NewList::count();
-        $list = NewList::limit($limit)->offset(($page - 1) * $limit)->get();
+        $list = NewList::orderBy('id','DESC')->limit($limit)->offset(($page - 1) * $limit)->get();
         return [
             'data' => $list,
             'count' => $count

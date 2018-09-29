@@ -56,7 +56,6 @@ class SystemController extends Controller
             $scene .=$key.'='.$value.'&';
         }
         $scene = substr($scene,0,-1);
-//        dd($scene);
         $wx =  getWxXcx();
         $data = [
             'scene'=>$scene,

@@ -18,6 +18,7 @@ class CreatePrizesTable extends Migration
             $table->string('name');
             $table->integer('score');
             $table->integer('count');
+            $table->string('icon')->nullable();
             $table->integer('num')->default(0);
             $table->timestamps();
         });

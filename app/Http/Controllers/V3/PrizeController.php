@@ -46,7 +46,8 @@ class PrizeController extends Controller
             'name'=>$post->name?$post->name:'',
             'score'=>$post->score?$post->score:0,
             'count'=>$post->count?$post->count:0,
-            'num'=>$post->num?$post->num:0
+            'num'=>$post->num?$post->num:0,
+            'icon'=>$post->icon?$post->icon:''
         ];
         if ($this->handle->addPrize($id,$data)){
             return jsonResponse([
