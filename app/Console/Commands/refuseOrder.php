@@ -61,6 +61,15 @@ class refuseOrder extends Command
                     $list->state = 2;
                     $list->save();
                     Order::where('group_number','=',$order->group_number)->update(['state'=>'canceled']);
+                    $amount = StoreAmount::where('store_id','=',$order->store_id)->first();
+                    if (empty($amount)){
+//                        $count = Order::where('store_id','=',$store->id)->whereNotIn('state',['canceled','created'])->sum('price');
+                        $amount = new StoreAmount();
+                        $amount->store_id = $order->store_id;
+                    }
+                    $amount->amount -= $order->price;
+                    $amount->available -= $order->price;
+                    $amount->save();
                 }
             }
         }

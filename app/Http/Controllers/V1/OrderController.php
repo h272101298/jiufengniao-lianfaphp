@@ -643,6 +643,7 @@ class OrderController extends Controller
                         $this->handle->addOrder($order->id, $data);
                         $free = $this->handle->getGroupFree($order->user_id);
                         $this->handle->addGroupFree($order->user_id,$free+1);
+                        $this->handle->addStoreAmount($order->store_id,$order->price);
                     }
                 }
             }else{
@@ -681,6 +682,7 @@ class OrderController extends Controller
                         $this->handle->addOrder($order->id, $data);
                         $free = $this->handle->getGroupFree($order->user_id);
                         $this->handle->addGroupFree($order->user_id,$free+1);
+                        $this->handle->addStoreAmount($order->store_id,$order->price);
                     }
                 }
             }
