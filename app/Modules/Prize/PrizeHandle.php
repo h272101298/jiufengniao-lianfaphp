@@ -69,7 +69,7 @@ trait PrizeHandle
     }
     public function getPrizesArray()
     {
-        return Prize::where('count','!=','0')->orWhere('score','=',0)->get()->toArray();
+        return Prize::where('num','!=','0')->orWhere('score','=',0)->get()->toArray();
     }
 
 
