@@ -479,7 +479,7 @@ trait ProductHandle
         $stocks = Stock::where('product_id', '=', $product->id)->orderBy('price', 'DESC')->get();
         if (!empty($stocks)) {
             foreach ($stocks as $stock) {
-                $detail = explode($stock->product_detail,',');
+                $detail = explode(',',$stock->product_detail);
                 $detail = ProductDetailSnapshot::whereIn('id',$detail)->pluck('title')->toArray();
                 $stock->product_detail = implode(',',$detail);
                 $stock->images = StockImage::where('stock_id', '=', $stock->id)->pluck('url')->toArray();
