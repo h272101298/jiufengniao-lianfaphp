@@ -30,7 +30,7 @@ class WxNotify
         if (!empty($data['access_token'])){
             $this->accessToken = $data['access_token'];
         }else{
-            throw new Exception($data);
+            throw new Exception(json_encode($data));
         }
     }
     public function send($data)
