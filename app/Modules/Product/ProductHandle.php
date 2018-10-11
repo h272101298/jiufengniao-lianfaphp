@@ -476,7 +476,7 @@ trait ProductHandle
             $type_id = $swap->parent_id;
         } while ($type_id != 0);
         $product->typeArray = array_reverse($type);
-        $stocks = Stock::where('product_id', '=', $product->id)->orderBy('price', 'DESC')->get();
+        $stocks = Stock::where('product_id', '=', $product->id)->orderBy('price', 'ASC')->get();
         if (!empty($stocks)) {
             foreach ($stocks as $stock) {
                 $detail = explode(',',$stock->product_detail);
