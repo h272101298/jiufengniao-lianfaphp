@@ -455,7 +455,7 @@ trait ProductHandle
                 $product->price = $stock->price;
                 $product->origin_price = $stock->origin_price;
             } else {
-                $stock = Stock::where('product_id', '=', $product->id)->orderBy('price', 'DESC')->first();
+                $stock = Stock::where('product_id', '=', $product->id)->orderBy('price', 'ASC')->first();
                 $product->cover = $stock->cover;
                 $product->price = $stock->price;
                 $product->origin_price = $stock->origin_price;
