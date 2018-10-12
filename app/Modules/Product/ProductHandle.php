@@ -480,7 +480,7 @@ trait ProductHandle
         if (!empty($stocks)) {
             foreach ($stocks as $stock) {
                 $detail = explode(',',$stock->product_detail);
-                $detailData = ProductDetailSnapshot::select(['id','title'])->whereIn('id',$detail)->toArray();
+                $detailData = ProductDetailSnapshot::select(['id','title'])->whereIn('id',$detail)->get()->toArray();
                 $stock->product_detail = array_column($detailData,'title');
                 $stock->detail = array_column($detailData,'id');
                 $stock->images = StockImage::where('stock_id', '=', $stock->id)->pluck('url')->toArray();
