@@ -473,7 +473,9 @@ trait ProductHandle
         do {
             array_push($type, $type_id);
             $swap = ProductTypeBind::where('type_id', '=', $type_id)->first();
-            $type_id = $swap->parent_id;
+            if (!empty($swap)){
+                $type_id = $swap->parent_id;
+            }
         } while ($type_id != 0);
         $product->typeArray = array_reverse($type);
         $stocks = Stock::where('product_id', '=', $product->id)->orderBy('price', 'ASC')->get();
@@ -542,6 +544,11 @@ trait ProductHandle
             return $stock->id;
         }
         return false;
+    }
+    public function delStocksByIdArray($idArray){
+        StockImage::whereIn('stock_id',$idArray)->delete();
+        Stock::whereIn('id',$idArray)->delete();
+        return true;
     }
 
     public function addStockImage($id, $url)

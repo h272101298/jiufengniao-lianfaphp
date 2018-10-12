@@ -138,6 +138,7 @@ class ProductController extends Controller
         ];
         $stock = $post->stock;
         $norm = $post->norm;
+        $delStocks = $post->delStocks?$post->delStocks:null;
 //        dd($data);
         $product_id = $this->handle->addProduct($id,$data);
         if ($product_id){
@@ -178,6 +179,9 @@ class ProductController extends Controller
                 foreach ($images as $image){
                     $this->handle->addStockImage($stock_id,$image);
                 }
+            }
+            if (!empty($delStocks)){
+                $this->handle->delStocksByIdArray($delStocks);
             }
         }
         return jsonResponse([
