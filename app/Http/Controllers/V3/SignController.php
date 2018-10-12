@@ -122,6 +122,11 @@ class SignController extends Controller
     public function getSignConfigs()
     {
         $data = $this->handle->getSignConfigs();
+        if (!empty($data)){
+            foreach ($data as $datum){
+                $datum->reward = intval($datum->reward);
+            }
+        }
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data
