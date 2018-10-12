@@ -25,8 +25,7 @@ Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middle
 //Route::options('/{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('v1/{all}',function (){jsonResponse(['msg'=>'ok']);})->middleware('cross');
 Route::get('test',function (){
-    $handle = new \App\Modules\User();
-    dd($handle->getPrizesArray());
+    dd(\Illuminate\Support\Facades\Auth::check());
 });
 Route::post('test2','V1\SystemController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
