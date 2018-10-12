@@ -479,11 +479,13 @@ trait ProductHandle
         $stocks = Stock::where('product_id', '=', $product->id)->orderBy('price', 'ASC')->get();
         if (!empty($stocks)) {
             foreach ($stocks as $stock) {
-                $detail = explode(',',$stock->product_detail);
-                $detailData = ProductDetailSnapshot::select(['id','title'])->whereIn('id',$detail)->get()->toArray();
-                $stock->product_detail = array_column($detailData,'title');
-                $stock->detail = array_column($detailData,'id');
-                $stock->images = StockImage::where('stock_id', '=', $stock->id)->pluck('url')->toArray();
+                if ($stock->detail!='fixed'){
+                    $detail = explode(',',$stock->product_detail);
+                    $detailData = ProductDetailSnapshot::select(['id','title'])->whereIn('id',$detail)->get()->toArray();
+                    $stock->product_detail = array_column($detailData,'title');
+                    $stock->detail = array_column($detailData,'id');
+                    $stock->images = StockImage::where('stock_id', '=', $stock->id)->pluck('url')->toArray();
+                }
             }
         }
         $product->default = $stocks[0];

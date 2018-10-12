@@ -163,7 +163,7 @@ class ProductController extends Controller
                     'cover'=>$item['cover'],
                     'price'=>$item['price'],
                     'origin_price'=>$item['origin_price'],
-                    'product_detail'=>$detail
+                    'product_detail'=>is_array($detail)?implode(',',$detail):$detail
                 ];
                 $images = $item['images'];
                 $stockId = isset($item['id'])&&$item!=0?$item['id']:0;
