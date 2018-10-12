@@ -144,17 +144,22 @@ class ProductController extends Controller
             foreach ($stock as $item){
                 if ($norm!='fixed'){
                     $swap = [];
+                    $modifyBool = true;
                     if (isset($item['product_detail'])){
                         $detail = $item['product_detail'];
+                        $modifyBool = false;
                     }
-                    if (isset($item['detail'])){
-                        foreach ($item['detail'] as $detail){
-                            $detail_id = $this->handle->addProductCategorySnapshot($product_id,$detail);
-                            array_push($swap,$detail_id);
+                    if ($modifyBool){
+                        if (isset($item['detail'])){
+                            foreach ($item['detail'] as $detail){
+                                $detail_id = $this->handle->addProductCategorySnapshot($product_id,$detail);
+                                array_push($swap,$detail_id);
+                            }
+                            sort($swap);
+                            $detail = implode(',',$swap);
                         }
-                        sort($swap);
-                        $detail = implode(',',$swap);
                     }
+
                 }else{
                     $detail = 'fixed';
                 }
