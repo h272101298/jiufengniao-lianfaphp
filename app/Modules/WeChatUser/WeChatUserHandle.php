@@ -1,6 +1,7 @@
 <?php
 namespace App\Modules\WeChatUser;
 use App\Modules\Address\AddressHandle;
+use App\Modules\Prize\PrizeHandle;
 use App\Modules\Product\Model\Product;
 use App\Modules\Proxy\Model\ProxyList;
 use App\Modules\Proxy\Model\ProxyUser;
@@ -25,6 +26,7 @@ class WeChatUserHandle {
     use AddressHandle;
     use SettleApplyHandle;
     use ProxyHandle;
+    use PrizeHandle;
     //创建用户
     public function createUser($data)
     {
