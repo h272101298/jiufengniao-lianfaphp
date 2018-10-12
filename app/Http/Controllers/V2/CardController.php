@@ -61,7 +61,7 @@ class CardController extends Controller
     {
         $state = Input::get('state');
         $page = Input::get('page',1);
-        $limit = Input::get('limit');
+        $limit = Input::get('limit',10);
         $data = $this->handle->getCardPromotions(null,$state,$page,$limit);
         $this->handle->formatPromotions($data['data']);
         return jsonResponse([
