@@ -435,7 +435,7 @@ trait ProductHandle
         }
         $db->where('review', '=', 1)->where('state', '=', 1)->where('deleted', '=', 0);
         $count = $db->count();
-        $data = $db->select(['name', 'id', 'norm'])->limit($limit)->offset(($page-1)*$limit)->get();
+        $data = $db->select(['name', 'id', 'norm','sales_volume'])->limit($limit)->offset(($page-1)*$limit)->get();
         $data = $this->formatProductApi($data);
         return [
             'data' => $data,
