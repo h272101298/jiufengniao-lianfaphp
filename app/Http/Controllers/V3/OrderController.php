@@ -266,7 +266,7 @@ class OrderController extends Controller
                 $delivery = 0;
                 if ($item['express']==1){
                     $express = $this->handle->getStoreExpress($item['id']);
-                    $expressPrice+=$express->price;
+                    $expressPrice+=empty($express)?0:$express->price;
                     $delivery = 1;
                 }
                 $data = [
