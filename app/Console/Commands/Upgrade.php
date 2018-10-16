@@ -51,14 +51,14 @@ class Upgrade extends Command
 //            DB::select(' alter table bargain_promotions add `time` int DEFAULT 0');
 //            DB::select(' alter table stock_snapshots add `product` VARCHAR(50) DEFAULT NULL ');
 //            DB::select(' alter table proxy_applies add `notify_id` VARCHAR(194) DEFAULT NULL ');
-//            $snapshots = StockSnapshot::all();
-//            foreach ($snapshots as $snapshot){
-//                $product = Product::find($snapshot->product_id);
-//                if (!empty($product)&&empty($snapshot->product)){
-//                    $snapshot->product = $product->name;
-//                    $snapshot->save();
-//                }
-//            }
+            $snapshots = StockSnapshot::all();
+            foreach ($snapshots as $snapshot){
+                $product = Product::find($snapshot->product_id);
+                if (!empty($product)&&empty($snapshot->product)){
+                    $snapshot->product = $product->name;
+                    $snapshot->save();
+                }
+            }
 //            DB::select(' alter table orders add `delivery` tinyint(4) DEFAULT 0 ');
 //            DB::select(' alter table exchange_records add `score` int(11)  DEFAULT 0 ');
 //        //第二次更新
