@@ -124,7 +124,7 @@ class SignController extends Controller
         $data = $this->handle->getSignConfigs();
         if (count($data)!=0){
             foreach ($data as $datum){
-                $datum->reward = intval($datum->reward);
+                $datum['reward'] = intval($datum['reward']);
             }
         }
         return jsonResponse([
