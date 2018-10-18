@@ -58,7 +58,7 @@ class GroupBuyController extends Controller
         $limit = Input::get('limit',10);
         $state = Input::get('state',1);
         $data = $this->handle->getGroupBuyPromotions(0,null,null,'',0,$state,0,$page,$limit);
-        $this->handle->formatGroupBuyPromotions($data['data'],0,1);
+        $this->handle->formatGroupBuyPromotions($data['data'],0,1,0,1);
         return jsonResponse([
             'msg'=>'ok',
             'data'=>$data

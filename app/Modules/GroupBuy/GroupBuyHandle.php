@@ -72,7 +72,7 @@ trait GroupBuyHandle
             'count'=>$count
         ];
     }
-    public function formatGroupBuyPromotions(&$promotions,$store=0,$product=0,$stock=0)
+    public function formatGroupBuyPromotions(&$promotions,$store=0,$product=0,$stock=0,$price=0)
     {
         if (empty($promotions)){
             return [];
@@ -98,6 +98,10 @@ trait GroupBuyHandle
                     $stock->images = StockImage::where('stock_id','=',$stock->stock_id)->get();
                 }
                 $promotion->stocks = $stocks;
+            }
+            if ($price){
+                $price = GroupBuyStock::where('group_id','=',$promotion->id)->orderBy('group_price','ASC')->pluck('group_price')->first();
+                $promotion->group_price = $price;
             }
         }
         return $promotions;

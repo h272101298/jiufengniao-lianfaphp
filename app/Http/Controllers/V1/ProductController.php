@@ -98,6 +98,23 @@ class ProductController extends Controller
             'msg'=>'ok'
         ],200);
     }
+    public function editProductCategory(Request $post)
+    {
+        $id = $post->id?$post->id:0;
+        $title = $post->title;
+        $details = $post->detailArray;
+        if ($this->handle->editProductCategory($id,$title)) {
+            if (!empty($details)){
+//                dd($details);
+                foreach ($details as $detail){
+                    $this->handle->editCategoryDetail($detail['id'],$detail['title'],$id);
+                }
+            }
+        }
+        return jsonResponse([
+            'msg'=>'ok'
+        ],200);
+    }
     public function delProductCategory()
     {
         $id = Input::get('id');

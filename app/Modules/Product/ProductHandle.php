@@ -240,6 +240,29 @@ trait ProductHandle
         }
         return false;
     }
+    public function editProductCategory($id,$title)
+    {
+        $category = $id?ProductCategory::find($id):new ProductCategory();
+        $category->title = $title;
+        if ($category->save()){
+            return true;
+        }
+        return false;
+    }
+    public function editCategoryDetail($id,$title,$category_id=0)
+    {
+        if ($id) {
+            $detail = CategoryDetail::find($id);
+        } else {
+            $detail = new CategoryDetail();
+            $detail->category_id = $category_id;
+        }
+        $detail->title = $title;
+        if ($detail->save()){
+            return true;
+        }
+        return false;
+    }
 
     public function getProductCategories($store_id = 0, $page = 1, $limit = 10, $title = '')
     {
