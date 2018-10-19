@@ -49,7 +49,7 @@ class WxPay
             'spbill_create_ip' =>$ip
         ];
         $parameters['sign'] = $this->getSign($parameters);
-        $xmlData = iconv('UTF-8','ISO8859-1',$this->arrayToXml($parameters));
+        $xmlData = $this->arrayToXml($parameters);
         $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData, $url, 60));
 //        dd($parameters);
         return $unifiedOrder;
