@@ -27,13 +27,13 @@ class WxPay
         $this->key = $key;
     }
 
-    public function pay($out_trade_no,$body,$total_fee,$notifyUrl)
+    public function pay($out_trade_no,$body,$total_fee,$notifyUrl,$ip)
     {
-        $return = $this->weixinapp($out_trade_no,$body,$total_fee,$notifyUrl);
+        $return = $this->weixinapp($out_trade_no,$body,$total_fee,$notifyUrl,$ip);
         return $return;
     }
 
-    private function unifiedOrder($out_trade_no,$body,$total_fee,$notifyUrl)
+    private function unifiedOrder($out_trade_no,$body,$total_fee,$notifyUrl,$ip)
     {
         $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
         $parameters = [
@@ -45,8 +45,8 @@ class WxPay
             'total_fee' => $total_fee,
             'notify_url' => $notifyUrl,
             'openid' => $this->openid,
-            'trade_type' => 'JSAPI'
-//            'spbill_create_ip' =>
+            'trade_type' => 'JSAPI',
+            'spbill_create_ip' =>$ip
         ];
         $parameters['sign'] = $this->getSign($parameters);
         $xmlData = $this->arrayToXml($parameters);
@@ -116,9 +116,9 @@ class WxPay
         return $val;
     }
 
-    private function weixinapp($out_trade_no,$body,$total_fee,$notifyUrl)
+    private function weixinapp($out_trade_no,$body,$total_fee,$notifyUrl,$ip)
     {
-        $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee,$notifyUrl);
+        $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee,$notifyUrl,$ip);
 //        dd($unifiedOrder);
         if (!isset($unifiedOrder['prepay_id'])){
             var_dump($unifiedOrder);
