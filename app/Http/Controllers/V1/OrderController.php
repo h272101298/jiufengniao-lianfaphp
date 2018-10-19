@@ -308,7 +308,7 @@ class OrderController extends Controller
             }
             //$price = Order::where('group_number', '=', $order_id)->sum('price');
             $wxPay = getWxPay($user->open_id);
-            $data = $wxPay->pay($order_id, '购买商品', ($order->price) * 100, $url);
+            $data = $wxPay->pay($order_id, '购买商品', ($order->price) * 100, $url,$post->getClientIp());
             $notify_id = $wxPay->getPrepayId();
             Order::where('number', '=', $order_id)->update(['notify_id' => $notify_id]);
             return response()->json([
