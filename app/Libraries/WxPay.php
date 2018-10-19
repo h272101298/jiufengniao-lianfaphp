@@ -51,7 +51,7 @@ class WxPay
         $parameters['sign'] = $this->getSign($parameters);
         $xmlData = $this->arrayToXml($parameters);
         $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData, $url, 60));
-//        dd($parameters);
+        dd($parameters);
         return $unifiedOrder;
     }
 
