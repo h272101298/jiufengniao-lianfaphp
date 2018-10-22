@@ -130,6 +130,39 @@ trait ProductHandle
     {
         return ProductTypeBind::where('parent_id','=',$type_id)->count();
     }
+    public function getProductTypesParents()
+    {
+        $idArray = ProductTypeBind::where('parent_id', '=', 0)->pluck('type_id')->toArray();
+        $data = ProductType::whereIn('id',$idArray)->get()->toArray();
+        return $data;
+    }
+    public function getProductTypesTreeByParent($parent)
+    {
+//        $level1 = ProductTypeBind::where('parent_id', '=', 0)->pluck('type_id')->toArray();
+        $level2 = ProductTypeBind::where('parent_id','=', $parent)->pluck('type_id')->toArray();
+        $level3 = ProductTypeBind::whereIn('parent_id', $level2)->pluck('type_id')->toArray();
+        $data = ProductType::all()->toArray();
+        $bind = ProductTypeBind::all()->toArray();
+        $bind = array_column($bind, 'parent_id', 'type_id');
+        for ($i = 0; $i < count($data); $i++) {
+            $data[$i]['parent_id'] = $bind[$data[$i]['id']];
+        }
+        $level2 = array_filter($data, function ($item) use ($level2) {
+            return in_array($item['id'], $level2);
+        });
+        $level2 = array_merge($level2);
+        $level3 = array_filter($data, function ($item) use ($level3) {
+            return in_array($item['id'], $level3);
+        });
+        $level3 = array_merge($level3);
+        for ($i = 0; $i < count($level2); $i++) {
+            $id = $level2[$i]['id'];
+            $level2[$i]['child'] = array_filter($level3, function ($item) use ($id) {
+                return $item['parent_id'] == $id;
+            });
+        }
+        return $level2;
+    }
     public function getProductTypesTree()
     {
         $level1 = ProductTypeBind::where('parent_id', '=', 0)->pluck('type_id')->toArray();

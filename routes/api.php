@@ -22,6 +22,8 @@ Route::group(['prefix'=>'v1'],function (){
     Route::post('login','V1\WeChatController@login');
     Route::get('test','V1\WeChatController@test');
     Route::get('product/types','V1\ProductController@getProductTypesTree');
+    Route::get('product/types/parents','V1\ProductController@getProductTypesParents');
+    Route::get('product/types/tree','V1\ProductController@getProductTypesTreeByParent');
     Route::get('documents','V1\SystemController@getDocuments');
     Route::get('adverts','V1\AdvertController@getAdverts');
     Route::get('recommend/list','V1\ProductController@getRecommendList');

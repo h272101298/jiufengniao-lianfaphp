@@ -152,7 +152,6 @@ class StoreController extends Controller
     }
     public function addExpressConfig(Request $post)
     {
-//        dd($post->businessId);
         if ($this->handle->addStoreExpressConfig(getStoreId(),$post->businessId,$post->apiKey)) {
             return jsonResponse([
                 'msg'=>'ok'

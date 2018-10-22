@@ -84,6 +84,23 @@ class ProductController extends Controller
             'data'=>$data
         ]);
     }
+    public function getProductTypesParents()
+    {
+        $data = $this->handle->getProductTypesParents();
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function getProductTypesTreeByParent()
+    {
+        $id = Input::get('id');
+        $data = $this->handle->getProductTypesTreeByParent($id);
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
     public function addProductCategory(ProductCategoryPost $post)
     {
         $categories = $post->categories;
