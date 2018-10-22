@@ -102,11 +102,10 @@ trait StoreHandle
         return false;
     }
 
-    public function addStore($id = 0, $user_id, $data)
+    public function addStore($user_id, $data)
     {
-        if ($id) {
-            $store = Store::find($id);
-        } else {
+        $store = Store::where('user_id','=',$user_id)->first();
+        if (empty($store)){
             $store = new Store();
             $store->user_id = $user_id;
         }

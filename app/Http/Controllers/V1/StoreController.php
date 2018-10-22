@@ -100,18 +100,11 @@ class StoreController extends Controller
     }
     public function addStore(StorePost $post)
     {
-        $id = $post->id?$post->id:0;
-        if ($this->handle->getUserStoreCount(Auth::id(),$id)!=0){
-            return jsonResponse([
-                'msg'=>'不能重复开店！'
-            ],400);
-        }
-
         $data = [
             'name'=>$post->name,
             'manager'=>$post->manager
         ];
-        if ($this->handle->addStore($id,Auth::id(),$data)){
+        if ($this->handle->addStore(Auth::id(),$data)){
             setStoreId(Auth::id());
             return jsonResponse([
                 'msg'=>'ok'
