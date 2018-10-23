@@ -41,6 +41,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('clearQueues')->everyFiveMinutes();
         $schedule->command('checkGroupBuy')->everyMinute();
         $schedule->command('refuseOrder')->everyFiveMinutes();
+        $schedule->command('receiveOrder')->dailyAt('3:00');
     }
 
     /**
