@@ -346,6 +346,7 @@ class OrderController extends Controller
                                 ];
                                 $this->handle->addStockSnapshot($order_id, $stockData);
                             }
+                            $this->handle->addProduct($product->id,['sales_volume'=>$product->sales_volume+$stock['number']]);
                         }
                         if (isset($item['coupon_id'])&&$item['coupon_id']!=0){
                             $coupon = $this->handle->getUserCoupon($item['coupon_id']);
