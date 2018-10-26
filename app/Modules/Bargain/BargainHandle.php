@@ -183,7 +183,6 @@ trait BargainHandle
             return [];
         }
         foreach ($records as $record){
-            dd($records);
             $record->user = WeChatUser::find($record->user_id);
             $price = BargainRecord::where('promotion','=',$record->id)->sum('price');
             $record->price = number_format($price,2);
