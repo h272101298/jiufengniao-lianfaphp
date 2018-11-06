@@ -122,7 +122,6 @@ class ProductController extends Controller
         $details = $post->detailArray;
         if ($this->handle->editProductCategory($id,$title)) {
             if (!empty($details)){
-//                dd($details);
                 foreach ($details as $detail){
                     $this->handle->editCategoryDetail($detail['id'],$detail['title'],$id);
                 }
@@ -173,7 +172,6 @@ class ProductController extends Controller
         $stock = $post->stock;
         $norm = $post->norm;
         $delStocks = $post->delStocks?$post->delStocks:null;
-//        dd($data);
         $product_id = $this->handle->addProduct($id,$data);
         if ($product_id){
             foreach ($stock as $item){
@@ -207,7 +205,6 @@ class ProductController extends Controller
                 ];
                 $images = $item['images'];
                 $stockId = isset($item['id'])&&$item!=0?$item['id']:0;
-//                $this->handle->delStocks($product_id);
                 $stock_id = $this->handle->addStock($stockId,$stockData);
                 $this->handle->delStockImages($stock_id);
                 foreach ($images as $image){

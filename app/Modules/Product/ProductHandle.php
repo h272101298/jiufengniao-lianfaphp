@@ -935,11 +935,13 @@ trait ProductHandle
         foreach ($list as $item) {
             $stock = Stock::where('product_id', '=', $item->product_id)->orderBy('price', 'ASC')->first();
             $product = Product::find($item->product_id);
-            $item->product_name = $product->name;
-            $item->sales_volume = $product->sales_volume;
-            $item->cover = $stock->cover;
-            $item->price = $stock->price;
-            $item->origin_price = $stock->origin_price;
+            if ($product){
+                $item->product_name = $product->name;
+                $item->sales_volume = $product->sales_volume;
+                $item->cover = $stock->cover;
+                $item->price = $stock->price;
+                $item->origin_price = $stock->origin_price;
+            }
         }
         return $list;
     }
