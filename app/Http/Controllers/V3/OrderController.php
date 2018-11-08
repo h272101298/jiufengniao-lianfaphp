@@ -11,6 +11,8 @@ use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class OrderController extends Controller
 {
@@ -488,5 +490,57 @@ class OrderController extends Controller
                 'msg'=>$exception->getMessage()
             ],400);
         }
+    }
+    public function getOrderQrCode()
+    {
+        $id = Input::get('order_id');
+        $qrcode = QrCode::format('png')->size(255)->generate(json_encode(['order_id'=>$id]));
+        return response()->make($qrcode,200,['content-type'=>'image/gif']);
+    }
+    public function getOrder()
+    {
+        $id = Input::get('id');
+        $order = $this->handle->getOrderByNumber($id);
+        $this->handle->formatOrder($order);
+        return jsonResponse([
+            'msg' => 'ok',
+            'data' => $order
+        ]);
+    }
+    public function confirmOrder()
+    {
+        $id = Input::get('id');
+        $user_id = getRedisData(Input::get('token'));
+        $order = $this->handle->getOrderByNumber($id);
+        if (!$this->handle->checkBind($user_id,$order->store_id)) {
+            return jsonResponse([
+                'msg' => '无权操作！'
+            ], 401);
+        }
+        $data = [
+            'state' => 'finished'
+        ];
+        $config = $this->handle->getScoreConfig();
+        if (!empty($config)&&$config->state!=0){
+            $score = floor(($config->ratio/100)*$order->price);
+            if ($score!=0){
+                $data = [
+                    'user_id'=>$order->user_id,
+                    'type'=>'1',
+                    'score'=>$score,
+                    'remark'=>'订单获得'
+                ];
+                $this->handle->addScoreRecord(0,$data);
+                $this->handle->addUserScore2($order->user_id,$score);
+            }
+        }
+        if ($this->handle->addOrder($order->id, $data)) {
+            return jsonResponse([
+                'msg' => 'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg' => '操作失败！'
+        ]);
     }
 }

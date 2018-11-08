@@ -17,6 +17,7 @@ use App\Modules\Store\Model\Store;
 use App\Modules\Store\Model\StoreAmount;
 use App\Modules\Store\Model\StoreCategory;
 use App\Modules\Store\Model\StoreExpress;
+use App\Modules\Store\Model\StoreUserBind;
 use App\Modules\Store\Model\StoreWithdraw;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -303,5 +304,29 @@ trait StoreHandle
             $withdraw->store = Store::find($withdraw->store_id);
         }
         return $withdraws;
+    }
+    public function bindUser($user_id,$store_id)
+    {
+        $bind = StoreUserBind::where('user_id','=',$user_id)
+            ->where('store_id','=',$store_id)->first();
+        if (empty($bind)){
+            $bind = new StoreUserBind();
+            $bind->user_id = $user_id;
+            $bind->store_id = $store_id;
+            $bind->save();
+        }
+        return true;
+    }
+    public function unBindUser($user_id)
+    {
+        return StoreUserBind::where('user_id','=',$user_id)->delete();
+    }
+    public function checkBind($user_id,$store_id=0)
+    {
+        $db = DB::table('store_user_binds')->where('user_id','=',$user_id);
+        if ($store_id){
+            $db->where('store_id','=',$store_id);
+        }
+        return $db->count();
     }
 }

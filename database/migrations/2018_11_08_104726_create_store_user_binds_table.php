@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePrizeConfigsTable extends Migration
+class CreateStoreUserBindsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreatePrizeConfigsTable extends Migration
      */
     public function up()
     {
-        Schema::create('prize_configs', function (Blueprint $table) {
+        Schema::create('store_user_binds', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('share_score')->default(0);
-            $table->unsignedInteger('register_score')->default(0);
-            $table->unsignedInteger('prize_score')->default(0);
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('store_id');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreatePrizeConfigsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prize_configs');
+        Schema::dropIfExists('store_user_binds');
     }
 }

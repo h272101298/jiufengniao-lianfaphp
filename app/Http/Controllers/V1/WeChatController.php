@@ -52,7 +52,8 @@ class WeChatController extends Controller
                         'address'=>$this->handle->getDefaultAddress($user->id),
                         'apply'=>$this->handle->getUserSettleApplyCount($token),
                         'is_proxy'=>$this->handle->checkProxyUser($user->id),
-                        'proxy_apply'=>$this->handle->getUserProxyApplyCount($user->id)
+                        'proxy_apply'=>$this->handle->getUserProxyApplyCount($user->id),
+                        'bind'=>$this->handle->checkBind($user->id)
                     ]
                 ]);
             }else{
@@ -94,7 +95,8 @@ class WeChatController extends Controller
                             'apply'=>0,
                             'address'=>'',
                             'is_proxy'=>0,
-                            'proxy_apply'=>0
+                            'proxy_apply'=>0,
+                            'bind'=>0
                         ]
                     ]);
                 }

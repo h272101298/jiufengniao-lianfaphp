@@ -125,4 +125,7 @@ Route::group(['prefix'=>'v3'],function (){
     Route::post('prize','V3\PrizeController@prize');
     Route::get('prizes','V3\PrizeController@getPrizes');
     Route::post('share','V3\WeChatController@share');
+    Route::get('order','V3\OrderController@getOrder');
+    Route::get('order/qrcode','V3\OrderController@getOrderQrCode');
+    Route::get('order/confirm','V3\OrderController@confirmOrder');
 });

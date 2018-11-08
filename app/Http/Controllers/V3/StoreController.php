@@ -93,4 +93,24 @@ class StoreController extends Controller
             'msg'=>'ok'
         ]);
     }
+    public function bindUser()
+    {
+        $user_id = Input::get('user_id');
+        $store_id = Input::get('store_id');
+        if ($this->handle->bindUser($user_id,$store_id)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+    }
+    public function unBindUser()
+    {
+        $user_id = Input::get('user_id');
+        $store_id = Input::get('store_id');
+        if ($this->handle->unBindUser($user_id,$store_id)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+    }
 }

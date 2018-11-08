@@ -175,4 +175,6 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('prizes','V3\PrizeController@getPrizes');
     Route::post('prize','V3\PrizeController@addPrize');
     Route::delete('prize','V3\PrizeController@delPrize');
+    Route::get('bind/user','V3\StoreController@bindUser');
+    Route::get('unbind/user','V3\StoreController@unBindUser');
 });
