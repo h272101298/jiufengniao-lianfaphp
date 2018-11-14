@@ -25,7 +25,7 @@ Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middle
 //Route::options('/{all}',function (){return jsonResponse(['msg'=>'ok']);})->middleware('cross');
 //Route::options('v1/{all}',function (){jsonResponse(['msg'=>'ok']);})->middleware('cross');
 Route::get('test',function (){
-    dd(\Illuminate\Support\Facades\Auth::check());
+    return strtotime(date('Y-1-1'));
 });
 Route::post('test2','V1\SystemController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){

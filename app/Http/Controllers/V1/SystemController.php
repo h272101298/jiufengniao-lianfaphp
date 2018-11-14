@@ -250,9 +250,9 @@ class SystemController extends Controller
             'todaySalesCount'=>$this->handle->countSales(0,date('Y-m-d')),
             'todayUserCount'=>$this->handle->countWeChatUsers(date('Y-m-d')),
             'reviewProductCount'=>$this->handle->countProduct($storeId,0,1),
-            'storeAmount'=>$amount->amount,
+            'storeAmount'=>$amount?$amount->amount:0,
             'withdrawAmount'=>$this->handle->countStoreWithdraw($storeId),
-            'amount'=>$amount->available,
+            'amount'=>$amount?$amount->available:0,
             'loginCount'=>getRedisData('LoginCount',0)
         ];
         return jsonResponse([
