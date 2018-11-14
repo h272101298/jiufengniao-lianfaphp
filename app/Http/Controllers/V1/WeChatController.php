@@ -172,8 +172,8 @@ class WeChatController extends Controller
             'city'=>implode(',',$post->city),
             'name'=>$post->name,
             'phone'=>$post->phone,
-            'address'=>$post->address,
-            'zip_code'=>$post->zipCode
+            'address'=>$post->address?$post->address:'',
+            'zip_code'=>$post->zipCode?$post->zipCode:''
         ];
         if ($this->handle->addAddress($token,$data,$id)){
             return \jsonResponse([
