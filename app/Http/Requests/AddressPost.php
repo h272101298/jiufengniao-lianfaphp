@@ -28,9 +28,9 @@ class AddressPost extends FormRequest
             'name'=>'required',
             'phone'=>'required',
             'zipCode'=>'required',
-            'city'=>'required|array',
-            'city.*'=>'required|string',
-            'address'=>'required',
+            'city'=>'nullable|array',
+            'city.*'=>'nullable|string',
+            'address'=>'nullable',
             'id'=>'nullable'
         ];
     }
