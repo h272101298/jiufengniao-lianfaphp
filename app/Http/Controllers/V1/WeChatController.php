@@ -164,7 +164,7 @@ class WeChatController extends Controller
     /**
      * 添加收货地址，需登录
      */
-    public function createAddress(AddressPost $post)
+    public function createAddress(Request $post)
     {
         $token = $post->token;
         $id = $post->id?$post->id:0;
