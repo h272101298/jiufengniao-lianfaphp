@@ -169,7 +169,7 @@ class WeChatController extends Controller
         $token = $post->token;
         $id = $post->id?$post->id:0;
         $data = [
-            'city'=>implode(',',$post->city),
+            'city'=>empty($post->city)?'':implode(',',$post->city),
             'name'=>$post->name,
             'phone'=>$post->phone,
             'address'=>$post->address?$post->address:'',
