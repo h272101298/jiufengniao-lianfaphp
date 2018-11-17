@@ -177,12 +177,12 @@ class ProductController extends Controller
             foreach ($stock as $item){
                 if ($norm!='fixed'){
                     $swap = [];
-//                    $modifyBool = true;
-//                    if (isset($item['product_detail'])){
-//                        $detail = $item['product_detail'];
-//                        $modifyBool = false;
-//                    }
-//                    if ($modifyBool){
+                    $modifyBool = true;
+                    if (isset($item['product_detail'])&&count($item['product_detail'])!=0){
+                        $detail = $item['product_detail'];
+                        $modifyBool = false;
+                    }
+                    if ($modifyBool){
                         if (isset($item['detail'])){
                             foreach ($item['detail'] as $detail){
                                 $detail_id = $this->handle->addProductCategorySnapshot($product_id,$detail);
@@ -191,6 +191,71 @@ class ProductController extends Controller
                             sort($swap);
                             $detail = implode(',',$swap);
                         }
+                    }
+
+                }else{
+                    $detail = 'fixed';
+                }
+                $stockData = [
+                    'product_id'=>$product_id,
+                    'cover'=>$item['cover'],
+                    'price'=>$item['price'],
+                    'origin_price'=>$item['origin_price'],
+                    'product_detail'=>is_array($detail)?implode(',',$detail):$detail
+                ];
+                $images = $item['images'];
+                $stockId = isset($item['id'])&&$item!=0?$item['id']:0;
+                $stock_id = $this->handle->addStock($stockId,$stockData);
+                $this->handle->delStockImages($stock_id);
+                foreach ($images as $image){
+                    $this->handle->addStockImage($stock_id,$image);
+                }
+            }
+            if (!empty($delStocks)){
+                $this->handle->delStocksByIdArray($delStocks);
+            }
+        }
+        return jsonResponse([
+            'msg'=>'ok'
+        ]);
+    }
+    public function modifyProduct(Request $post)
+    {
+        $id = $post->id?$post->id:0;
+        $data = [
+            'store_id'=>getStoreId(),
+            'name'=>$post->name,
+            'detail'=>$post->detail,
+            'brokerage'=>$post->brokerage,
+            'express'=>0,
+            'express_price'=>0,
+            'share_title'=>$post->share_title,
+            'share_detail'=>$post->share_detail,
+            'type_id'=>$post->type_id,
+            'norm'=>$post->norm,
+        ];
+        $stock = $post->stock;
+        $norm = $post->norm;
+        $delStocks = $post->delStocks?$post->delStocks:null;
+        $product_id = $this->handle->addProduct($id,$data);
+        if ($product_id){
+            foreach ($stock as $item){
+                if ($norm!='fixed'){
+                    $swap = [];
+//                    $modifyBool = true;
+//                    if (isset($item['product_detail'])){
+//                        $detail = $item['product_detail'];
+//                        $modifyBool = false;
+//                    }
+//                    if ($modifyBool){
+                    if (isset($item['detail'])){
+                        foreach ($item['detail'] as $detail){
+                            $detail_id = $this->handle->addProductCategorySnapshot($product_id,$detail);
+                            array_push($swap,$detail_id);
+                        }
+                        sort($swap);
+                        $detail = implode(',',$swap);
+                    }
 //                    }
 
                 }else{
