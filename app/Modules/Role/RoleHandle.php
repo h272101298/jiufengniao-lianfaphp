@@ -114,9 +114,14 @@ trait RoleHandle
         $role = Role::findOrFail($id);
         if ($role->delete()){
             RolePermission::where('role_id','=',$id)->delete();
+            RoleUser::where('role_id','=',$id)->delete();
             return true;
         }
         return false;
+    }
+    public function checkRoleUser($id)
+    {
+        return RoleUser::where('role_id','=',$id)->count();
     }
     public function createPermission($id=0,$data)
     {

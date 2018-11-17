@@ -139,6 +139,11 @@ class SystemController extends Controller
     public function delRole()
     {
         $id = Input::get('id');
+        if ($this->handle->checkRoleUser($id)){
+            return jsonResponse([
+                'msg'=>'该角色已绑定用户！'
+            ],400);
+        }
         if($this->handle->delRole($id)){
             return jsonResponse([
                 'msg'=>'ok'
