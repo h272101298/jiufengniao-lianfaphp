@@ -178,8 +178,9 @@ class ProductController extends Controller
                 if ($norm!='fixed'){
                     $swap = [];
                     $modifyBool = true;
+                    $swapDetail = null;
                     if (isset($item['product_detail'])&&count($item['product_detail'])!=0){
-                        $detail = $item['product_detail'];
+                        $swapDetail = $item['product_detail'];
                         $modifyBool = false;
                     }
                     if ($modifyBool){
@@ -191,6 +192,13 @@ class ProductController extends Controller
                             sort($swap);
                             $detail = implode(',',$swap);
                         }
+                    }else{
+                        foreach ($swapDetail as $detail){
+                            $detail_id = $this->handle->addProductCategorySnapshot($product_id,$detail);
+                            array_push($swap,$detail_id);
+                        }
+                        sort($swap);
+                        $detail = implode(',',$swap);
                     }
 
                 }else{
