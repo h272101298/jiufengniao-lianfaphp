@@ -183,15 +183,16 @@ class ProductController extends Controller
                         $swapDetail = $item['product_detail'];
                         $modifyBool = false;
                     }
-                    if ($modifyBool){
-                        if (isset($item['detail'])){
-                            foreach ($item['detail'] as $detail){
-                                $detail_id = $this->handle->addProductCategorySnapshot($product_id,$detail);
-                                array_push($swap,$detail_id);
+                    if ($modifyBool) {
+                        if (isset($item['detail'])) {
+                            foreach ($item['detail'] as $detail) {
+                                $detail_id = $this->handle->addProductCategorySnapshot($product_id, $detail);
+                                array_push($swap, $detail_id);
                             }
                             sort($swap);
-                            $detail = implode(',',$swap);
+                            $detail = implode(',', $swap);
                         }
+//                    }
                     }else{
                         foreach ($swapDetail as $detail){
                             $detail_id = $this->handle->addProductCategorySnapshot($product_id,$detail);
@@ -200,7 +201,6 @@ class ProductController extends Controller
                         sort($swap);
                         $detail = implode(',',$swap);
                     }
-
                 }else{
                     $detail = 'fixed';
                 }

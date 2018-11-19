@@ -539,9 +539,10 @@ trait ProductHandle
             foreach ($stocks as $stock) {
                 if ($stock->detail!='fixed'){
                     $detail = explode(',',$stock->product_detail);
-                    $detailData = ProductDetailSnapshot::select(['id','title'])->whereIn('id',$detail)->get()->toArray();
-                    $stock->product_detail = array_column($detailData,'id');
-                    $stock->detail_title = array_column($detailData,'title');
+                    $detailData = ProductDetailSnapshot::select(['title'])->whereIn('id',$detail)->get()->toArray();
+                    $swap = CategoryDetail::select(['id','title'])->whereIn('title',$detailData)->get()->toArray();
+                    $stock->product_detail = array_column($swap,'id');
+                    $stock->detail_title = array_column($swap,'title');
                     $stock->images = StockImage::where('stock_id', '=', $stock->id)->pluck('url')->toArray();
                 }
             }
