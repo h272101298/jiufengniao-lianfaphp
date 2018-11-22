@@ -273,6 +273,7 @@ trait OrderHandle
             $swap = [];
             $user = WeChatUser::find($orders[$i]->user_id);
             $address = AddressSnapshot::where('order_id','=',$orders[$i]->id)->first();
+            $checker = WeChatUser::find($orders[$i]->checker);
             $swap['id'] = $i+1;
             $swap['number'] = $orders[$i]->number.' ';
             $swap['user'] = $user?filterEmoji($user->nickname):'';
@@ -282,7 +283,8 @@ trait OrderHandle
             $swap['time'] = $orders[$i]->created_at;
             $swap['name'] = !empty($address)?$address->name:"";
             $swap['phone'] = !empty($address)?$address->phone.' ':"";
-            $swap['address'] = !empty($address)?$address->address:"";
+            $swap['checker'] = !empty($checker)?filterEmoji($checker->nickname):'';
+            $swap['check_time'] = date('Y-m-d H:i:s',$orders[$i]->check_time);
             array_push($data,$swap);
         }
         return $data;

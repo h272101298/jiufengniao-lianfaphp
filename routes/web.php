@@ -170,6 +170,7 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('pickup/config','V3\SystemController@getPickUpConfig');
     Route::post('notify/promotion','V3\SystemController@notifyPromotion');
     Route::get('export/orders','V3\ExcelController@exportOrder');
+    Route::get('new/export/orders','V3\ExcelController@newExportOrder');
     Route::post('prize/config','V3\PrizeController@addPrizeConfig');
     Route::get('prize/config','V3\PrizeController@getPrizeConfig');
     Route::get('prizes','V3\PrizeController@getPrizes');

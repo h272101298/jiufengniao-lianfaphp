@@ -518,7 +518,9 @@ class OrderController extends Controller
             ], 401);
         }
         $data = [
-            'state' => 'finished'
+            'state' => 'finished',
+            'checker'=>$user_id,
+            'check_time'=>time()
         ];
         $config = $this->handle->getScoreConfig();
         if (!empty($config)&&$config->state!=0){
