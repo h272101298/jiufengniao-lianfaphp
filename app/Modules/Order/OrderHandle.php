@@ -284,7 +284,7 @@ trait OrderHandle
             $swap['name'] = !empty($address)?$address->name:"";
             $swap['phone'] = !empty($address)?$address->phone.' ':"";
             $swap['checker'] = !empty($checker)?filterEmoji($checker->nickname):'';
-            $swap['check_time'] = date('Y-m-d H:i:s',$orders[$i]->check_time);
+            $swap['check_time'] = $orders[$i]->check_time==0?'':date('Y-m-d H:i:s',$orders[$i]->check_time);
             array_push($data,$swap);
         }
         return $data;
