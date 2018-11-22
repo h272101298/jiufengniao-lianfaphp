@@ -395,12 +395,14 @@ trait OrderHandle
             $path.$config->ssl_key);
         if ($data['return_code']=='FAIL'){
             $refuse->state = 3;
+            $refuse->remark = json_encode($data);
             $refuse->save();
             //var_dump($data);
             return false;
         }else{
             if ($data['result_code']=='FAIL'){
                 $refuse->state = 3;
+                $refuse->remark = json_encode($data);
                 $refuse->save();
                 //var_dump($data);
                 return false;
