@@ -532,23 +532,25 @@ class OrderController extends Controller
     public function cancelOrder()
     {
         $id = Input::get('id');
-        $remark = Input::get('remark','');
+        $remark = Input::get('remark');
         $order = $this->handle->getOrderByNumber($id);
-        if (!in_array($order->state, ['created', 'paid'])) {
-            return jsonResponse([
-                'msg' => '当前状态不能取消！'
-            ], 400);
-        }
-        if ($order->state == 'paid') {
+//        if (!in_array($order->state, ['created', 'paid'])) {
+//            return jsonResponse([
+//                'msg' => '当前状态不能取消！'
+//            ], 400);
+//        }
+        if ($order->state != 'created') {
+            if ($order->state=='paid'){
+                $remark = '支付状态退款！';
+            }
             $data = [
                 'store_id' => $order->store_id,
-                'remark' => '支付状态退款！'
+                'remark' => $remark
             ];
             $this->handle->addRefuse(0, $order->id, $data);
         }
         $data = [
-            'state' => 'canceled',
-            'remark'=>$remark
+            'state' => 'canceled'
         ];
         if ($this->handle->addOrder($order->id, $data)) {
             return jsonResponse([
