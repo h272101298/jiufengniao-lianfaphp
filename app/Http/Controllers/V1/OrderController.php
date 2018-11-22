@@ -532,6 +532,7 @@ class OrderController extends Controller
     public function cancelOrder()
     {
         $id = Input::get('id');
+        $remark = Input::get('remark','');
         $order = $this->handle->getOrderByNumber($id);
         if (!in_array($order->state, ['created', 'paid'])) {
             return jsonResponse([
@@ -546,7 +547,8 @@ class OrderController extends Controller
             $this->handle->addRefuse(0, $order->id, $data);
         }
         $data = [
-            'state' => 'canceled'
+            'state' => 'canceled',
+            'remark'=>$remark
         ];
         if ($this->handle->addOrder($order->id, $data)) {
             return jsonResponse([
