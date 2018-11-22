@@ -540,6 +540,9 @@ class OrderController extends Controller
 //            ], 400);
 //        }
         if ($order->state != 'created') {
+            if ($order->state=='paid'){
+                $remark .= '支付状态退款！';
+            }
             $data = [
                 'store_id' => $order->store_id,
                 'remark' => $remark
