@@ -124,6 +124,9 @@ Route::group(['prefix'=>'v2','middleware'=>'cross'],function (){
     Route::put('bargain/promotion','V2\BargainController@modifyBargainPromotion');
     Route::get('bargain/promotion','V2\BargainController@getBargainPromotion');
     Route::delete('bargain/promotion','V2\BargainController@delBargainPromotion');
+    Route::post('bargain/rule','V2\BargainController@setBargainRule');
+    Route::delete('bargain/rule','V2\BargainController@delBargainRule');
+    Route::get('bargain/rule','V2\BargainController@getBargainRule');
     Route::get('bargain/promotions','V2\BargainController@getBargainPromotions');
     Route::get('check/bargain/promotion','V2\BargainController@checkPromotion');
     Route::get('enable/bargain/promotion','V2\BargainController@enablePromotion');

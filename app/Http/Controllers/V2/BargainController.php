@@ -338,4 +338,31 @@ class BargainController extends Controller
             'msg'=>'系统错误！'
         ],400);
     }
+    public function getBargainRule()
+    {
+        return jsonResponse([
+            'msg'=>'ok',
+            'data'=>$this->handle->getBargainRule()
+        ]);
+    }
+    public function setBargainRule()
+    {
+        $content = Input::get('content');
+        if ($this->handle->setBargainRule($content)){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+        return jsonResponse([
+            'msg'=>'系统错误！'
+        ],400);
+    }
+    public function delBargainRule()
+    {
+        if ($this->handle->delBargainRule()){
+            return jsonResponse([
+                'msg'=>'ok'
+            ]);
+        }
+    }
 }

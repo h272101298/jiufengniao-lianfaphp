@@ -12,6 +12,7 @@ namespace App\Modules\Bargain;
 use App\Modules\Bargain\Model\BargainList;
 use App\Modules\Bargain\Model\BargainPromotion;
 use App\Modules\Bargain\Model\BargainRecord;
+use App\Modules\Bargain\Model\BargainRule;
 use App\Modules\Bargain\Model\BargainStock;
 use App\Modules\Product\Model\Product;
 use App\Modules\Product\Model\Stock;
@@ -299,5 +300,26 @@ trait BargainHandle
     public function getBargainListById($id)
     {
         return BargainList::findOrFail($id);
+    }
+    public function setBargainRule($content)
+    {
+        $rule = BargainRule::first();
+        if (empty($rule)){
+            $rule = new BargainRule();
+        }
+        $rule->content = $content;
+        if ($rule->save()){
+            return true;
+        }
+        return false;
+    }
+    public function getBargainRule()
+    {
+        return BargainRule::first();
+    }
+    public function delBargainRule()
+    {
+        $rule = BargainRule::first();
+        return $rule->delete();
     }
 }

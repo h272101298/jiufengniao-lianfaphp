@@ -79,6 +79,7 @@ Route::group(['prefix'=>'v2'],function (){
     Route::get('hot/card/promotions','V2\CardController@getHotCardPromotions');
     Route::get('bargain/promotions','V2\BargainController@getEnablePromotions');
     Route::get('bargain/stock','V2\BargainController@getBargainStock');
+    Route::get('bargain/rule','V2\BargainController@getBargainRule');
     Route::group(['middleware'=>'checkToken'],function (){
         Route::get('card/promotion','V2\CardController@getEnablePromotion');
         Route::get('card/draw','V2\CardController@drawCard');
