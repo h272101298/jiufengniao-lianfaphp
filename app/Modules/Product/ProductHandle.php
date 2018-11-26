@@ -398,6 +398,9 @@ trait ProductHandle
         $product = Product::findOrFail($id);
         $product->deleted = 1;
         if ($product->save()) {
+            HotList::where('product_id', '=', $id)->delete();
+            OfferList::where('product_id', '=', $id)->delete();
+            NewList::where('product_id', '=', $id)->delete();
             return true;
         }
         return false;
