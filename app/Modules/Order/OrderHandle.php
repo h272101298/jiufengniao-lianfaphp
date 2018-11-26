@@ -321,6 +321,7 @@ trait OrderHandle
         $order->store = Store::find($order->store_id);
         $order->address = AddressSnapshot::where('order_id','=',$order->id)->get();
         $order->stocks = StockSnapshot::where('order_id','=',$order->id)->get();
+        $order->express = $order->express==0?'':Express::find($order->express)->title;
     }
     public function getExpressInfo($order_id)
     {
