@@ -223,8 +223,16 @@ trait ProxyHandle
         ];
     }
 
-    public function getBrokerageList($page = 1, $limit = 10)
+    public function getBrokerageList($page = 1, $limit = 10,$users=[])
     {
+        if (count($users)!=0){
+            $count = Brokerage::whereIn('user_id',$users)->count();
+            $data = Brokerage::whereIn('user_id',$users)->limit($limit)->offset(($page - 1) * $limit)->get();
+            return [
+                'data' => $data,
+                'count' => $count
+            ];
+        }
         $count = Brokerage::count();
         $data = Brokerage::limit($limit)->offset(($page - 1) * $limit)->get();
         return [
@@ -242,5 +250,9 @@ trait ProxyHandle
             $brokerage->order = Order::find($brokerage->order_id);
         }
         return $brokerages;
+    }
+    public function getProxyUserIdByName($name)
+    {
+        return ProxyUser::where('name','like','%'.$name.'%')->pluck()->toArray();
     }
 }

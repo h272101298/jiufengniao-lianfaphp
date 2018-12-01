@@ -185,7 +185,14 @@ class UserController extends Controller
     {
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
-        $data = $this->handle->getBrokerageList($page,$limit);
+        $name = Input::get('name');
+        if ($name){
+            $user_id = $this->handle->getProxyUserIdByName($name);
+            $data = $this->handle->getBrokerageList($page,$limit,$user_id);
+        }else{
+            $data = $this->handle->getBrokerageList($page,$limit);
+        }
+
         $this->handle->formatUserBrokerageList($data['data']);
         return \jsonResponse([
             'msg'=>'ok',
