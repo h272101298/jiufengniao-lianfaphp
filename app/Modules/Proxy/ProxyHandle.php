@@ -253,6 +253,6 @@ trait ProxyHandle
     }
     public function getProxyUserIdByName($name)
     {
-        return ProxyUser::where('name','like','%'.$name.'%')->pluck()->toArray();
+        return ProxyUser::where('name','like','%'.$name.'%')->pluck('user_id')->toArray();
     }
 }
