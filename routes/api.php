@@ -130,3 +130,8 @@ Route::group(['prefix'=>'v3'],function (){
     Route::get('order/qrcode','V3\OrderController@getOrderQrCode');
     Route::get('order/confirm','V3\OrderController@confirmOrder');
 });
+
+Route::group(['prefix'=>'v4'],function(){
+    Route::get('article','v4\ArticleController@index');
+    Route::get('article/detail','v4\ArticleController@home_detail');
+});
