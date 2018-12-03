@@ -41,7 +41,9 @@ class ArticleController extends Controller
         $id=$request->get('id');
         $data=DB::table('article')
             ->where('id',$id)
-            ->value('content');
+            ->select('title','content','created_at')
+            ->get();
+        $data=$data[0];
         $heat=DB::table('article')
             ->where('id',$id)
             ->value('heat');
