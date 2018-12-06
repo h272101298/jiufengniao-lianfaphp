@@ -259,6 +259,7 @@ class OrderController extends Controller
                                     'product'=>$product->name
                                 ];
                                 $this->handle->addStockSnapshot($order_id, $stockData);
+                                $this->handle->addProduct($product->id,$product->sales_volume+$stock['number']);
                             }
                         }
                         $price = $price;

@@ -7,7 +7,6 @@ use App\Modules\Product\Model\ProductDetailSnapshot;
 use App\Modules\Score\Model\ScoreProduct;
 use App\Modules\Score\Model\ScoreProductStock;
 use App\Modules\User;
-use function GuzzleHttp\Psr7\uri_for;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
