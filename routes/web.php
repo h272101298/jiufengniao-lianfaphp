@@ -182,3 +182,11 @@ Route::group(['prefix'=>'v3','middleware'=>'cross'],function (){
     Route::get('bind/user','V3\StoreController@bindUser');
     Route::get('unbind/user','V3\StoreController@unBindUser');
 });
+
+Route::group(['prefix'=>'v4','middleware'=>'cross'],function(){
+    Route::get('article','v4\ArticleController@index');
+    Route::get('article/detail','v4\ArticleController@detail');
+    Route::post('article','v4\ArticleController@add');
+    Route::put('article','v4\ArticleController@edit');
+    Route::delete('article','v4\ArticleController@del');
+});
