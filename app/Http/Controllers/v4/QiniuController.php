@@ -9,8 +9,8 @@ use Qiniu\Auth;
 class QiniuController extends Controller
 {
     //
-    private $accessKey = "IRb_YKqItisSFGclNyJyLwBN9Wh2bhjX6eVCpVDB";
-    private $secretKey = "PCksRolXkKH3A8bj_1DXiZW5KHLiTuCJXUmQ2AQK";
+    private $accessKey = "jIFPDW2kqbYITI0cBU8wxLdi0W420Ieb98cB7Qou";
+    private $secretKey = "9ObYhaaeQMC0VBWl0oNQb36CjTf4zeZxE5RXCgqB";
     private $bucket = "tubanuo";
     public function getToken(){
         $auth=new Auth($this->accessKey,$this->secretKey);
