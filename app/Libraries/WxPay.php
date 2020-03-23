@@ -9,6 +9,7 @@
 namespace App\Libraries;
 
 
+use App\Modules\System\Model\TxConfig;
 use Mockery\Exception;
 
 class WxPay
@@ -55,7 +56,7 @@ class WxPay
         return $unifiedOrder;
     }
 
-    public function handCash($openid,$amount){
+    public function handCash($openid,$amount,$sslcert,$sslkey){
         $url="https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
         $data=[
             'mch_appid'=>$this->appid,
@@ -70,7 +71,7 @@ class WxPay
         ];
         $data['sign']= $this->getSign($data);
         $xmlData=$this->arrayToXml($data);
-        $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData,$url,"60"));
+        $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData,$url,"60",True,$sslcert,$sslkey));
         return $unifiedOrder;
     }
 

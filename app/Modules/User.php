@@ -13,6 +13,7 @@ use App\Modules\Advert\AdvertHandle;
 use App\Modules\Amount\AmountHandle;
 use App\Modules\Bargain\BargainHandle;
 use App\Modules\Card\CardHandle;
+use App\Modules\Cash\CashHandle;
 use App\Modules\Coupon\CouponHandle;
 use App\Modules\Discount\DiscountHandle;
 use App\Modules\GroupBuy\GroupBuyHandle;
@@ -52,6 +53,7 @@ class User
     use ScoreHandle;
     use DiscountHandle;
     use PrizeHandle;
+    use CashHandle;
     public function addUser($id,$data,$role)
     {
         if ($id){
