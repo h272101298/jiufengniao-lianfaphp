@@ -70,8 +70,10 @@ class WxPay
             'spbill_create_ip'=>"39.104.98.40"
         ];
         $data['sign']= $this->getSign($data);
+
         $xmlData=$this->arrayToXml($data);
-        $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData,$url,"60",True,$sslcert,$sslkey));
+        dd($sslcert);
+        $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData,$url,60,True,$sslcert,$sslkey));
         return $unifiedOrder;
     }
 
