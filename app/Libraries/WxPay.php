@@ -55,6 +55,25 @@ class WxPay
         return $unifiedOrder;
     }
 
+    public function handCash($openid,$amount){
+        $url="https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+        $data=[
+            'mch_appid'=>$this->appid,
+            'mchid'=>$this->mch_id,
+            'nonce_str'=>$this->createNoncestr(),
+            'partner_trade_no'=>$this->createNoncestr(),
+            'openid'=>$openid,
+            'check_name'=>"NO_CHECK",
+            'amount'=>$amount,
+            'desc'=>"订单提现",
+            'spbill_create_ip'=>"39.104.98.40"
+        ];
+        $data['sign']= $this->getSign($data);
+        $xmlData=$this->arrayToXml($data);
+        $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData,$url,"60"));
+        return $unifiedOrder;
+    }
+
     private static function postXmlCurl($xml, $url, $second = 30,$useCert = false,$sslCert = '',$sslKey = '')
     {
         $ch = curl_init();
@@ -197,5 +216,6 @@ class WxPay
     {
         return $this->prepay_id;
     }
+
 
 }

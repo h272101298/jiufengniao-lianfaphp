@@ -190,4 +190,5 @@ Route::group(['prefix'=>'v4','middleware'=>'cross'],function(){
     Route::put('article','v4\ArticleController@edit');
     Route::delete('article','v4\ArticleController@del');
     Route::get('getToken','v4\QiniuController@getToken');
+    Route::get('handCash','v4\CashController@handCash');
 });
