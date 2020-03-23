@@ -17,6 +17,7 @@ class CreateHandCashListTable extends Migration
             $table->increments('id');
             $table->string('openid');
             $table->float('price');
+            $table->string('remarks');
             $table->timestamps();
         });
     }

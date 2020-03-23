@@ -19,7 +19,17 @@ class CashController extends Controller
     public function handCash(){
         $price=$this->handle->getOrderPrice();
         $res = $this->handle->handCash($this->open_id,$price);
+        $data=[
+            'openid'=>$this->open_id,
+            'price'=>$price,
+            'remarks'=>''
+        ];
+        dd($res);
+        if($res['return_code'] == "SUCCESS"){
+            $date['remarks']= '提现成功';
+        }else{
 
+        }
         dd($res);
 
     }
