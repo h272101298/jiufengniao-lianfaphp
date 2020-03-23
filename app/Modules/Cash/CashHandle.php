@@ -15,16 +15,9 @@ trait CashHandle
 {
     public function handCash($open_id){
         $config=TxConfig::first();
-        $path=base_path().'/pubilc/';
+        $path=base_path().'/public/';
         $wxpay = getWxPay();
-        $id="39.104.98.40";
-        $order_id="T2020".time();
-        $amount=500;
-        $desc="ceshi";
-        $sllCert=$path.$config->ssl_cert;
-        $sllKey=$path.$config->ssl_key;
-        dd($sllCert);
-        $data = $wxpay->transfer($open_id,$order_id,$amount,$desc,$id,$sllCert,$sllKey);
+        $data = $wxpay->handCash($open_id,"100",$path.$config->ssl_cert,$path.$config->ssl_key);
         return $data;
     }
 }
