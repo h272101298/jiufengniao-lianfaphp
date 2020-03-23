@@ -20,7 +20,7 @@ class CashController extends Controller
         $price=$this->handle->getOrderPrice();
         $res = $this->handle->handCash($this->open_id,$price);
 
-        dd($price);
+        dd($res);
 
     }
 }
