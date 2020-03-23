@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e0e96487-e8cc-498b-b482-180df1c794a1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/app/Libraries/WxPay.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Libraries/WxPay.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Modules/Cash/CashHandle.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/Cash/CashHandle.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +40,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
+            <state relative-caret-position="515">
               <caret line="97" column="26" selection-start-line="97" selection-start-column="20" selection-end-line="97" selection-end-column="26" />
             </state>
           </provider>
@@ -54,11 +55,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Libraries/WxPay.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="619">
-              <caret line="71" column="45" lean-forward="true" selection-start-line="71" selection-start-column="45" selection-end-line="71" selection-end-column="45" />
+            <state relative-caret-position="338">
+              <caret line="77" column="61" selection-start-line="77" selection-start-column="56" selection-end-line="77" selection-end-column="61" />
               <folding>
                 <element signature="e#115#153#0#PHP" expanded="true" />
               </folding>
@@ -78,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Modules/Order/OrderHandle.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="394" column="141" selection-start-line="394" selection-start-column="133" selection-end-line="394" selection-end-column="141" />
+            <state relative-caret-position="546">
+              <caret line="391" column="36" selection-start-line="391" selection-start-column="30" selection-end-line="391" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -93,11 +94,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Modules/Cash/CashHandle.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="19" column="96" selection-start-line="19" selection-start-column="96" selection-end-line="19" selection-end-column="96" />
+            <state relative-caret-position="620">
+              <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -125,8 +126,8 @@
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/app/Modules/User.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/v4/CashController.php" />
-        <option value="$PROJECT_DIR$/app/Modules/Cash/CashHandle.php" />
         <option value="$PROJECT_DIR$/app/Libraries/WxPay.php" />
+        <option value="$PROJECT_DIR$/app/Modules/Cash/CashHandle.php" />
       </list>
     </option>
   </component>
@@ -351,12 +352,12 @@
       <updated>1584781332510</updated>
       <workItem from="1584781338031" duration="5955000" />
       <workItem from="1584843073430" duration="1197000" />
-      <workItem from="1584927856538" duration="8829000" />
+      <workItem from="1584927856538" duration="10014000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15981000" />
+    <option name="totallyTimeSpent" value="17166000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -495,38 +496,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1398">
+          <caret line="71" column="30" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="515">
+          <caret line="97" column="26" selection-start-line="97" selection-start-column="20" selection-end-line="97" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/helpers.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
           <caret line="102" column="13" selection-start-line="102" selection-start-column="13" selection-end-line="102" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Modules/Cash/CashHandle.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="19" column="96" selection-start-line="19" selection-start-column="96" selection-end-line="19" selection-end-column="96" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/V1/OrderController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2854">
-          <caret line="45" column="51" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Modules/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="55" column="18" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Modules/Order/OrderHandle.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="394" column="141" selection-start-line="394" selection-start-column="133" selection-end-line="394" selection-end-column="141" />
         </state>
       </provider>
     </entry>
@@ -540,27 +527,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/V1/OrderController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="97" column="26" selection-start-line="97" selection-start-column="20" selection-end-line="97" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1398">
-          <caret line="71" column="30" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="30" />
+        <state relative-caret-position="-2854">
+          <caret line="45" column="51" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="51" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Libraries/WxPay.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="619">
-          <caret line="71" column="45" lean-forward="true" selection-start-line="71" selection-start-column="45" selection-end-line="71" selection-end-column="45" />
+        <state relative-caret-position="338">
+          <caret line="77" column="61" selection-start-line="77" selection-start-column="56" selection-end-line="77" selection-end-column="61" />
           <folding>
             <element signature="e#115#153#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Modules/Order/OrderHandle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="391" column="36" selection-start-line="391" selection-start-column="30" selection-end-line="391" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Modules/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="55" column="18" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Modules/Cash/CashHandle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="620">
+          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
         </state>
       </provider>
     </entry>
