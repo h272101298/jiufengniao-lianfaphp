@@ -17,8 +17,10 @@ class CashController extends Controller
         $this->handle = new User();
     }
     public function handCash(){
-        $res = $this->handle->handCash($this->open_id);
-        dd($res);
+        $price=$this->handle->getOrderPrice();
+        $res = $this->handle->handCash($this->open_id,$price);
+
+        dd($price);
 
     }
 }

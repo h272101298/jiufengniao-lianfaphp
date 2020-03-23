@@ -9,15 +9,31 @@
 namespace App\Modules\Cash;
 
 
+use App\Modules\Order\Model\Order;
 use App\Modules\System\Model\TxConfig;
+use Illuminate\Support\Facades\DB;
 
 trait CashHandle
 {
-    public function handCash($open_id){
+    public function handCash($open_id,$amount){
         $config=TxConfig::first();
         $path=base_path().'/public/';
         $wxpay = getWxPay();
-        $data = $wxpay->handCash($open_id,"100",$path.$config->ssl_cert,$path.$config->ssl_key);
+        if ($amount > 1){
+            $data = $wxpay->handCash($open_id,$amount,$path.$config->ssl_cert,$path.$config->ssl_key);
+        }else{
+            $data = ['msg'=>"金额少于1元,无法提现"];
+        }
         return $data;
+    }
+    public function getOrderPrice(){
+        $start_time=date('Y-m-d 00:00:00',time());
+        $end_time=date('Y-m-d 23:59:59',time());
+        $amount=DB::table('orders')->where('created_at','>=',$start_time)
+            ->where('created_at','<',$end_time)
+            ->where('state','!=','canceled')
+            ->where('state','!=','created')
+            ->sum('price');
+        return $amount;
     }
 }
