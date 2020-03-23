@@ -72,8 +72,8 @@ class WxPay
         $data['sign']= $this->getSign($data);
 
         $xmlData=$this->arrayToXml($data);
-        dd($sslcert);
         $unifiedOrder = $this->xmlToArray($this->postXmlCurl($xmlData,$url,60,True,$sslcert,$sslkey));
+        dd($unifiedOrder);
         return $unifiedOrder;
     }
 
