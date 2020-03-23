@@ -15,7 +15,7 @@ trait CashHandle
 {
     public function handCash($open_id){
         $config=TxConfig::first();
-        $path=base_path().'/pubilc';
+        $path=base_path().'/pubilc/';
         $wxpay = getWxPay();
         $id="39.104.98.40";
         $order_id="T2020".time();
