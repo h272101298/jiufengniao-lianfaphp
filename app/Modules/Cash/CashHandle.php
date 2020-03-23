@@ -9,6 +9,7 @@
 namespace App\Modules\Cash;
 
 
+use App\Modules\Cash\Model\Cash;
 use App\Modules\Order\Model\Order;
 use App\Modules\System\Model\TxConfig;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,10 @@ trait CashHandle
         return $amount;
     }
     public function saveCashList($data){
-
+        $cash=new Cash();
+        $res=$cash->save($data);
+        if ($res){
+            return $res;
+        }
     }
 }

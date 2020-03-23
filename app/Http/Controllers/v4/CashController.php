@@ -24,13 +24,16 @@ class CashController extends Controller
             'price'=>$price,
             'remarks'=>''
         ];
-        dd($res);
-        if($res['return_code'] == "SUCCESS"){
-            $date['remarks']= '提现成功';
-        }else{
 
+        if($res['result_code'] == "SUCCESS"){
+            $date['remarks']= '提现成功';
+        }elseif($res['result_code'] == "FAIL"){
+            $data['remarks']=$res["err_code_des"];
+        }else{
+            $data['remarks']=$res['msg'];
         }
-        dd($res);
+        $msg=$this->handle->saveCashList($data);
+        dd($msg);
 
     }
 }
