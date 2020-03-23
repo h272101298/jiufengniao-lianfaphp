@@ -22,7 +22,9 @@ class CashController extends Controller
         $data=[
             'openid'=>$this->open_id,
             'price'=>$price,
-            'remarks'=>''
+            'remarks'=>'',
+            'created_at'=>date('Y:m:d H:i:s',time()),
+            'update_at'=>date('Y:m:d H:i:s',time())
         ];
 
         if($res['result_code'] == "SUCCESS"){

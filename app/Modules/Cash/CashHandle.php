@@ -39,8 +39,7 @@ trait CashHandle
         return $amount;
     }
     public function saveCashList($data){
-        $cash=new Cash();
-        $res=$cash->save($data);
+        $res=DB::table('hand_cash_list')->insert($data);
         if ($res){
             return $res;
         }

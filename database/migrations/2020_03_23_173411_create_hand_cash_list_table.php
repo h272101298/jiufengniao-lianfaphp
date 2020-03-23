@@ -16,7 +16,7 @@ class CreateHandCashListTable extends Migration
         Schema::create('hand_cash_list', function (Blueprint $table) {
             $table->increments('id');
             $table->string('openid');
-            $table->float('price');
+            $table->float('price',2);
             $table->string('remarks');
             $table->timestamps();
         });
