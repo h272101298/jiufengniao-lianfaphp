@@ -20,6 +20,7 @@ trait CashHandle
         $path=base_path().'/public/';
         $wxpay = getWxPay();
         if ($amount > 1){
+            $amount=$amount*100;
             $data = $wxpay->handCash($open_id,$amount,$path.$config->ssl_cert,$path.$config->ssl_key);
         }else{
             $data = ['msg'=>"金额少于1元,无法提现"];
