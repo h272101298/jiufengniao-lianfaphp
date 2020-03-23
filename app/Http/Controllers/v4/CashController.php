@@ -34,7 +34,6 @@ class CashController extends Controller
         }else{
             $data['remarks']=$res['msg'];
         }
-        dd($data);
         $msg=$this->handle->saveCashList($data);
         dd($msg);
 
