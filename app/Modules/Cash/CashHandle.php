@@ -43,8 +43,6 @@ trait CashHandle
     }
     public function saveCashList($data){
         $res=DB::table('hand_cash_list')->insert($data);
-        if ($res){
-            return $res;
-        }
+        return $res;
     }
 }
