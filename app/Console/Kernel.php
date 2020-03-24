@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\Brokerage;
 use App\Console\Commands\checkGroupBuy;
 use App\Console\Commands\ClearQueue;
+use App\Console\Commands\HandCash;
 use App\Console\Commands\Notify;
 use App\Console\Commands\refuseOrder;
 use Illuminate\Console\Scheduling\Schedule;
