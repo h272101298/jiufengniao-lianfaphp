@@ -23,8 +23,8 @@ class CashController extends Controller
             'openid'=>$this->open_id,
             'price'=>$price,
             'remarks'=>'',
-            'created_at'=>date('Y:m:d H:i:s',time()),
-            'update_at'=>date('Y:m:d H:i:s',time())
+            'created_at'=>date('Y-m-d H:i:s',time()),
+            'update_at'=>date('Y-m-d H:i:s',time())
         ];
         if($res['result_code'] == "SUCCESS"){
             $data['remarks']= '提现成功';
