@@ -13,14 +13,14 @@ class HandCash extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'Cash:hand';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Cash:hand';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
