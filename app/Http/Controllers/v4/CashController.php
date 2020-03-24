@@ -26,12 +26,12 @@ class CashController extends Controller
             'created_at'=>date('Y:m:d H:i:s',time()),
             'update_at'=>date('Y:m:d H:i:s',time())
         ];
-dd($res);
         if($res['result_code'] == "SUCCESS"){
             $data['remarks']= '提现成功';
         }elseif($res['result_code'] == "FAIL"){
             $data['remarks']=$res["err_code_des"];
-        }else{
+        }elseif($res['result_code'] == "ERROR"){
+            var_dump(123);
             $data['remarks']=$res['msg'];
         }
 
