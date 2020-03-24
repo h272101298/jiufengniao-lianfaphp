@@ -36,13 +36,14 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('card:hand')->dailyAt("23:59");
         $schedule->command('brokerage:make')->dailyAt('2:00');
         $schedule->command('notify:send')->everyFiveMinutes();
         $schedule->command('clearQueues')->everyFiveMinutes();
         $schedule->command('checkGroupBuy')->everyMinute();
         $schedule->command('refuseOrder')->everyFiveMinutes();
         $schedule->command('receiveOrder')->dailyAt('3:00');
-        $schedule->command('card:hand')->dailyAt("23:59:59");
+
     }
 
     /**
