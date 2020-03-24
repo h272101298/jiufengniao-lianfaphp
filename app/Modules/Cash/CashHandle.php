@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\DB;
 trait CashHandle
 {
     public function handCash($open_id,$amount){
-        $today=date('Y-m-d');
-        $check=DB::table('hand_cash_list')->where('');
         $config=TxConfig::first();
         $path=base_path().'/public/';
         $wxpay = getWxPay();
