@@ -18,6 +18,7 @@ class CashController extends Controller
     }
     public function handCash(){
         $price=$this->handle->getOrderPrice();
+        dd($price);
         $res = $this->handle->handCash($this->open_id,$price);
         $data=[
             'openid'=>$this->open_id,
