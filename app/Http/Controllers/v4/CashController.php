@@ -33,9 +33,6 @@ class CashController extends Controller
         }elseif($res['result_code'] == "ERROR"){
             $data['remarks']=$res['msg'];
         }
-        var_dump($data);
-        $msg=$this->handle->saveCashList($data);
-        dd($msg);
-
+        $this->handle->saveCashList($data);
     }
 }

@@ -17,11 +17,13 @@ use Illuminate\Support\Facades\DB;
 trait CashHandle
 {
     public function handCash($open_id,$amount){
+        $today=date('Y-m-d');
+        $check=DB::table('hand_cash_list')->where('');
         $config=TxConfig::first();
         $path=base_path().'/public/';
         $wxpay = getWxPay();
         if ($amount > 1){
-            //$amount=$amount*100;
+            $amount=$amount*100;
             $data = $wxpay->handCash($open_id,$amount,$path.$config->ssl_cert,$path.$config->ssl_key);
         }else{
             $data = [
