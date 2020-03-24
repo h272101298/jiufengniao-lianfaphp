@@ -20,12 +20,13 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        HandCash::class,
         Brokerage::class,
         Notify::class,
         ClearQueue::class,
         checkGroupBuy::class,
         refuseOrder::class,
-        HandCash::class
+
     ];
 
     /**
@@ -38,7 +39,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('card:hand')->dailyAt("23:59");
+        $schedule->command('handcard')->dailyAt("23:59");
         $schedule->command('brokerage:make')->dailyAt('2:00');
         $schedule->command('notify:send')->everyFiveMinutes();
         $schedule->command('clearQueues')->everyFiveMinutes();
