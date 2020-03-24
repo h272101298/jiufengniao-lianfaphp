@@ -18,7 +18,6 @@ class CashController extends Controller
     }
     public function handCash(){
         $price=$this->handle->getOrderPrice();
-        dd($price);
         $res = $this->handle->handCash($this->open_id,$price);
         $data=[
             'openid'=>$this->open_id,
@@ -29,12 +28,13 @@ class CashController extends Controller
         ];
 
         if($res['result_code'] == "SUCCESS"){
-            $date['remarks']= '提现成功';
+            $data['remarks']= '提现成功';
         }elseif($res['result_code'] == "FAIL"){
             $data['remarks']=$res["err_code_des"];
         }else{
             $data['remarks']=$res['msg'];
         }
+        dd($data);
         $msg=$this->handle->saveCashList($data);
         dd($msg);
 
