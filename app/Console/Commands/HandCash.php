@@ -57,7 +57,7 @@ class HandCash extends Command
         }elseif($res['result_code'] == "ERROR"){
             $data['remarks']=$res['msg'];
         }
-        $this->handle->saveCashList($data);
+        $this->saveCashList($data);
 
     }
 }
