@@ -9,6 +9,6 @@
 return [
     'http://192.168.1.141:8081',
     'http://192.168.1.143:8081',
-    'https://background.geckowing.com'
+    'https://fa.fengniaotuangou.cn'
 //    'http://a.com',
 ];
