@@ -23,7 +23,8 @@ class Kernel extends ConsoleKernel
         Notify::class,
         ClearQueue::class,
         checkGroupBuy::class,
-        refuseOrder::class
+        refuseOrder::class,
+        HandCash::class
     ];
 
     /**
