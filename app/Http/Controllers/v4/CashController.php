@@ -26,7 +26,7 @@ class CashController extends Controller
             'created_at'=>date('Y:m:d H:i:s',time()),
             'update_at'=>date('Y:m:d H:i:s',time())
         ];
-
+        dd($res);
         if($res['result_code'] == "SUCCESS"){
             $data['remarks']= '提现成功';
         }elseif($res['result_code'] == "FAIL"){
@@ -34,7 +34,7 @@ class CashController extends Controller
         }else{
             $data['remarks']=$res['msg'];
         }
-        dd($data);
+
         $msg=$this->handle->saveCashList($data);
         dd($msg);
 
