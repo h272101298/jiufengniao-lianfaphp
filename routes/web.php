@@ -27,7 +27,7 @@ Route::options('{all}',function (){return jsonResponse(['msg'=>'ok']);})->middle
 Route::get('test',function (){
     dd(\Illuminate\Support\Facades\Auth::check());
 });
-Route::post('test2','V1\SystemController@test');
+Route::post('test2','V1\SystembargainController@test');
 Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
     Route::post('upload','V1\SystemController@upload');
     Route::post('login','V1\UserController@login');
