@@ -115,7 +115,7 @@ class MemberController extends Controller
     public function addMemberRecord(Request $post)
     {
         $url = $post->getScheme() . '://' . $post->getHttpHost() . '/api/member/notify';
-        dd($url);
+        //dd($url);
         $user_id = getRedisData($post->token);
         $member_id = $post->member_id;
         $level = $this->handle->getMemberLevel($member_id);
@@ -144,6 +144,7 @@ class MemberController extends Controller
     {
         $data = $post->getContent();
         $wx = WxPay::xmlToArray($data);
+        dd($wx);
         $wspay = getWxPay($wx['openid']);
         $data = [
             'appid' => $wx['appid'],
