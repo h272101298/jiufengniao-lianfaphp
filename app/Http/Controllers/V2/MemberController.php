@@ -130,8 +130,9 @@ class MemberController extends Controller
         if ($this->handle->addMemberRecord(0,$data)){
             $user = $this->handle->getWeChatUserById($user_id);
             $wxPay = getWxPay($user->open_id);
-            dd($wxPay);
+
             $data = $wxPay->pay($number, '购买商品', ($level->price) * 100, $url);
+            dd($data);
             return jsonResponse([
                 'msg' => 'ok',
                 'data' => $data
