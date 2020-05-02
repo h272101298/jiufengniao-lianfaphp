@@ -133,7 +133,7 @@ class MemberController extends Controller
             $wxPay = getWxPay($user->open_id);
 
             $data = $wxPay->pay($number, '购买商品', ($level->price) * 100, $url,$ip);
-            //dd($data);
+            dd($data);
             return jsonResponse([
                 'msg' => 'ok',
                 'data' => $data
