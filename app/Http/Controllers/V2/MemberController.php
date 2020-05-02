@@ -127,7 +127,7 @@ class MemberController extends Controller
             'name'=>$level->name,
             'price'=>$level->price
         ];
-        $ip="";
+        $ip="39.104.98.40";
         if ($this->handle->addMemberRecord(0,$data)){
             $user = $this->handle->getWeChatUserById($user_id);
             $wxPay = getWxPay($user->open_id);
