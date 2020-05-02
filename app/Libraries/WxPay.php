@@ -160,6 +160,7 @@ class WxPay
     private function weixinapp($out_trade_no,$body,$total_fee,$notifyUrl,$ip)
     {
         $unifiedOrder = $this->unifiedOrder($out_trade_no,$body,$total_fee,$notifyUrl,$ip);
+        dd($unifiedOrder);
 //        dd($unifiedOrder);
         if (!isset($unifiedOrder['prepay_id'])){
             var_dump($unifiedOrder);
