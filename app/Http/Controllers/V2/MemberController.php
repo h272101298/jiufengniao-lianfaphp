@@ -130,6 +130,7 @@ class MemberController extends Controller
         if ($this->handle->addMemberRecord(0,$data)){
             $user = $this->handle->getWeChatUserById($user_id);
             $wxPay = getWxPay($user->open_id);
+            dd($wxPay);
             $data = $wxPay->pay($number, '购买商品', ($level->price) * 100, $url);
             return jsonResponse([
                 'msg' => 'ok',
@@ -144,7 +145,7 @@ class MemberController extends Controller
     {
         $data = $post->getContent();
         $wx = WxPay::xmlToArray($data);
-        dd($wx);
+
         $wspay = getWxPay($wx['openid']);
         $data = [
             'appid' => $wx['appid'],
