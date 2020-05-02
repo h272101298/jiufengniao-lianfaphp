@@ -132,7 +132,7 @@ class MemberController extends Controller
             $wxPay = getWxPay($user->open_id);
 
             $data = $wxPay->pay($number, '购买商品', ($level->price) * 100, $url);
-            dd($data);
+            //dd($data);
             return jsonResponse([
                 'msg' => 'ok',
                 'data' => $data
@@ -145,6 +145,7 @@ class MemberController extends Controller
     public function memberNotify(Request $post)
     {
         $data = $post->getContent();
+        dd($data);
         $wx = WxPay::xmlToArray($data);
 
         $wspay = getWxPay($wx['openid']);
