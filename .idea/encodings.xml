@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with NO BOM" />
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://G:/安防资料/后台代码/sboot/target/classes/com/zou/wxpay/util/ClientPayResData.class" charset="UTF-8" />
+  </component>
 </project>

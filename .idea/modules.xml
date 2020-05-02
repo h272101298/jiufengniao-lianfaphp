@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Shop.iml" filepath="$PROJECT_DIR$/.idea/Shop.iml" />
+      <module fileurl="file://G:/安防资料/后台代码/sboot/.idea/sboot.iml" filepath="G:/安防资料/后台代码/sboot/.idea/sboot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../hbtuangou/tuangou/.idea/tuangou.iml" filepath="$PROJECT_DIR$/../hbtuangou/tuangou/.idea/tuangou.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../tubanuo/.idea/tubanuo.iml" filepath="$PROJECT_DIR$/../tubanuo/.idea/tubanuo.iml" />
     </modules>
   </component>
 </project>

@@ -97,5 +97,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="tubanuo" />
+    <orderEntry type="module" module-name="sboot" />
+    <orderEntry type="module" module-name="tuangou" />
   </component>
 </module>

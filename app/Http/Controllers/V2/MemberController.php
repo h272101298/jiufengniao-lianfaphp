@@ -115,6 +115,7 @@ class MemberController extends Controller
     public function addMemberRecord(Request $post)
     {
         $url = $post->getScheme() . '://' . $post->getHttpHost() . '/api/member/notify';
+        dd($url);
         $user_id = getRedisData($post->token);
         $member_id = $post->member_id;
         $level = $this->handle->getMemberLevel($member_id);
