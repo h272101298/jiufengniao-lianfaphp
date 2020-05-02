@@ -127,11 +127,12 @@ class MemberController extends Controller
             'name'=>$level->name,
             'price'=>$level->price
         ];
+        $ip="";
         if ($this->handle->addMemberRecord(0,$data)){
             $user = $this->handle->getWeChatUserById($user_id);
             $wxPay = getWxPay($user->open_id);
 
-            $data = $wxPay->pay($number, '购买商品', ($level->price) * 100, $url);
+            $data = $wxPay->pay($number, '购买商品', ($level->price) * 100, $url,$ip);
             //dd($data);
             return jsonResponse([
                 'msg' => 'ok',
@@ -145,7 +146,7 @@ class MemberController extends Controller
     public function memberNotify(Request $post)
     {
         $data = $post->getContent();
-        dd($data);
+        //dd($data);
         $wx = WxPay::xmlToArray($data);
 
         $wspay = getWxPay($wx['openid']);
