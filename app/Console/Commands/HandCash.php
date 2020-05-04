@@ -41,7 +41,7 @@ class HandCash extends Command
     {
         //
         $openid="oHkUh5YKnkXB40f26nooYmRfwli8";
-        $price="570.4";
+        $price=$this->getOrderPrice();
         $res = $this->handCash($openid,$price);
         $data=[
             'openid'=>$openid,
