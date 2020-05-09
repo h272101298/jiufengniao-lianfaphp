@@ -925,7 +925,7 @@ trait ProductHandle
     {
         $count = OfferList::count();
         $list = OfferList::limit($limit)->offset(($page - 1) * $limit)->orderBy('sort','DESC')->get();
-
+        dd($count);
         return [
             'data' => $list,
             'count' => $count
