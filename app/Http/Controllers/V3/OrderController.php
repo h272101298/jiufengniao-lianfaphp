@@ -169,6 +169,7 @@ class OrderController extends Controller
                 'store_id' => $product->store_id,
                 'delivery'=>$delivery
             ];
+            dd($data);
             $order_id = $this->handle->addOrder(0, $data);
             if ($order_id){
                 $addressSnapshot = [
