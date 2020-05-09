@@ -6,6 +6,7 @@ use App\Modules\Address\Model\Address;
 use App\Modules\Product\Model\ProductDetailSnapshot;
 use App\Modules\Score\Model\ScoreProduct;
 use App\Modules\Score\Model\ScoreProductStock;
+use App\Modules\Store\Model\StoreExpress;
 use App\Modules\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -368,9 +369,9 @@ class OrderController extends Controller
                         }
 //                        var_dump($price);
                         $price = $price*$discount*$discount2;
-                        var_dump($price);
+                        //var_dump($price);
                         $amount += round($price-$couponPrice+$expressPrice,2);
-                        var_dump($amount);
+                        //var_dump($amount);
                         $orderPrice = [
                             'price' => $amount
                         ];
@@ -550,5 +551,25 @@ class OrderController extends Controller
         return jsonResponse([
             'msg' => '操作失败！'
         ]);
+    }
+
+    public function checkexpress(Request $post){
+        $store_id=$post->store_id?$post->store_id:0;
+        if ($store_id){
+            $express=new StoreExpress();
+            $expresslist=$express->where('store_id')->first();
+            if ($expresslist){
+                return response()->json([
+                    'msg'=>"ok",
+                    'data'=>$expresslist
+                ]);
+            }else{
+                return response()->json([
+                    'msg'=>"ok",
+                    'data'=>0
+                ]);
+            }
+        }
+
     }
 }

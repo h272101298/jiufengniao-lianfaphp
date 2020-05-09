@@ -129,6 +129,7 @@ Route::group(['prefix'=>'v3'],function (){
     Route::get('order','V3\OrderController@getOrder');
     Route::get('order/qrcode','V3\OrderController@getOrderQrCode');
     Route::get('order/confirm','V3\OrderController@confirmOrder');
+    Route::get('order/checkexpress',"V3\OrderController@checkexpress");
 });
 
 Route::group(['prefix'=>'v4'],function(){
