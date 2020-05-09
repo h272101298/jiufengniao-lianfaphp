@@ -281,7 +281,7 @@ class OrderController extends Controller
                     'delivery'=>$delivery
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
-                dd($data);
+
                 if ($order_id) {
                     $addressSnapshot = [
                         'name' => $address->name,
@@ -302,7 +302,8 @@ class OrderController extends Controller
                         }else{
                             $discount = $member->discount/10;
                         }
-//                        var_dump($stocks);
+
+                      var_dump($stocks);
                         foreach ($stocks as $stock) {
 //                            var_dump($stock);
                             $swapStock = $this->handle->getStockById($stock['id']);
