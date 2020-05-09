@@ -281,7 +281,7 @@ class OrderController extends Controller
                     'delivery'=>$delivery
                 ];
                 $order_id = $this->handle->addOrder(0, $data);
-                dd($order_id);
+                dd($data);
                 if ($order_id) {
                     $addressSnapshot = [
                         'name' => $address->name,
