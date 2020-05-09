@@ -95,7 +95,7 @@ Route::group(['prefix'=>'v1','middleware'=>'cross'],function (){
         Route::get('proxy/reject','V1\UserController@rejectProxyApply')->middleware('permission:proxyApplyCheck');
         Route::get('proxy/users','V1\UserController@getProxyList')->middleware('permission:proxyList');
         Route::get('refuses','V1\OrderController@getRefuseList')->middleware('permission:refuseListStore|refuseListAll');
-        Route::get('refuse','V1\OrderController@refuseOrder')->middleware('permission:refuseDo');
+        Route::get('refuse','V1\OrderController@refuseOrder');
         Route::post('brokerage/ratio','V1\SystemController@addBrokerageRatio')->middleware('permission:brokerageList');
         Route::get('brokerage/ratio','V1\SystemController@getBrokerageRatio')->middleware('permission:brokerageList');
         Route::get('count','V1\SystemController@getCount');

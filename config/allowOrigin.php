@@ -9,6 +9,7 @@
 return [
     'http://192.168.1.141:8081',
     'http://192.168.1.143:8081',
-    'https://lian.fengniaotuangou.cn'
+    'https://lian.fengniaotuangou.cn',
+    'http://shop.test:8080'
 //    'http://a.com',
 ];

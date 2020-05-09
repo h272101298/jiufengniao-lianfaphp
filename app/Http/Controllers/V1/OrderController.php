@@ -575,9 +575,11 @@ class OrderController extends Controller
         ]);
     }
 
-    public function refuseOrder()
+    public function refuseOrder(Request $post)
     {
-        $id = Input::get('id');
+
+        $id = $post->id;
+        //dd($this->handle->refuse($id));
         if ($this->handle->refuse($id)) {
             return jsonResponse([
                 'msg' => 'ok'
