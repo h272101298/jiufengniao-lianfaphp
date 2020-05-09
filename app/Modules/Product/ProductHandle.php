@@ -924,7 +924,7 @@ trait ProductHandle
     public function getOfferList($page = 1, $limit = 10)
     {
         $count = OfferList::count();
-        $list = OfferList::limit($limit)->offset(($page - 1) * $limit)->orderBy('sort','DESC')->get();
+        $list = OfferList::offset(($page - 1) * $limit)->limit($limit)->orderBy('sort','DESC')->get();
 
         return [
             'data' => $list,
