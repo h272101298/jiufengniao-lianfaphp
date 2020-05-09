@@ -6,7 +6,6 @@ use App\Modules\Address\Model\Address;
 use App\Modules\Product\Model\ProductDetailSnapshot;
 use App\Modules\Score\Model\ScoreProduct;
 use App\Modules\Score\Model\ScoreProductStock;
-use App\Modules\Store\Model\StoreExpress;
 use App\Modules\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -348,8 +347,7 @@ class OrderController extends Controller
                                     'number' => $stock['number'],
                                     'product'=>$product->name
                                 ];
-                                var_dump($stockData);
-                                var_dump($discount);
+
                                 $this->handle->addStockSnapshot($order_id, $stockData);
                             }
                             $this->handle->addProduct($product->id,['sales_volume'=>$product->sales_volume+$stock['number']]);
@@ -380,8 +378,6 @@ class OrderController extends Controller
                     }
                 }
             }
-            var_dump(number_format($amount,2));
-            var_dump(number_format($post->price,2));
             if (number_format($amount,2)!=number_format($post->price,2)){
                 throw new \Exception('非法价格！'.number_format($amount,2).'d'.$expressPrice);
             }
@@ -551,25 +547,5 @@ class OrderController extends Controller
         return jsonResponse([
             'msg' => '操作失败！'
         ]);
-    }
-
-    public function checkexpress(Request $post){
-        $store_id=$post->store_id?$post->store_id:0;
-        if ($store_id){
-            $express=new StoreExpress();
-            $expresslist=$express->where('store_id',$store_id)->first();
-            if ($expresslist){
-                return response()->json([
-                    'msg'=>"ok",
-                    'data'=>$expresslist
-                ]);
-            }else{
-                return response()->json([
-                    'msg'=>"ok",
-                    'data'=>0
-                ]);
-            }
-        }
-
     }
 }
