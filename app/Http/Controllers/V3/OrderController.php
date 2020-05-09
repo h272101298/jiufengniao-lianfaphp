@@ -51,6 +51,7 @@ class OrderController extends Controller
                 //$store = $this->handle->getStoreById($product->store_id);
                 $state = 'created';
                 $price = $groupStock->group_price*$number;
+                dump($price);
 //                if (isset($coupon_id)&&$coupon_id!=0){
 //                    $coupon = $this->handle->getUserCoupon($coupon_id);
 //                    if ($coupon->user_id!=$user_id||$coupon->store_id!=$product->store_id||$coupon->state!=1){
@@ -77,7 +78,7 @@ class OrderController extends Controller
                     'store_id' => $product->store_id,
                     'delivery'=>$delivery
                 ];
-                dd($data);
+                //dd($data);
                 $order_id = $this->handle->addOrder(0, $data);
                 if ($order_id){
                     $addressSnapshot = [
