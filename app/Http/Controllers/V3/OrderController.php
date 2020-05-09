@@ -33,9 +33,6 @@ class OrderController extends Controller
         $number = $post->number ? $post->number :1;
         $express = $post->express?$post->express:0;
         $couponPrice = 0;
-        $groupStock = $this->handle->getGroupBuyStock($group_id,$stock_id);
-        $price = $groupStock->group_price*$number;
-        dd($price);
         DB::beginTransaction();
         try {
             if ($list_id){
@@ -54,7 +51,6 @@ class OrderController extends Controller
                 //$store = $this->handle->getStoreById($product->store_id);
                 $state = 'created';
                 $price = $groupStock->group_price*$number;
-                //dump($price);
 //                if (isset($coupon_id)&&$coupon_id!=0){
 //                    $coupon = $this->handle->getUserCoupon($coupon_id);
 //                    if ($coupon->user_id!=$user_id||$coupon->store_id!=$product->store_id||$coupon->state!=1){
@@ -81,7 +77,7 @@ class OrderController extends Controller
                     'store_id' => $product->store_id,
                     'delivery'=>$delivery
                 ];
-                //dd($data);
+
                 $order_id = $this->handle->addOrder(0, $data);
                 if ($order_id){
                     $addressSnapshot = [
@@ -375,6 +371,7 @@ class OrderController extends Controller
                         $orderPrice = [
                             'price' => $amount
                         ];
+                        dd($orderPrice);
                         $this->handle->addOrder($order_id, $orderPrice);
                     }
                 }
