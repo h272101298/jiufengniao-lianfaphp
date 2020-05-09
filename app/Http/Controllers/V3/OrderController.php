@@ -303,7 +303,7 @@ class OrderController extends Controller
                             $discount = $member->discount/10;
                         }
 
-                      var_dump($stocks);
+                      //var_dump($stocks);
                         foreach ($stocks as $stock) {
 //                            var_dump($stock);
                             $swapStock = $this->handle->getStockById($stock['id']);
@@ -320,14 +320,14 @@ class OrderController extends Controller
                             }
 //                            var_dump($swapStock);
 
-//                            var_dump($product);
+                         var_dump($product);
                             if ($product->store_id == $item['id']) {
 //                                 var_dump($swapStock->price);
                                 //var_dump($stock['number']);
                                 $originPrice +=  $swapStock->price * $stock['number'];
                                 $price += $swapStock->price * $stock['number'];
-//                                var_dump($price);
-//                                var_dump($swapStock->price);
+                               var_dump($price);
+                                var_dump($swapStock->price);
 
                                 if ($product->norm == 'fixed') {
                                     $detail = 'fixed';
