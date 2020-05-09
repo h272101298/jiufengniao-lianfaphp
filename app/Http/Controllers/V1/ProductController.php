@@ -630,17 +630,11 @@ class ProductController extends Controller
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         switch ($type){
-            case 'hot':
-                $data = $this->handle->getHotList($page,$limit);
-                break;
-            case 'new':
-                $data = $this->handle->getNewList($page,$limit);
-                break;
             case 'offer':
                 $data = $this->handle->getOfferList($page,$limit);
                 break;
             default:
-                $data = $this->handle->getHotList($page,$limit);
+                $data = $this->handle->getOfferList($page,$limit);
                 break;
         }
         $this->handle->formatRecommendList($data['data']);
