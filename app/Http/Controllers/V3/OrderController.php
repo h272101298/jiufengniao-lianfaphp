@@ -320,14 +320,14 @@ class OrderController extends Controller
                             }
 //                            var_dump($swapStock);
 
-                         var_dump($product);
+//                         var_dump($product);
                             if ($product->store_id == $item['id']) {
 //                                 var_dump($swapStock->price);
                                 //var_dump($stock['number']);
                                 $originPrice +=  $swapStock->price * $stock['number'];
                                 $price += $swapStock->price * $stock['number'];
-                               var_dump($price);
-                                var_dump($swapStock->price);
+//                               var_dump($price);
+//                                var_dump($swapStock->price);
 
                                 if ($product->norm == 'fixed') {
                                     $detail = 'fixed';
@@ -347,6 +347,8 @@ class OrderController extends Controller
                                     'number' => $stock['number'],
                                     'product'=>$product->name
                                 ];
+                                var_dump($stockData);
+                                var_dump($discount);
                                 $this->handle->addStockSnapshot($order_id, $stockData);
                             }
                             $this->handle->addProduct($product->id,['sales_volume'=>$product->sales_volume+$stock['number']]);
