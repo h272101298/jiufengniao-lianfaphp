@@ -388,7 +388,9 @@ trait OrderHandle
     {
         $config = TxConfig::first();
         $refuse = Refuse::find($id);
-        $data['return_code']='SUCCESS';
+        $data=[
+            'return_code'=>'SUCCESS'
+        ];
         /*$wxpay = getWxPay();
         $path = base_path().'/public/';
         $order = Order::find($refuse->order_id);
