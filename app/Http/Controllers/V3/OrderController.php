@@ -557,7 +557,7 @@ class OrderController extends Controller
         $store_id=$post->store_id?$post->store_id:0;
         if ($store_id){
             $express=new StoreExpress();
-            $expresslist=$express->where('store_id')->first();
+            $expresslist=$express->where('store_id',$store_id)->first();
             if ($expresslist){
                 return response()->json([
                     'msg'=>"ok",
