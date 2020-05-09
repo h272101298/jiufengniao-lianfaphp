@@ -371,7 +371,7 @@ class OrderController extends Controller
                         $orderPrice = [
                             'price' => $amount
                         ];
-                        dd($orderPrice);
+                        
                         $this->handle->addOrder($order_id, $orderPrice);
                     }
                 }
