@@ -368,9 +368,9 @@ class OrderController extends Controller
                         }
 //                        var_dump($price);
                         $price = $price*$discount*$discount2;
-//                        var_dump($price);
+                        var_dump($price);
                         $amount += round($price-$couponPrice+$expressPrice,2);
-//                        var_dump($amount);
+                        var_dump($amount);
                         $orderPrice = [
                             'price' => $amount
                         ];
@@ -379,6 +379,8 @@ class OrderController extends Controller
                     }
                 }
             }
+            var_dump(number_format($amount,2));
+            var_dump(number_format($post->price,2));
             if (number_format($amount,2)!=number_format($post->price,2)){
                 throw new \Exception('非法价格！'.number_format($amount,2).'d'.$expressPrice);
             }
