@@ -643,7 +643,7 @@ class ProductController extends Controller
                 $data = $this->handle->getOfferList($page,$limit);
                 break;
         }
-        dd($data);
+        
         $this->handle->formatRecommendList($data['data']);
         return jsonResponse([
             'msg'=>'ok',
