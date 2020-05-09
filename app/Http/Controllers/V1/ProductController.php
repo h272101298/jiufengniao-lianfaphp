@@ -630,6 +630,12 @@ class ProductController extends Controller
         $page = Input::get('page',1);
         $limit = Input::get('limit',10);
         switch ($type){
+            case 'hot':
+                $data = $this->handle->getHotList($page,$limit);
+                break;
+            case 'new':
+                $data = $this->handle->getNewList($page,$limit);
+                break;
             case 'offer':
                 $data = $this->handle->getOfferList($page,$limit);
                 break;
@@ -637,6 +643,7 @@ class ProductController extends Controller
                 $data = $this->handle->getOfferList($page,$limit);
                 break;
         }
+        dd($data);
         $this->handle->formatRecommendList($data['data']);
         return jsonResponse([
             'msg'=>'ok',
